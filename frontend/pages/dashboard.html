@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Dashboard - FarmIntel AI</title>
+    <link rel="icon" type="image/x-icon" href="#">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../css/dashboard.css">
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="animated-bg"></div>
+    
+    <!-- Dark/Light Mode Toggle -->
+    <div class="theme-toggle-wrapper">
+        <button id="themeToggle" class="theme-toggle-btn">
+            <i class="fas fa-sun"></i>
+        </button>
+    </div>
+
+    <!-- Dashboard Container -->
+    <div class="dashboard-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-logo">
+                <div class="logo-icon">
+                    <i class="fas fa-leaf"></i>
+                </div>
+                <span>FarmIntel AI</span>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item active">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="detect.html" class="nav-item">
+                    <i class="fas fa-camera"></i>
+                    <span>Detect Disease</span>
+                </a>
+                <a href="weather.html" class="nav-item">
+                    <i class="fas fa-cloud-sun-rain"></i>
+                    <span>Weather Analysis</span>
+                </a>
+                <a href="history.html" class="nav-item">
+                    <i class="fas fa-history"></i>
+                    <span>Scan History</span>
+                </a>
+                <a href="library.html" class="nav-item">
+                    <i class="fas fa-book"></i>
+                    <span>Disease Library</span>
+                </a>
+                <a href="report.html" class="nav-item">
+                    <i class="fas fa-file-alt"></i>
+                    <span>Reports</span>
+                </a>
+                <a href="faq.html" class="nav-item">
+                    <i class="fas fa-question-circle"></i>
+                    <span>FAQ</span>
+                </a>
+                <a href="settings.html" class="nav-item">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </a>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <a href="profile.html" class="user-info">
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="user-details">
+                        <h4 id="userName">John Farmer</h4>
+                        <p>Premium Plan</p>
+                    </div>
+                </a>
+                <button id="logoutBtn" class="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Mobile Menu Toggle -->
+        <button id="mobileMenuToggle" class="mobile-menu-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+        <div id="sidebarOverlay" class="sidebar-overlay"></div>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Welcome Banner -->
+            <div class="welcome-banner" data-aos="fade-down">
+                <div class="welcome-content">
+                    <div class="welcome-text">
+                        <h2 id="welcomeMessage">Welcome back, John Farmer! 👋</h2>
+                        <p>Here's what's happening with your farm today</p>
+                    </div>
+                    <div class="welcome-date">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span id="currentDate"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="stats-grid" data-aos="fade-up" data-aos-delay="100">
+                <!-- Total Scans Card -->
+                <div class="stat-card">
+                    <div class="stat-icon gradient-blue">
+                        <i class="fas fa-camera"></i>
+                    </div>
+                    <div class="stat-value">
+                        <div class="number" id="totalScans">0</div>
+                        <div class="label">TOTAL SCANS</div>
+                    </div>
+                    <div class="stat-trend positive" id="scanTrend">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>+12%</span>
+                    </div>
+                </div>
+                
+                <!-- Diseased Crops Card -->
+                <div class="stat-card">
+                    <div class="stat-icon gradient-red">
+                        <i class="fas fa-leaf"></i>
+                    </div>
+                    <div class="stat-value">
+                        <div class="number" id="diseasedCrops">0</div>
+                        <div class="label">DISEASED CROPS</div>
+                    </div>
+                    <div class="stat-trend negative" id="diseaseTrend">
+                        <i class="fas fa-arrow-down"></i>
+                        <span>-5%</span>
+                    </div>
+                </div>
+                
+                <!-- Weather Risk Card -->
+                <div class="stat-card">
+                    <div class="stat-icon gradient-orange">
+                        <i class="fas fa-cloud-rain"></i>
+                    </div>
+                    <div class="stat-value">
+                        <div class="number" id="weatherRisk">--</div>
+                        <div class="label">WEATHER RISK</div>
+                    </div>
+                    <div class="stat-trend warning" id="riskIcon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                </div>
+                
+                <!-- Health Score Card -->
+                <div class="stat-card">
+                    <div class="stat-icon gradient-green">
+                        <i class="fas fa-tractor"></i>
+                    </div>
+                    <div class="stat-value">
+                        <div class="number" id="healthScore">0</div>
+                        <div class="label">HEALTH SCORE</div>
+                    </div>
+                    <div class="stat-trend positive" id="healthTrend">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>+8%</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions & Charts Row -->
+            <div class="dashboard-row" data-aos="fade-up" data-aos-delay="200">
+                <!-- Quick Actions -->
+                <div class="quick-actions">
+                    <h3><i class="fas fa-bolt"></i> Quick Actions</h3>
+                    <div class="actions-grid">
+                        <button class="action-btn" onclick="location.href='detect.html'">
+                            <i class="fas fa-camera"></i>
+                            <span>Start Scanning</span>
+                        </button>
+                        <button class="action-btn" onclick="location.href='weather.html'">
+                            <i class="fas fa-cloud-sun"></i>
+                            <span>Weather Risk</span>
+                        </button>
+                        <button class="action-btn" onclick="location.href='history.html'">
+                            <i class="fas fa-history"></i>
+                            <span>Past Reports</span>
+                        </button>
+                        <button class="action-btn" onclick="location.href='library.html'">
+                            <i class="fas fa-book"></i>
+                            <span>Disease Guide</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Disease Distribution Chart -->
+                <div class="chart-card">
+                    <h3><i class="fas fa-chart-pie"></i> Disease Distribution</h3>
+                    <canvas id="diseaseChart" width="400" height="300"></canvas>
+                </div>
+            </div>
+
+            <!-- Weather Alert Banner -->
+            <div class="weather-alert low-risk" id="weatherAlert" data-aos="fade-up" data-aos-delay="300">
+                <div class="alert-icon">
+                    <i class="fas fa-cloud-sun"></i>
+                </div>
+                <div class="alert-content">
+                    <h4 id="alertTitle">📊 Low Risk</h4>
+                    <p id="alertMessage">Loading weather data...</p>
+                </div>
+                <button class="alert-action" onclick="location.href='weather.html'">
+                    View Risk Data <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+
+            <!-- Recent Scans Section -->
+            <div class="recent-scans" data-aos="fade-up" data-aos-delay="400">
+                <div class="section-header">
+                    <h3><i class="fas fa-clock"></i> Recent Scans</h3>
+                    <a href="history.html" class="view-all">View All <i class="fas fa-arrow-right"></i></a>
+                </div>
+                
+                <div class="scans-table-container">
+                    <table class="scans-table">
+                        <thead>
+                            <tr>
+                                <th>Disease / Diagnosis</th>
+                                <th>Scan Date</th>
+                                <th>Confidence</th>
+                                <th>Severity</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recentScansTable">
+                            <tr class="empty-row">
+                                <td colspan="5">
+                                    <div class="empty-state">
+                                        <i class="fas fa-camera"></i>
+                                        <h4>No Scans Yet</h4>
+                                        <p>Start by detecting a disease!</p>
+                                        <button class="btn-primary" onclick="location.href='detect.html'">
+                                            Start Scanning <i class="fas fa-arrow-right"></i>
+                                        </button>
+                                    </div>
+                                  </td>
+                              </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="../js/dashboard.js"></script>
+</body>
+</html>

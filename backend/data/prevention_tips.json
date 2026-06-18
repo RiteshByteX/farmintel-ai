@@ -1,0 +1,608 @@
+{
+  "version": "1.0.0",
+  "last_updated": "2024-01-15",
+  "total_crops": 9,
+  "total_tips": 87,
+  "prevention_tips": {
+    "general": {
+      "title": "General Prevention Tips for All Crops",
+      "tips": [
+        {
+          "id": "gen_001",
+          "title": "Crop Rotation",
+          "description": "Rotate crops every 2-3 years to prevent soil-borne disease buildup",
+          "importance": "critical",
+          "implementation": "Plant different crop families in each season"
+        },
+        {
+          "id": "gen_002",
+          "title": "Use Disease-Free Seeds",
+          "description": "Always use certified, disease-free seeds from reliable sources",
+          "importance": "critical",
+          "implementation": "Purchase from certified suppliers, inspect seeds before planting"
+        },
+        {
+          "id": "gen_003",
+          "title": "Proper Spacing",
+          "description": "Maintain adequate spacing between plants for air circulation",
+          "importance": "high",
+          "implementation": "Follow recommended spacing for each crop variety"
+        },
+        {
+          "id": "gen_004",
+          "title": "Sanitize Tools",
+          "description": "Clean and disinfect gardening tools between uses",
+          "importance": "high",
+          "implementation": "Use bleach solution (1:9) or alcohol to sterilize tools"
+        },
+        {
+          "id": "gen_005",
+          "title": "Remove Plant Debris",
+          "description": "Clear fallen leaves and plant debris regularly",
+          "importance": "high",
+          "implementation": "Compost healthy debris, burn or discard infected material"
+        },
+        {
+          "id": "gen_006",
+          "title": "Water Management",
+          "description": "Water at base of plants, avoid overhead irrigation",
+          "importance": "critical",
+          "implementation": "Use drip irrigation or water early morning"
+        },
+        {
+          "id": "gen_007",
+          "title": "Mulching",
+          "description": "Apply organic mulch to prevent soil splash",
+          "importance": "medium",
+          "implementation": "Use straw, wood chips, or plastic mulch"
+        },
+        {
+          "id": "gen_008",
+          "title": "Regular Monitoring",
+          "description": "Inspect plants weekly for early disease signs",
+          "importance": "critical",
+          "implementation": "Check undersides of leaves, look for spots or discoloration"
+        },
+        {
+          "id": "gen_009",
+          "title": "Proper Nutrition",
+          "description": "Maintain balanced fertilization for plant health",
+          "importance": "high",
+          "implementation": "Soil test before applying fertilizers"
+        },
+        {
+          "id": "gen_010",
+          "title": "Companion Planting",
+          "description": "Plant companion crops that repel pests",
+          "importance": "medium",
+          "implementation": "Marigolds, basil, and nasturtiums are good companions"
+        }
+      ]
+    },
+    
+    "Apple": {
+      "crop": "Apple",
+      "total_tips": 9,
+      "tips": [
+        {
+          "id": "app_001",
+          "title": "Plant Resistant Varieties",
+          "description": "Choose apple varieties resistant to common diseases like scab and rust",
+          "varieties": ["Enterprise", "Liberty", "Freedom", "William's Pride"],
+          "importance": "critical"
+        },
+        {
+          "id": "app_002",
+          "title": "Prune Annually",
+          "description": "Prune trees during dormancy to improve air circulation",
+          "timing": "Late winter (January-February)",
+          "importance": "high"
+        },
+        {
+          "id": "app_003",
+          "title": "Remove Mummified Fruit",
+          "description": "Remove and destroy mummified fruit that harbor diseases",
+          "timing": "Fall and spring",
+          "importance": "critical"
+        },
+        {
+          "id": "app_004",
+          "title": "Apply Dormant Oil",
+          "description": "Apply dormant oil in late winter to control overwintering pests",
+          "timing": "Before bud break",
+          "importance": "medium"
+        },
+        {
+          "id": "app_005",
+          "title": "Thin Fruit",
+          "description": "Thin fruit to improve air circulation and reduce disease pressure",
+          "method": "Leave 6-8 inches between fruits",
+          "importance": "medium"
+        },
+        {
+          "id": "app_006",
+          "title": "Clean Fallen Leaves",
+          "description": "Rake and remove fallen leaves in autumn to reduce overwintering pathogens",
+          "timing": "After leaf drop",
+          "importance": "high"
+        },
+        {
+          "id": "app_007",
+          "title": "Monitor Weather",
+          "description": "Track weather conditions for infection periods",
+          "importance": "medium",
+          "tools": "Weather station, disease forecasting apps"
+        },
+        {
+          "id": "app_008",
+          "title": "Maintain Tree Health",
+          "description": "Provide adequate water and nutrients for tree vigor",
+          "importance": "high",
+          "schedule": "Fertilize in spring, water during drought"
+        },
+        {
+          "id": "app_009",
+          "title": "Remove Cedar Trees",
+          "description": "Remove nearby cedar/juniper trees to prevent rust diseases",
+          "distance": "At least 2 miles if possible",
+          "importance": "medium"
+        }
+      ]
+    },
+    
+    "Tomato": {
+      "crop": "Tomato",
+      "total_tips": 10,
+      "tips": [
+        {
+          "id": "tom_001",
+          "title": "Plant Resistant Varieties",
+          "description": "Choose disease-resistant varieties (look for VFN designation)",
+          "varieties": ["Mountain Merit", "Defiant", "Iron Lady", "Jasper"],
+          "importance": "critical"
+        },
+        {
+          "id": "tom_002",
+          "title": "Stake or Cage Plants",
+          "description": "Support plants to keep foliage off the ground",
+          "importance": "high",
+          "method": "Use stakes, cages, or trellises"
+        },
+        {
+          "id": "tom_003",
+          "title": "Remove Lower Leaves",
+          "description": "Prune lower leaves to prevent soil splash",
+          "timing": "When plants are 12-18 inches tall",
+          "importance": "high"
+        },
+        {
+          "id": "tom_004",
+          "title": "Water at Base",
+          "description": "Avoid wetting foliage when watering",
+          "method": "Use drip irrigation or soaker hoses",
+          "importance": "critical"
+        },
+        {
+          "id": "tom_005",
+          "title": "Crop Rotation",
+          "description": "Don't plant tomatoes in same spot for 3-4 years",
+          "rotation_crops": ["Beans", "Peas", "Corn", "Onions"],
+          "importance": "critical"
+        },
+        {
+          "id": "tom_006",
+          "title": "Mulch",
+          "description": "Apply mulch to prevent soil splash",
+          "materials": ["Straw", "Leaves", "Plastic mulch"],
+          "importance": "high"
+        },
+        {
+          "id": "tom_007",
+          "title": "Apply Preventive Sprays",
+          "description": "Apply copper or sulfur sprays preventatively",
+          "frequency": "Every 7-10 days during wet weather",
+          "importance": "medium"
+        },
+        {
+          "id": "tom_008",
+          "title": "Morning Watering",
+          "description": "Water in morning so leaves dry quickly",
+          "timing": "Before 10 AM",
+          "importance": "high"
+        },
+        {
+          "id": "tom_009",
+          "title": "Remove Infected Plants",
+          "description": "Remove and destroy diseased plants immediately",
+          "method": "Bag and discard, do not compost",
+          "importance": "critical"
+        },
+        {
+          "id": "tom_010",
+          "title": "Clean Up Season End",
+          "description": "Remove all plant debris at end of season",
+          "timing": "After final harvest",
+          "importance": "high"
+        }
+      ]
+    },
+    
+    "Potato": {
+      "crop": "Potato",
+      "total_tips": 8,
+      "tips": [
+        {
+          "id": "pot_001",
+          "title": "Use Certified Seed Potatoes",
+          "description": "Always plant certified disease-free seed potatoes",
+          "importance": "critical",
+          "note": "Never use grocery store potatoes for planting"
+        },
+        {
+          "id": "pot_002",
+          "title": "Hill Soil Around Plants",
+          "description": "Hill soil around stems to protect tubers",
+          "timing": "When plants are 6-8 inches tall",
+          "importance": "high"
+        },
+        {
+          "id": "pot_003",
+          "title": "Crop Rotation",
+          "description": "Rotate with non-nightshade crops",
+          "rotation": "3-4 year rotation with corn, beans, or grains",
+          "importance": "critical"
+        },
+        {
+          "id": "pot_004",
+          "title": "Avoid Overhead Irrigation",
+          "description": "Keep foliage dry to prevent blight",
+          "importance": "high",
+          "method": "Use drip irrigation or water at base"
+        },
+        {
+          "id": "pot_005",
+          "title": "Destroy Volunteer Potatoes",
+          "description": "Remove potato volunteers that can harbor diseases",
+          "importance": "high",
+          "timing": "Throughout growing season"
+        },
+        {
+          "id": "pot_006",
+          "title": "Harvest Promptly",
+          "description": "Harvest when mature, don't leave in ground",
+          "importance": "medium",
+          "timing": "When vines die back"
+        },
+        {
+          "id": "pot_007",
+          "title": "Proper Storage",
+          "description": "Store tubers in cool, dark, dry place",
+          "conditions": "40-50°F (4-10°C), dark, ventilated",
+          "importance": "high"
+        },
+        {
+          "id": "pot_008",
+          "title": "Apply Preventive Fungicides",
+          "description": "Apply fungicides before disease appears",
+          "frequency": "Every 7-10 days in wet weather",
+          "importance": "medium"
+        }
+      ]
+    },
+    
+    "Grape": {
+      "crop": "Grape",
+      "total_tips": 8,
+      "tips": [
+        {
+          "id": "gra_001",
+          "title": "Choose Resistant Varieties",
+          "description": "Plant disease-resistant grape varieties",
+          "varieties": ["Concord", "Norton", "Marquis", "Traminette"],
+          "importance": "critical"
+        },
+        {
+          "id": "gra_002",
+          "title": "Proper Pruning",
+          "description": "Prune annually for air circulation",
+          "timing": "Dormant season (late winter)",
+          "importance": "high"
+        },
+        {
+          "id": "gra_003",
+          "title": "Canopy Management",
+          "description": "Train vines to allow sunlight and air movement",
+          "methods": ["Vertical shoot positioning", "Leaf removal"],
+          "importance": "high"
+        },
+        {
+          "id": "gra_004",
+          "title": "Remove Mummified Berries",
+          "description": "Remove and destroy mummified fruit",
+          "importance": "critical",
+          "timing": "During pruning and throughout season"
+        },
+        {
+          "id": "gra_005",
+          "title": "Apply Sulfur",
+          "description": "Apply sulfur for powdery mildew control",
+          "frequency": "Every 10-14 days",
+          "importance": "medium",
+          "caution": "Do not apply in hot weather (>90°F)"
+        },
+        {
+          "id": "gra_006",
+          "title": "Sanitize Pruning Tools",
+          "description": "Disinfect tools between vines",
+          "method": "Use bleach solution or alcohol",
+          "importance": "high"
+        },
+        {
+          "id": "gra_007",
+          "title": "Monitor Weather",
+          "description": "Track conditions for disease forecasting",
+          "importance": "medium",
+          "tools": "Weather station, disease models"
+        },
+        {
+          "id": "gra_008",
+          "title": "Good Air Drainage",
+          "description": "Plant on slopes for air drainage",
+          "importance": "high",
+          "note": "Avoid low-lying frost pockets"
+        }
+      ]
+    },
+    
+    "Corn": {
+      "crop": "Corn",
+      "total_tips": 7,
+      "tips": [
+        {
+          "id": "crn_001",
+          "title": "Plant Resistant Hybrids",
+          "description": "Choose hybrids with disease resistance",
+          "importance": "critical",
+          "note": "Look for resistance to common rust and northern leaf blight"
+        },
+        {
+          "id": "crn_002",
+          "title": "Crop Rotation",
+          "description": "Rotate with non-grass crops",
+          "rotation": "Corn-soybean rotation effective",
+          "importance": "high"
+        },
+        {
+          "id": "crn_003",
+          "title": "Tillage",
+          "description": "Bury crop residue to reduce inoculum",
+          "methods": ["Plowing", "Disking"],
+          "importance": "medium"
+        },
+        {
+          "id": "crn_004",
+          "title": "Proper Spacing",
+          "description": "Avoid overcrowding for air circulation",
+          "importance": "medium",
+          "spacing": "Follow hybrid recommendations"
+        },
+        {
+          "id": "crn_005",
+          "title": "Early Planting",
+          "description": "Plant early to avoid peak disease periods",
+          "importance": "medium",
+          "timing": "When soil temperature reaches 50°F (10°C)"
+        },
+        {
+          "id": "crn_006",
+          "title": "Remove Volunteer Corn",
+          "description": "Eliminate volunteer corn plants",
+          "importance": "high",
+          "timing": "Before planting new crop"
+        },
+        {
+          "id": "crn_007",
+          "title": "Balanced Fertilization",
+          "description": "Avoid excess nitrogen which increases susceptibility",
+          "importance": "medium",
+          "note": "Soil test before applying"
+        }
+      ]
+    },
+    
+    "Bell Pepper": {
+      "crop": "Bell Pepper",
+      "total_tips": 7,
+      "tips": [
+        {
+          "id": "pep_001",
+          "title": "Disease-Free Seeds",
+          "description": "Use certified disease-free seeds",
+          "importance": "critical",
+          "note": "Hot water treatment for seeds"
+        },
+        {
+          "id": "pep_002",
+          "title": "Avoid Overhead Water",
+          "description": "Water at base, keep foliage dry",
+          "importance": "critical",
+          "method": "Drip irrigation preferred"
+        },
+        {
+          "id": "pep_003",
+          "title": "Crop Rotation",
+          "description": "3-4 year rotation away from peppers",
+          "rotation": "Avoid tomatoes, eggplant, potatoes",
+          "importance": "high"
+        },
+        {
+          "id": "pep_004",
+          "title": "Proper Spacing",
+          "description": "Allow air circulation between plants",
+          "spacing": "18-24 inches between plants",
+          "importance": "high"
+        },
+        {
+          "id": "pep_005",
+          "title": "Apply Copper Sprays",
+          "description": "Preventive copper sprays for bacterial diseases",
+          "frequency": "Weekly during wet weather",
+          "importance": "medium"
+        },
+        {
+          "id": "pep_006",
+          "title": "Remove Infected Leaves",
+          "description": "Promptly remove and destroy infected leaves",
+          "importance": "high",
+          "timing": "At first sign of disease"
+        },
+        {
+          "id": "pep_007",
+          "title": "Sanitize Tools",
+          "description": "Disinfect tools between plants",
+          "importance": "high",
+          "method": "Use bleach solution"
+        }
+      ]
+    },
+    
+    "Strawberry": {
+      "crop": "Strawberry",
+      "total_tips": 7,
+      "tips": [
+        {
+          "id": "str_001",
+          "title": "Disease-Free Plants",
+          "description": "Purchase certified disease-free plants",
+          "importance": "critical",
+          "note": "Avoid using plants from unknown sources"
+        },
+        {
+          "id": "str_002",
+          "title": "Proper Spacing",
+          "description": "Allow air circulation between plants",
+          "spacing": "12-18 inches apart",
+          "importance": "high"
+        },
+        {
+          "id": "str_003",
+          "title": "Mulch",
+          "description": "Apply straw mulch to keep fruit clean",
+          "importance": "high",
+          "materials": "Clean straw, pine needles"
+        },
+        {
+          "id": "str_004",
+          "title": "Remove Old Leaves",
+          "description": "Remove old leaves after harvest",
+          "timing": "After fruiting season",
+          "importance": "high"
+        },
+        {
+          "id": "str_005",
+          "title": "Avoid Overhead Water",
+          "description": "Water at base, keep leaves dry",
+          "importance": "critical",
+          "method": "Drip irrigation"
+        },
+        {
+          "id": "str_006",
+          "title": "Renovate Beds",
+          "description": "Renovate strawberry beds annually",
+          "timing": "After harvest",
+          "importance": "medium"
+        },
+        {
+          "id": "str_007",
+          "title": "Crop Rotation",
+          "description": "Plant in new location every 3-4 years",
+          "importance": "high",
+          "rotation": "Avoid areas previously in tomatoes, peppers"
+        }
+      ]
+    },
+    
+    "seasonal": {
+      "title": "Seasonal Prevention Guidelines",
+      "seasons": {
+        "spring": {
+          "name": "Spring",
+          "tips": [
+            "Start with disease-free seeds and transplants",
+            "Apply preventive fungicides before rain events",
+            "Ensure proper spacing for air circulation",
+            "Begin regular monitoring for early disease signs",
+            "Remove any overwintering plant debris"
+          ]
+        },
+        "summer": {
+          "name": "Summer",
+          "tips": [
+            "Water early morning to allow foliage drying",
+            "Increase monitoring frequency during humid weather",
+            "Apply fungicides preventatively during wet periods",
+            "Remove infected leaves immediately",
+            "Maintain mulch to prevent soil splash"
+          ]
+        },
+        "monsoon": {
+          "name": "Monsoon/Rainy Season",
+          "tips": [
+            "Apply fungicides BEFORE rain events",
+            "Ensure proper drainage in fields",
+            "Increase air circulation with pruning",
+            "Monitor twice daily for disease signs",
+            "Avoid working with wet plants",
+            "Use copper-based sprays for fungal prevention"
+          ]
+        },
+        "winter": {
+          "name": "Winter",
+          "tips": [
+            "Remove all plant debris from fields",
+            "Apply dormant oils to fruit trees",
+            "Plan crop rotation for next season",
+            "Sanitize and store garden tools",
+            "Order disease-resistant varieties for spring"
+          ]
+        }
+      }
+    },
+    
+    "weather_based": {
+      "title": "Weather-Based Prevention Actions",
+      "conditions": [
+        {
+          "condition": "High Humidity (>80%)",
+          "action": "Apply preventive fungicide immediately",
+          "monitoring": "Increase inspection frequency to daily",
+          "risk": "High risk of fungal diseases"
+        },
+        {
+          "condition": "Extended Leaf Wetness (>6 hours)",
+          "action": "Apply protective fungicide",
+          "monitoring": "Check for disease symptoms next 5-7 days",
+          "risk": "Infection period likely"
+        },
+        {
+          "condition": "Heavy Rain Forecast",
+          "action": "Apply fungicide BEFORE rain",
+          "monitoring": "Inspect after rain for damage",
+          "risk": "Increased disease spread"
+        },
+        {
+          "condition": "Prolonged Drought",
+          "action": "Maintain consistent irrigation",
+          "monitoring": "Check for stress symptoms",
+          "risk": "Plant stress increases susceptibility"
+        },
+        {
+          "condition": "Temperature Extremes (>35°C or <10°C)",
+          "action": "Protect plants with covers or shade",
+          "monitoring": "Watch for stress-related diseases",
+          "risk": "Stress-induced susceptibility"
+        }
+      ]
+    }
+  }
+}

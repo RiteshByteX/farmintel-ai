@@ -1,0 +1,802 @@
+{
+  "version": "1.0.0",
+  "last_updated": "2024-01-15",
+  "total_diseases": 28,
+  "total_crops": 9,
+  "diseases": {
+    "Apple Scab": {
+      "id": "dis_001",
+      "name": "Apple Scab",
+      "crop": "Apple",
+      "category": "Fungal",
+      "severity": "Moderate",
+      "symptoms": [
+        "Olive-green to black spots on leaves",
+        "Spots become velvety and irregularly shaped",
+        "Leaves may curl and drop prematurely",
+        "Fruit develops dark, scabby lesions",
+        "Fruit may become deformed and crack"
+      ],
+      "causes": [
+        "Fungal pathogen Venturia inaequalis",
+        "Overwinters in fallen leaves",
+        "Spores released in spring during rain",
+        "Requires extended leaf wetness for infection"
+      ],
+      "favorable_conditions": {
+        "temperature": "15-22°C (59-72°F)",
+        "humidity": "High (>80%)",
+        "leaf_wetness": "9+ hours",
+        "season": "Spring, early summer"
+      },
+      "treatment_chemical": "Sulfur-based or myclobutanil fungicides applied at green tip stage",
+      "treatment_organic": "Sulfur spray, neem oil, or compost tea applied every 7-10 days",
+      "prevention": [
+        "Plant resistant varieties (Enterprise, Liberty, Freedom)",
+        "Rake and destroy fallen leaves in autumn",
+        "Prune for good air circulation",
+        "Apply preventive fungicides in spring",
+        "Monitor weather for infection periods"
+      ],
+      "spread": "Wind and rain splash",
+      "incubation_period": "9-17 days",
+      "economic_impact": "High - can cause 50-70% crop loss if uncontrolled"
+    },
+    
+    "Apple Black Rot": {
+      "id": "dis_002",
+      "name": "Apple Black Rot",
+      "crop": "Apple",
+      "category": "Fungal",
+      "severity": "Severe",
+      "symptoms": [
+        "Purple spots on leaves turning brown",
+        "Fruit shows black, rotting lesions",
+        "Lesions have concentric rings (frog-eye leaf spot)",
+        "Infected fruit shrivels into black mummies",
+        "Cankers on branches and trunk"
+      ],
+      "causes": [
+        "Botryosphaeria obtusa fungus",
+        "Enters through wounds or natural openings",
+        "Overwinters in mummified fruit and cankers",
+        "Spores spread by rain and wind"
+      ],
+      "favorable_conditions": {
+        "temperature": "20-30°C (68-86°F)",
+        "humidity": "High",
+        "leaf_wetness": "6+ hours",
+        "season": "Summer, early fall"
+      },
+      "treatment_chemical": "Captan or thiophanate-methyl applied at bloom and fruit set",
+      "treatment_organic": "Copper spray or Bordeaux mixture",
+      "prevention": [
+        "Remove mummified fruit from trees",
+        "Prune out dead or diseased wood",
+        "Clean up fallen fruit and leaves",
+        "Sanitize pruning tools between cuts",
+        "Maintain tree health with proper nutrition"
+      ],
+      "spread": "Rain splash, wind, insects",
+      "incubation_period": "7-14 days",
+      "economic_impact": "Severe - can destroy entire crop"
+    },
+    
+    "Potato Late Blight": {
+      "id": "dis_003",
+      "name": "Potato Late Blight",
+      "crop": "Potato",
+      "category": "Fungal-like (Oomycete)",
+      "severity": "Severe",
+      "symptoms": [
+        "Dark brown to black lesions on leaves",
+        "White fuzzy growth on leaf undersides",
+        "Lesions enlarge rapidly in wet conditions",
+        "Tubers show dark, shrunken areas",
+        "Entire plant can collapse within days"
+      ],
+      "causes": [
+        "Phytophthora infestans pathogen",
+        "Spores spread by wind and rain",
+        "Overwinters in infected tubers",
+        "Same pathogen causes tomato late blight"
+      ],
+      "favorable_conditions": {
+        "temperature": "15-22°C (59-72°F)",
+        "humidity": ">85%",
+        "leaf_wetness": "10+ hours",
+        "season": "Cool, wet weather"
+      },
+      "treatment_chemical": "Mancozeb or chlorothalonil applied preventatively",
+      "treatment_organic": "Copper spray (Bordeaux mixture)",
+      "prevention": [
+        "Use certified disease-free seed potatoes",
+        "Destroy volunteer potatoes",
+        "Hill soil around stems",
+        "Avoid overhead irrigation",
+        "Apply preventive fungicides before disease appears",
+        "Harvest promptly and store properly"
+      ],
+      "spread": "Windborne spores, infected tubers",
+      "incubation_period": "3-7 days",
+      "economic_impact": "Devastating - Irish Potato Famine cause"
+    },
+    
+    "Tomato Late Blight": {
+      "id": "dis_004",
+      "name": "Tomato Late Blight",
+      "crop": "Tomato",
+      "category": "Fungal-like (Oomycete)",
+      "severity": "Severe",
+      "symptoms": [
+        "Dark, water-soaked spots on leaves",
+        "Spots turn brown and crispy",
+        "White fuzzy growth on leaf undersides",
+        "Dark lesions on stems and fruit",
+        "Rapid defoliation and plant collapse"
+      ],
+      "causes": [
+        "Phytophthora infestans pathogen",
+        "Same as potato late blight",
+        "Spores travel long distances by wind",
+        "Overwinters in infected plant debris"
+      ],
+      "favorable_conditions": {
+        "temperature": "15-22°C (59-72°F)",
+        "humidity": ">85%",
+        "leaf_wetness": "8+ hours",
+        "season": "Cool, wet weather"
+      },
+      "treatment_chemical": "Copper hydroxide or mancozeb",
+      "treatment_organic": "Neem oil + garlic spray, copper spray",
+      "prevention": [
+        "Use resistant varieties",
+        "Avoid planting near potatoes",
+        "Provide good air circulation",
+        "Water at base, not overhead",
+        "Apply preventive copper sprays",
+        "Remove infected plants immediately"
+      ],
+      "spread": "Windborne spores, infected transplants",
+      "incubation_period": "3-7 days",
+      "economic_impact": "Severe - can destroy entire crop in days"
+    },
+    
+    "Tomato Early Blight": {
+      "id": "dis_005",
+      "name": "Tomato Early Blight",
+      "crop": "Tomato",
+      "category": "Fungal",
+      "severity": "Moderate",
+      "symptoms": [
+        "Dark spots with concentric rings (target-like)",
+        "Spots on lower leaves first",
+        "Yellowing around spots",
+        "Leaves turn yellow and drop",
+        "Can affect stems and fruit"
+      ],
+      "causes": [
+        "Alternaria solani fungus",
+        "Survives in soil and plant debris",
+        "Spores splashed onto lower leaves",
+        "Enters through wounds or natural openings"
+      ],
+      "favorable_conditions": {
+        "temperature": "20-30°C (68-86°F)",
+        "humidity": "Moderate to high",
+        "leaf_wetness": "6+ hours",
+        "season": "Warm, humid weather"
+      },
+      "treatment_chemical": "Chlorothalonil or mancozeb every 7-10 days",
+      "treatment_organic": "Baking soda solution, compost tea",
+      "prevention": [
+        "Rotate crops (3-4 years)",
+        "Mulch to prevent soil splash",
+        "Remove lower leaves",
+        "Water at base",
+        "Stake plants for air circulation",
+        "Use disease-free seeds"
+      ],
+      "spread": "Soil splash, wind, insects",
+      "incubation_period": "2-5 days",
+      "economic_impact": "Moderate - can reduce yield by 20-30%"
+    },
+    
+    "Corn Common Rust": {
+      "id": "dis_006",
+      "name": "Corn Common Rust",
+      "crop": "Corn",
+      "category": "Fungal",
+      "severity": "Moderate",
+      "symptoms": [
+        "Small, cinnamon-brown pustules on leaves",
+        "Pustules scattered on both leaf surfaces",
+        "Pustules turn black as plant matures",
+        "Severe infection causes leaf death",
+        "Reduced photosynthesis and yield"
+      ],
+      "causes": [
+        "Puccinia sorghi fungus",
+        "Spores spread long distances by wind",
+        "Requires living host to survive",
+        "Alternate host is Oxalis species"
+      ],
+      "favorable_conditions": {
+        "temperature": "15-25°C (59-77°F)",
+        "humidity": "High (>80%)",
+        "leaf_wetness": "6+ hours",
+        "season": "Cool, moist conditions"
+      },
+      "treatment_chemical": "Azoxystrobin or pyraclostrobin at first sign",
+      "treatment_organic": "Sulfur dust, neem oil",
+      "prevention": [
+        "Plant resistant hybrids",
+        "Early planting to avoid peak disease",
+        "Destroy volunteer corn",
+        "Crop rotation",
+        "Balanced nitrogen fertilization"
+      ],
+      "spread": "Windborne spores",
+      "incubation_period": "7-14 days",
+      "economic_impact": "Low to Moderate - usually not severe"
+    },
+    
+    "Grape Black Rot": {
+      "id": "dis_007",
+      "name": "Grape Black Rot",
+      "crop": "Grape",
+      "category": "Fungal",
+      "severity": "Severe",
+      "symptoms": [
+        "Brown to black circular spots on leaves",
+        "Small black spots on young shoots",
+        "Fruit shrivels into hard black mummies",
+        "Circular lesions on berries",
+        "Fruit becomes inedible"
+      ],
+      "causes": [
+        "Guignardia bidwellii fungus",
+        "Overwinters in mummified fruit",
+        "Spores released during spring rains",
+        "Requires wet conditions for infection"
+      ],
+      "favorable_conditions": {
+        "temperature": "20-30°C (68-86°F)",
+        "humidity": "High",
+        "leaf_wetness": "6+ hours",
+        "season": "Warm, wet weather"
+      },
+      "treatment_chemical": "Myclobutanil or mancozeb at bloom and fruit set",
+      "treatment_organic": "Sulfur spray, copper spray",
+      "prevention": [
+        "Prune for air circulation",
+        "Remove mummified fruit",
+        "Clean up fallen berries",
+        "Train vines properly",
+        "Apply preventive fungicides",
+        "Plant resistant varieties"
+      ],
+      "spread": "Rain splash, wind",
+      "incubation_period": "7-14 days",
+      "economic_impact": "Severe - can destroy entire crop"
+    },
+    
+    "Bell Pepper Bacterial Spot": {
+      "id": "dis_008",
+      "name": "Bell Pepper Bacterial Spot",
+      "crop": "Bell Pepper",
+      "category": "Bacterial",
+      "severity": "Moderate",
+      "symptoms": [
+        "Small, water-soaked spots on leaves",
+        "Spots turn brown with yellow halos",
+        "Spots may coalesce and cause defoliation",
+        "Small raised spots on fruit",
+        "Fruit spots become scabby"
+      ],
+      "causes": [
+        "Xanthomonas campestris bacteria",
+        "Survives on seeds and plant debris",
+        "Spreads by splashing water",
+        "Enters through natural openings or wounds"
+      ],
+      "favorable_conditions": {
+        "temperature": "24-30°C (75-86°F)",
+        "humidity": "High (>80%)",
+        "leaf_wetness": "Rain splash needed",
+        "season": "Warm, wet weather"
+      },
+      "treatment_chemical": "Copper-based bactericide at first sign",
+      "treatment_organic": "Bacillus subtilis, copper spray",
+      "prevention": [
+        "Use disease-free seeds",
+        "Crop rotation (3-4 years)",
+        "Avoid overhead irrigation",
+        "Remove infected plants",
+        "Sanitize tools",
+        "Apply preventive copper sprays"
+      ],
+      "spread": "Rain splash, insects, tools",
+      "incubation_period": "3-7 days",
+      "economic_impact": "Moderate - can reduce yield by 30-50%"
+    },
+    
+    "Strawberry Leaf Scorch": {
+      "id": "dis_009",
+      "name": "Strawberry Leaf Scorch",
+      "crop": "Strawberry",
+      "category": "Fungal",
+      "severity": "Moderate",
+      "symptoms": [
+        "Purple to brown spots on leaves",
+        "Spots enlarge and coalesce",
+        "Leaves appear scorched or burned",
+        "Older leaves affected first",
+        "Severe defoliation possible"
+      ],
+      "causes": [
+        "Diplocarpon earliana fungus",
+        "Overwinters in infected leaves",
+        "Spores spread by rain splash",
+        "Favors wet, humid conditions"
+      ],
+      "favorable_conditions": {
+        "temperature": "20-25°C (68-77°F)",
+        "humidity": "High",
+        "leaf_wetness": "Extended periods",
+        "season": "Warm, wet weather"
+      },
+      "treatment_chemical": "Captan or myclobutanil",
+      "treatment_organic": "Compost tea, neem oil",
+      "prevention": [
+        "Use disease-free plants",
+        "Remove old leaves after harvest",
+        "Proper spacing for air circulation",
+        "Avoid overhead watering",
+        "Crop rotation (3-4 years)",
+        "Apply preventive fungicides"
+      ],
+      "spread": "Rain splash, tools",
+      "incubation_period": "10-14 days",
+      "economic_impact": "Moderate - reduces plant vigor and yield"
+    },
+    
+    "Peach Bacterial Spot": {
+      "id": "dis_010",
+      "name": "Peach Bacterial Spot",
+      "crop": "Peach",
+      "category": "Bacterial",
+      "severity": "Moderate",
+      "symptoms": [
+        "Small, angular water-soaked spots on leaves",
+        "Spots turn purple-brown",
+        "Leaves develop shot-holes",
+        "Spots on fruit that crack open",
+        "Premature defoliation"
+      ],
+      "causes": [
+        "Xanthomonas arboricola bacteria",
+        "Overwinters in twig cankers and buds",
+        "Spreads by rain splash",
+        "Enters through natural openings"
+      ],
+      "favorable_conditions": {
+        "temperature": "20-30°C (68-86°F)",
+        "humidity": "High",
+        "leaf_wetness": "Rain events",
+        "season": "Warm, wet weather"
+      },
+      "treatment_chemical": "Copper-based bactericide at petal fall",
+      "treatment_organic": "Bacillus subtilis, copper spray",
+      "prevention": [
+        "Plant resistant varieties",
+        "Prune for air circulation",
+        "Avoid overhead irrigation",
+        "Remove infected branches",
+        "Apply preventive copper sprays",
+        "Sanitize pruning tools"
+      ],
+      "spread": "Rain splash, wind, insects",
+      "incubation_period": "5-10 days",
+      "economic_impact": "Moderate - affects fruit quality"
+    },
+    
+    "Cherry Powdery Mildew": {
+      "id": "dis_011",
+      "name": "Cherry Powdery Mildew",
+      "crop": "Cherry",
+      "category": "Fungal",
+      "severity": "Moderate",
+      "symptoms": [
+        "White powdery growth on leaves",
+        "Leaves may curl and distort",
+        "Powdery growth on young shoots",
+        "Infected leaves drop prematurely",
+        "Reduced fruit quality"
+      ],
+      "causes": [
+        "Podosphaera clandestina fungus",
+        "Overwinters in buds",
+        "Spores spread by wind",
+        "Does not require free water for infection"
+      ],
+      "favorable_conditions": {
+        "temperature": "18-28°C (64-82°F)",
+        "humidity": "High (>60%)",
+        "leaf_wetness": "Not required",
+        "season": "Spring to early summer"
+      },
+      "treatment_chemical": "Sulfur or myclobutanil",
+      "treatment_organic": "Milk spray (1:9), neem oil",
+      "prevention": [
+        "Plant resistant varieties",
+        "Prune for air circulation",
+        "Avoid overhead watering",
+        "Apply preventive sulfur in spring",
+        "Remove infected leaves",
+        "Reduce humidity in orchard"
+      ],
+      "spread": "Windborne spores",
+      "incubation_period": "7-10 days",
+      "economic_impact": "Moderate - affects tree vigor and fruit"
+    },
+    
+    "Corn Northern Leaf Blight": {
+      "id": "dis_012",
+      "name": "Corn Northern Leaf Blight",
+      "crop": "Corn",
+      "category": "Fungal",
+      "severity": "Severe",
+      "symptoms": [
+        "Long, cigar-shaped gray-green lesions",
+        "Lesions turn tan with dark borders",
+        "Lesions may coalesce killing leaves",
+        "Reduced photosynthetic area",
+        "Ear rot in severe cases"
+      ],
+      "causes": [
+        "Exserohilum turcicum fungus",
+        "Overwinters in crop residue",
+        "Spores spread by wind and rain",
+        "Favored by humid conditions"
+      ],
+      "favorable_conditions": {
+        "temperature": "18-27°C (64-81°F)",
+        "humidity": "High (>85%)",
+        "leaf_wetness": "6+ hours",
+        "season": "Warm, humid weather"
+      },
+      "treatment_chemical": "Strobilurin or triazole fungicides",
+      "treatment_organic": "Copper spray, compost tea",
+      "prevention": [
+        "Use resistant hybrids",
+        "Crop rotation",
+        "Tillage to bury residue",
+        "Proper spacing",
+        "Balanced nitrogen fertilization",
+        "Early planting"
+      ],
+      "spread": "Windborne spores, rain splash",
+      "incubation_period": "7-14 days",
+      "economic_impact": "Severe - can reduce yield by 40-60%"
+    },
+    
+    "Tomato Yellow Leaf Curl Virus": {
+      "id": "dis_013",
+      "name": "Tomato Yellow Leaf Curl Virus",
+      "crop": "Tomato",
+      "category": "Viral",
+      "severity": "Severe",
+      "symptoms": [
+        "Yellowing and curling of leaves",
+        "Leaves become small and crinkled",
+        "Stunted plant growth",
+        "Reduced fruit production",
+        "Flowers may drop prematurely"
+      ],
+      "causes": [
+        "Begomovirus transmitted by whiteflies",
+        "Cannot be cured once infected",
+        "Whiteflies acquire virus from infected plants",
+        "Virus persists in whiteflies"
+      ],
+      "favorable_conditions": {
+        "temperature": "25-35°C (77-95°F)",
+        "humidity": "Low to moderate",
+        "whitefly_activity": "High",
+        "season": "Warm weather"
+      },
+      "treatment_chemical": "No cure - Control whitefly vectors with insecticides",
+      "treatment_organic": "Neem oil, sticky traps, reflective mulch",
+      "prevention": [
+        "Use resistant varieties",
+        "Insect netting or row covers",
+        "Control whiteflies",
+        "Remove infected plants immediately",
+        "Use reflective mulches",
+        "Remove weed hosts"
+      ],
+      "spread": "Whiteflies only (not mechanical)",
+      "incubation_period": "14-21 days",
+      "economic_impact": "Severe - can cause 100% yield loss"
+    },
+    
+    "Corn Cercospora Leaf Spot": {
+      "id": "dis_014",
+      "name": "Corn Cercospora Leaf Spot",
+      "crop": "Corn",
+      "category": "Fungal",
+      "severity": "Moderate",
+      "symptoms": [
+        "Small rectangular brown spots",
+        "Spots have yellow halos",
+        "Lesions parallel to leaf veins",
+        "Lower leaves affected first",
+        "Severe infection causes leaf death"
+      ],
+      "causes": [
+        "Cercospora zeae-maydis fungus",
+        "Overwinters in crop residue",
+        "Spores spread by rain splash",
+        "Favors warm, humid conditions"
+      ],
+      "favorable_conditions": {
+        "temperature": "25-30°C (77-86°F)",
+        "humidity": "High (>80%)",
+        "leaf_wetness": "8+ hours",
+        "season": "Mid to late summer"
+      },
+      "treatment_chemical": "Azoxystrobin or pyraclostrobin",
+      "treatment_organic": "Copper spray",
+      "prevention": [
+        "Plant resistant hybrids",
+        "Crop rotation",
+        "Tillage to bury residue",
+        "Proper fertility",
+        "Avoid overhead irrigation"
+      ],
+      "spread": "Rain splash, wind",
+      "incubation_period": "10-14 days",
+      "economic_impact": "Moderate - can reduce yield by 10-20%"
+    },
+    
+    "Grape Leaf Blight": {
+      "id": "dis_015",
+      "name": "Grape Leaf Blight",
+      "crop": "Grape",
+      "category": "Fungal",
+      "severity": "Moderate",
+      "symptoms": [
+        "Brown spots on leaves",
+        "Spots enlarge and coalesce",
+        "Leaves turn brown and die",
+        "Defoliation from bottom up",
+        "Reduced fruit quality"
+      ],
+      "causes": [
+        "Pseudocercospora vitis fungus",
+        "Overwinters in fallen leaves",
+        "Spores spread by rain splash",
+        "Favors wet conditions"
+      ],
+      "favorable_conditions": {
+        "temperature": "20-28°C (68-82°F)",
+        "humidity": "High",
+        "leaf_wetness": "Extended periods",
+        "season": "Warm, wet weather"
+      },
+      "treatment_chemical": "Mancozeb or copper",
+      "treatment_organic": "Neem oil, compost tea",
+      "prevention": [
+        "Good canopy management",
+        "Proper spacing",
+        "Remove infected leaves",
+        "Improve air circulation",
+        "Avoid overhead watering",
+        "Train vines properly"
+      ],
+      "spread": "Rain splash",
+      "incubation_period": "10-14 days",
+      "economic_impact": "Moderate - reduces vine health"
+    },
+    
+    "Grape Esca": {
+      "id": "dis_016",
+      "name": "Grape Esca",
+      "crop": "Grape",
+      "category": "Fungal (Wood Disease)",
+      "severity": "Severe",
+      "symptoms": [
+        "Brown spots with dark borders on leaves",
+        "Tiger-stripe pattern on leaves",
+        "White rot in wood (white rot)",
+        "Fruit shrivels and drops",
+        "Gradual vine decline and death"
+      ],
+      "causes": [
+        "Phaeomoniella chlamydospora fungus",
+        "Enters through pruning wounds",
+        "Multiple fungi involved complex",
+        "Incubation period 3-5 years"
+      ],
+      "favorable_conditions": {
+        "temperature": "15-30°C (59-86°F)",
+        "wounds": "Fresh pruning cuts",
+        "rainfall": "Wet conditions after pruning",
+        "season": "Year-round"
+      },
+      "treatment_chemical": "Trichoderma-based treatments",
+      "treatment_organic": "Bordeaux mixture on pruning wounds",
+      "prevention": [
+        "Use disease-free planting material",
+        "Protect pruning wounds",
+        "Remove infected wood",
+        "Maintain vine vigor",
+        "Avoid mechanical damage",
+        "Remove infected vines"
+      ],
+      "spread": "Pruning wounds, contaminated tools",
+      "incubation_period": "3-5 years",
+      "economic_impact": "Severe - kills vines over time"
+    },
+    
+    "Apple Cedar Rust": {
+      "id": "dis_017",
+      "name": "Apple Cedar Rust",
+      "crop": "Apple",
+      "category": "Fungal (Rust)",
+      "severity": "Moderate",
+      "symptoms": [
+        "Bright yellow-orange spots on leaves",
+        "Small cup-like structures on spots",
+        "Spots on fruit near calyx end",
+        "Twig cankers on cedar trees",
+        "Premature leaf drop"
+      ],
+      "causes": [
+        "Gymnosporangium juniperi-virginianae",
+        "Requires both apple and cedar trees",
+        "Alternates between hosts",
+        "Spores travel up to 2 miles"
+      ],
+      "favorable_conditions": {
+        "temperature": "10-22°C (50-72°F)",
+        "humidity": "High",
+        "leaf_wetness": "Rainy spring weather",
+        "season": "Spring"
+      },
+      "treatment_chemical": "Myclobutanil or mancozeb",
+      "treatment_organic": "Sulfur spray",
+      "prevention": [
+        "Plant resistant varieties",
+        "Remove nearby cedar trees",
+        "Apply preventive fungicides in spring",
+        "Monitor weather for infection",
+        "Prune galls on cedar trees"
+      ],
+      "spread": "Windborne spores (up to 2 miles)",
+      "incubation_period": "10-14 days",
+      "economic_impact": "Moderate - affects fruit quality"
+    },
+    
+    "Tomato Septoria Leaf Spot": {
+      "id": "dis_018",
+      "name": "Tomato Septoria Leaf Spot",
+      "crop": "Tomato",
+      "category": "Fungal",
+      "severity": "Moderate",
+      "symptoms": [
+        "Small circular spots with gray centers",
+        "Dark borders around spots",
+        "Lower leaves affected first",
+        "Spots may have tiny black dots",
+        "Severe defoliation from bottom up"
+      ],
+      "causes": [
+        "Septoria lycopersici fungus",
+        "Survives on plant debris",
+        "Spores splash onto lower leaves",
+        "Favors warm, humid conditions"
+      ],
+      "favorable_conditions": {
+        "temperature": "20-25°C (68-77°F)",
+        "humidity": "High",
+        "leaf_wetness": "Frequent rain/overhead water",
+        "season": "Warm, wet weather"
+      },
+      "treatment_chemical": "Chlorothalonil or mancozeb",
+      "treatment_organic": "Baking soda solution, neem oil",
+      "prevention": [
+        "Remove lower leaves",
+        "Mulch to prevent soil splash",
+        "Avoid overhead watering",
+        "Stake plants",
+        "Crop rotation",
+        "Remove plant debris"
+      ],
+      "spread": "Rain splash, tools",
+      "incubation_period": "7-10 days",
+      "economic_impact": "Moderate - can reduce yield by 20-30%"
+    },
+    
+    "Potato Early Blight": {
+      "id": "dis_019",
+      "name": "Potato Early Blight",
+      "crop": "Potato",
+      "category": "Fungal",
+      "severity": "Moderate",
+      "symptoms": [
+        "Small dark spots with concentric rings",
+        "Lower leaves affected first",
+        "Leaves turn yellow and die",
+        "Tubers develop dark, sunken spots",
+        "Reduced yield"
+      ],
+      "causes": [
+        "Alternaria solani fungus",
+        "Survives in soil and debris",
+        "Spores splash onto plants",
+        "Favors warm, humid conditions"
+      ],
+      "favorable_conditions": {
+        "temperature": "20-30°C (68-86°F)",
+        "humidity": "Moderate to high",
+        "leaf_wetness": "Short periods sufficient",
+        "season": "Warm weather"
+      },
+      "treatment_chemical": "Chlorothalonil",
+      "treatment_organic": "Baking soda solution, compost tea",
+      "prevention": [
+        "Use disease-free seed potatoes",
+        "Crop rotation (3-4 years)",
+        "Maintain proper fertility",
+        "Hill soil around plants",
+        "Avoid overhead irrigation",
+        "Remove plant debris"
+      ],
+      "spread": "Rain splash, wind, insects",
+      "incubation_period": "2-5 days",
+      "economic_impact": "Moderate - reduces yield by 20-30%"
+    }
+  },
+  
+  "by_crop": {
+    "Apple": ["Apple Scab", "Apple Black Rot", "Apple Cedar Rust"],
+    "Tomato": ["Tomato Late Blight", "Tomato Early Blight", "Tomato Bacterial Spot", "Tomato Septoria Leaf Spot", "Tomato Yellow Leaf Curl Virus"],
+    "Potato": ["Potato Late Blight", "Potato Early Blight"],
+    "Corn": ["Corn Common Rust", "Corn Northern Leaf Blight", "Corn Cercospora Leaf Spot"],
+    "Grape": ["Grape Black Rot", "Grape Esca", "Grape Leaf Blight"],
+    "Bell Pepper": ["Bell Pepper Bacterial Spot"],
+    "Strawberry": ["Strawberry Leaf Scorch"],
+    "Peach": ["Peach Bacterial Spot"],
+    "Cherry": ["Cherry Powdery Mildew"]
+  },
+  
+  "by_category": {
+    "Fungal": [
+      "Apple Scab", "Apple Black Rot", "Potato Early Blight", 
+      "Tomato Early Blight", "Corn Common Rust", "Corn Northern Leaf Blight",
+      "Corn Cercospora Leaf Spot", "Grape Black Rot", "Grape Leaf Blight",
+      "Grape Esca", "Apple Cedar Rust", "Tomato Septoria Leaf Spot",
+      "Strawberry Leaf Scorch", "Cherry Powdery Mildew"
+    ],
+    "Fungal-like (Oomycete)": ["Potato Late Blight", "Tomato Late Blight"],
+    "Bacterial": ["Bell Pepper Bacterial Spot", "Peach Bacterial Spot", "Tomato Bacterial Spot"],
+    "Viral": ["Tomato Yellow Leaf Curl Virus"]
+  },
+  
+  "severity_classification": {
+    "Severe": [
+      "Apple Black Rot", "Potato Late Blight", "Tomato Late Blight",
+      "Corn Northern Leaf Blight", "Grape Black Rot", "Grape Esca",
+      "Tomato Yellow Leaf Curl Virus"
+    ],
+    "Moderate": [
+      "Apple Scab", "Apple Cedar Rust", "Potato Early Blight",
+      "Tomato Early Blight", "Tomato Bacterial Spot", "Tomato Septoria Leaf Spot",
+      "Corn Common Rust", "Corn Cercospora Leaf Spot", "Grape Leaf Blight",
+      "Bell Pepper Bacterial Spot", "Strawberry Leaf Scorch",
+      "Peach Bacterial Spot", "Cherry Powdery Mildew"
+    ]
+  }
+}

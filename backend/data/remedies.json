@@ -1,0 +1,1140 @@
+{
+  "version": "1.0.0",
+  "last_updated": "2024-01-15",
+  "total_diseases": 29,
+  "remedies": {
+    "Apple Scab": {
+      "disease_name": "Apple Scab",
+      "crop": "Apple",
+      "severity": "Moderate",
+      "chemical_treatment": {
+        "name": "Sulfur-based fungicide",
+        "dosage": "3g per liter of water",
+        "frequency": "Apply in spring when leaves emerge",
+        "method": "Spray entire tree thoroughly",
+        "precautions": "Do not apply in hot weather (>80°F)",
+        "products": ["Wettable Sulfur", "Lime Sulfur"],
+        "waiting_period": "14 days before harvest"
+      },
+      "organic_treatment": {
+        "name": "Compost Tea + Neem Oil",
+        "dosage": "5ml neem oil + 1 cup compost tea per liter",
+        "frequency": "Apply every 10 days",
+        "method": "Spray on leaves and fruit",
+        "precautions": "Test on small branch first",
+        "alternative": "Baking soda spray"
+      },
+      "cultural_practices": [
+        "Rake and destroy fallen leaves in autumn",
+        "Prune for air circulation",
+        "Remove infected fruit",
+        "Clean pruning tools",
+        "Reduce humidity in orchard"
+      ],
+      "prevention_tips": [
+        "Plant resistant varieties like 'Enterprise' or 'Liberty'",
+        "Apply preventive sprays at green tip stage",
+        "Maintain tree health with proper nutrition",
+        "Remove overwintering sites",
+        "Monitor weather for infection periods"
+      ],
+      "urgency": "Action within 7 days",
+      "season": "Spring, wet conditions",
+      "symptoms": "Olive-green to black spots on leaves and fruit. Leaves may curl and drop prematurely.",
+      "causes": "Fungal pathogen Venturia inaequalis. Overwinters in fallen leaves."
+    },
+    
+    "Apple Black Rot": {
+      "disease_name": "Apple Black Rot",
+      "crop": "Apple",
+      "severity": "Severe",
+      "chemical_treatment": {
+        "name": "Captan or thiophanate-methyl",
+        "dosage": "2g per liter of water",
+        "frequency": "Apply at bloom and fruit set",
+        "method": "Spray on foliage and fruit",
+        "precautions": "Rotate with different fungicides",
+        "products": ["Captan 50WP", "Thiophanate-methyl"],
+        "waiting_period": "21 days before harvest"
+      },
+      "organic_treatment": {
+        "name": "Copper Spray",
+        "dosage": "2g copper sulfate per liter",
+        "frequency": "Apply during growing season",
+        "method": "Spray on affected areas",
+        "precautions": "Use stainless steel equipment",
+        "alternative": "Sulfur spray"
+      },
+      "cultural_practices": [
+        "Remove mummified fruit from trees",
+        "Prune dead or diseased wood",
+        "Clean up fallen fruit and leaves",
+        "Sanitize pruning tools between cuts"
+      ],
+      "prevention_tips": [
+        "Maintain tree health with proper fertilization",
+        "Remove infected branches promptly",
+        "Apply preventive fungicides in early spring",
+        "Practice good orchard sanitation"
+      ],
+      "urgency": "Immediate action required",
+      "season": "Warm, wet weather",
+      "symptoms": "Purple spots on leaves turning brown. Fruit shows black, rotting lesions with concentric rings.",
+      "causes": "Botryosphaeria obtusa fungus. Enters through wounds."
+    },
+    
+    "Apple Cedar Rust": {
+      "disease_name": "Apple Cedar Rust",
+      "crop": "Apple",
+      "severity": "Moderate",
+      "chemical_treatment": {
+        "name": "Myclobutanil or mancozeb",
+        "dosage": "1.5ml per liter of water",
+        "frequency": "Apply every 10-14 days",
+        "method": "Spray on foliage",
+        "precautions": "Do not apply during flowering",
+        "products": ["Immunox", "Manzate"],
+        "waiting_period": "14 days before harvest"
+      },
+      "organic_treatment": {
+        "name": "Sulfur Spray",
+        "dosage": "3g per liter of water",
+        "frequency": "Apply every 10-14 days",
+        "method": "Spray on leaves",
+        "precautions": "Avoid in hot weather",
+        "alternative": "Neem oil"
+      },
+      "cultural_practices": [
+        "Remove nearby cedar trees if possible",
+        "Prune out galls on cedar trees",
+        "Increase air circulation",
+        "Plant resistant varieties"
+      ],
+      "prevention_tips": [
+        "Plant resistant apple varieties",
+        "Remove cedar trees within 2 miles",
+        "Apply preventive fungicides in spring",
+        "Monitor weather for infection periods"
+      ],
+      "urgency": "Action within 10 days",
+      "season": "Spring, rainy weather",
+      "symptoms": "Bright yellow-orange spots on leaves. Small cup-like structures form on spots.",
+      "causes": "Gymnosporangium juniperi-virginianae. Requires both apple and cedar trees."
+    },
+    
+    "Apple Healthy": {
+      "disease_name": "Apple Healthy",
+      "crop": "Apple",
+      "severity": "Low",
+      "chemical_treatment": {
+        "name": "No treatment needed",
+        "dosage": "N/A",
+        "frequency": "Annual dormant oil spray recommended",
+        "method": "N/A",
+        "precautions": "Use organic dormant oil",
+        "products": ["Dormant Oil"],
+        "waiting_period": "N/A"
+      },
+      "organic_treatment": {
+        "name": "Beneficial Insect Habitat",
+        "dosage": "Plant flowers nearby",
+        "frequency": "Seasonal",
+        "method": "Provide habitat for natural predators",
+        "precautions": "Avoid broad-spectrum pesticides",
+        "alternative": "Companion planting"
+      },
+      "cultural_practices": [
+        "Annual winter pruning",
+        "Mulch around base",
+        "Regular watering",
+        "Fertilize in spring",
+        "Thin fruit for quality"
+      ],
+      "prevention_tips": [
+        "Regular monitoring",
+        "Proper pruning",
+        "Fertilize based on soil test",
+        "Integrated pest management"
+      ],
+      "urgency": "No action needed",
+      "season": "All seasons",
+      "symptoms": "No visible symptoms. Plant appears healthy.",
+      "causes": "N/A - Plant is healthy"
+    },
+    
+    "Bell Pepper Bacterial Spot": {
+      "disease_name": "Bell Pepper Bacterial Spot",
+      "crop": "Bell Pepper",
+      "severity": "Moderate",
+      "chemical_treatment": {
+        "name": "Copper-based bactericide",
+        "dosage": "2g per liter of water",
+        "frequency": "Apply at first sign of disease",
+        "method": "Spray on foliage",
+        "precautions": "Do not exceed recommended dose",
+        "products": ["Kocide 3000", "Cuprofix"],
+        "waiting_period": "7 days before harvest"
+      },
+      "organic_treatment": {
+        "name": "Bacillus subtilis",
+        "dosage": "5ml per liter of water",
+        "frequency": "Apply weekly",
+        "method": "Spray on leaves",
+        "precautions": "Apply in morning",
+        "alternative": "Compost tea"
+      },
+      "cultural_practices": [
+        "Avoid overhead irrigation",
+        "Remove infected leaves",
+        "Practice crop rotation",
+        "Sanitize tools"
+      ],
+      "prevention_tips": [
+        "Use disease-free seeds",
+        "Crop rotation (3-4 years)",
+        "Avoid working with wet plants",
+        "Apply preventive copper sprays"
+      ],
+      "urgency": "Action within 5 days",
+      "season": "Warm, wet weather",
+      "symptoms": "Small, water-soaked spots on leaves that turn brown with yellow halos.",
+      "causes": "Xanthomonas campestris bacteria. Spreads by splashing water."
+    },
+    
+    "Bell Pepper Healthy": {
+      "disease_name": "Bell Pepper Healthy",
+      "crop": "Bell Pepper",
+      "severity": "Low",
+      "chemical_treatment": {
+        "name": "No treatment needed",
+        "dosage": "N/A",
+        "frequency": "Continue regular preventive care",
+        "method": "N/A",
+        "precautions": "N/A",
+        "products": [],
+        "waiting_period": "N/A"
+      },
+      "organic_treatment": {
+        "name": "Compost Tea",
+        "dosage": "1 cup per gallon of water",
+        "frequency": "Apply monthly",
+        "method": "Foliar spray",
+        "precautions": "Use well-aged compost",
+        "alternative": "Seaweed extract"
+      },
+      "cultural_practices": [
+        "Regular monitoring",
+        "Proper spacing",
+        "Consistent watering",
+        "Mulch to retain moisture"
+      ],
+      "prevention_tips": [
+        "Regular scouting",
+        "Remove weeds",
+        "Maintain plant health",
+        "Practice crop rotation"
+      ],
+      "urgency": "No action needed",
+      "season": "All seasons",
+      "symptoms": "No visible symptoms. Plant appears healthy.",
+      "causes": "N/A - Plant is healthy"
+    },
+    
+    "Cherry Healthy": {
+      "disease_name": "Cherry Healthy",
+      "crop": "Cherry",
+      "severity": "Low",
+      "chemical_treatment": {
+        "name": "No treatment needed",
+        "dosage": "N/A",
+        "frequency": "N/A",
+        "method": "N/A",
+        "precautions": "N/A",
+        "products": [],
+        "waiting_period": "N/A"
+      },
+      "organic_treatment": {
+        "name": "Neem Oil",
+        "dosage": "5ml per liter of water",
+        "frequency": "Apply monthly as preventive",
+        "method": "Spray on foliage",
+        "precautions": "Test on small area",
+        "alternative": "Compost tea"
+      },
+      "cultural_practices": [
+        "Regular pruning",
+        "Proper fertilization",
+        "Mulch around base",
+        "Monitor for pests"
+      ],
+      "prevention_tips": [
+        "Regular monitoring",
+        "Proper orchard sanitation",
+        "Balanced nutrition",
+        "Integrated pest management"
+      ],
+      "urgency": "No action needed",
+      "season": "All seasons",
+      "symptoms": "No visible symptoms. Tree appears healthy.",
+      "causes": "N/A - Tree is healthy"
+    },
+    
+    "Cherry Powdery Mildew": {
+      "disease_name": "Cherry Powdery Mildew",
+      "crop": "Cherry",
+      "severity": "Moderate",
+      "chemical_treatment": {
+        "name": "Sulfur or myclobutanil",
+        "dosage": "2g per liter of water",
+        "frequency": "Apply every 7-10 days",
+        "method": "Spray on foliage",
+        "precautions": "Do not apply in hot weather",
+        "products": ["Wettable Sulfur", "Immunox"],
+        "waiting_period": "14 days before harvest"
+      },
+      "organic_treatment": {
+        "name": "Milk Spray",
+        "dosage": "1 part milk to 9 parts water",
+        "frequency": "Apply weekly",
+        "method": "Spray on affected areas",
+        "precautions": "Use skim milk",
+        "alternative": "Baking soda solution"
+      },
+      "cultural_practices": [
+        "Prune for air circulation",
+        "Remove infected leaves",
+        "Avoid overhead watering",
+        "Reduce humidity"
+      ],
+      "prevention_tips": [
+        "Plant resistant varieties",
+        "Apply preventive sulfur in spring",
+        "Maintain good air circulation",
+        "Remove plant debris"
+      ],
+      "urgency": "Action within 7 days",
+      "season": "Spring to early summer",
+      "symptoms": "White powdery growth on leaves and young shoots.",
+      "causes": "Podosphaera clandestina fungus. Favors high humidity."
+    },
+    
+    "Corn Cercospora Leaf Spot": {
+      "disease_name": "Corn Cercospora Leaf Spot",
+      "crop": "Corn",
+      "severity": "Moderate",
+      "chemical_treatment": {
+        "name": "Azoxystrobin or pyraclostrobin",
+        "dosage": "1ml per liter of water",
+        "frequency": "Apply at first sign of disease",
+        "method": "Spray on foliage",
+        "precautions": "Rotate with different fungicides",
+        "products": ["Quadris", "Headline"],
+        "waiting_period": "30 days before harvest"
+      },
+      "organic_treatment": {
+        "name": "Copper Spray",
+        "dosage": "2g per liter of water",
+        "frequency": "Apply at first sign",
+        "method": "Spray on leaves",
+        "precautions": "Use copper sulfate",
+        "alternative": "Neem oil"
+      },
+      "cultural_practices": [
+        "Crop rotation",
+        "Residue management",
+        "Plant resistant hybrids",
+        "Proper fertility"
+      ],
+      "prevention_tips": [
+        "Plant resistant hybrids",
+        "Crop rotation with soybeans",
+        "Tillage to bury crop residue",
+        "Balanced fertilization"
+      ],
+      "urgency": "Action within 10 days",
+      "season": "Warm, humid weather",
+      "symptoms": "Small rectangular brown spots with yellow halos on leaves.",
+      "causes": "Cercospora zeae-maydis fungus. Survives in crop residue."
+    },
+    
+    "Corn Common Rust": {
+      "disease_name": "Corn Common Rust",
+      "crop": "Corn",
+      "severity": "Moderate",
+      "chemical_treatment": {
+        "name": "Azoxystrobin",
+        "dosage": "1ml per liter of water",
+        "frequency": "Apply when rust first appears",
+        "method": "Spray on foliage",
+        "precautions": "Rotate with different fungicides",
+        "products": ["Quadris", "Headline"],
+        "waiting_period": "30 days before harvest"
+      },
+      "organic_treatment": {
+        "name": "Sulfur Dust",
+        "dosage": "15-20 lbs per acre",
+        "frequency": "Apply during dry conditions",
+        "method": "Dust on leaves",
+        "precautions": "Avoid during hot weather",
+        "alternative": "Neem oil"
+      },
+      "cultural_practices": [
+        "Plant early to avoid peak disease",
+        "Remove volunteer corn",
+        "Crop rotation",
+        "Destroy infected residue"
+      ],
+      "prevention_tips": [
+        "Plant resistant hybrids",
+        "Early planting",
+        "Avoid excess nitrogen",
+        "Destroy volunteer corn"
+      ],
+      "urgency": "Action within 7 days",
+      "season": "Cool, moist conditions",
+      "symptoms": "Small, cinnamon-brown pustules scattered on leaves. Pustules turn black as plant matures.",
+      "causes": "Puccinia sorghi fungus. Spreads by wind."
+    },
+    
+    "Corn Healthy": {
+      "disease_name": "Corn Healthy",
+      "crop": "Corn",
+      "severity": "Low",
+      "chemical_treatment": {
+        "name": "No treatment needed",
+        "dosage": "N/A",
+        "frequency": "N/A",
+        "method": "N/A",
+        "precautions": "N/A",
+        "products": [],
+        "waiting_period": "N/A"
+      },
+      "organic_treatment": {
+        "name": "Compost Application",
+        "dosage": "2-3 inches",
+        "frequency": "At planting",
+        "method": "Side dress",
+        "precautions": "Use well-aged compost",
+        "alternative": "Cover cropping"
+      },
+      "cultural_practices": [
+        "Proper spacing",
+        "Weed management",
+        "Adequate irrigation",
+        "Timely fertilization"
+      ],
+      "prevention_tips": [
+        "Crop rotation",
+        "Resistant varieties",
+        "Soil health management",
+        "Regular scouting"
+      ],
+      "urgency": "No action needed",
+      "season": "All seasons",
+      "symptoms": "No visible symptoms. Plant appears healthy.",
+      "causes": "N/A - Plant is healthy"
+    },
+    
+    "Corn Northern Leaf Blight": {
+      "disease_name": "Corn Northern Leaf Blight",
+      "crop": "Corn",
+      "severity": "Severe",
+      "chemical_treatment": {
+        "name": "Strobilurin or triazole",
+        "dosage": "1ml per liter of water",
+        "frequency": "Apply at first sign",
+        "method": "Spray on foliage",
+        "precautions": "Rotate fungicides",
+        "products": ["Stratego", "Quilt"],
+        "waiting_period": "30 days before harvest"
+      },
+      "organic_treatment": {
+        "name": "Copper Spray",
+        "dosage": "2g per liter of water",
+        "frequency": "Apply preventatively",
+        "method": "Spray on leaves",
+        "precautions": "Use copper hydroxide",
+        "alternative": "Compost tea"
+      },
+      "cultural_practices": [
+        "Crop rotation",
+        "Tillage to bury residue",
+        "Plant resistant hybrids",
+        "Proper spacing"
+      ],
+      "prevention_tips": [
+        "Use resistant hybrids",
+        "Crop rotation",
+        "Tillage of crop residue",
+        "Balanced nitrogen fertilization"
+      ],
+      "urgency": "Immediate action required",
+      "season": "Warm, humid weather",
+      "symptoms": "Long, cigar-shaped gray-green to tan lesions on leaves.",
+      "causes": "Exserohilum turcicum fungus. Favored by humid conditions."
+    },
+    
+    "Grape Black Rot": {
+      "disease_name": "Grape Black Rot",
+      "crop": "Grape",
+      "severity": "Severe",
+      "chemical_treatment": {
+        "name": "Myclobutanil or mancozeb",
+        "dosage": "1.5ml per liter of water",
+        "frequency": "Apply at bloom and fruit set",
+        "method": "Spray on clusters and leaves",
+        "precautions": "Do not apply during harvest",
+        "products": ["Immunox", "Manzate"],
+        "waiting_period": "14 days before harvest"
+      },
+      "organic_treatment": {
+        "name": "Sulfur Spray",
+        "dosage": "3g per liter of water",
+        "frequency": "Apply every 10-14 days",
+        "method": "Spray on vines",
+        "precautions": "Avoid in hot weather",
+        "alternative": "Copper spray"
+      },
+      "cultural_practices": [
+        "Prune for air circulation",
+        "Remove mummified fruit",
+        "Clean up fallen berries",
+        "Train vines properly"
+      ],
+      "prevention_tips": [
+        "Plant resistant varieties",
+        "Apply preventive fungicides",
+        "Good canopy management",
+        "Sanitize pruning tools"
+      ],
+      "urgency": "Immediate action required",
+      "season": "Warm, wet weather",
+      "symptoms": "Brown to black circular spots on leaves. Fruit shrivels into hard black mummies.",
+      "causes": "Guignardia bidwellii fungus. Overwinters in mummified fruit."
+    },
+    
+    "Grape Esca": {
+      "disease_name": "Grape Esca",
+      "crop": "Grape",
+      "severity": "Severe",
+      "chemical_treatment": {
+        "name": "Trichoderma-based treatments",
+        "dosage": "As directed",
+        "frequency": "Apply in spring",
+        "method": "Spray on pruning wounds",
+        "precautions": "Use fresh product",
+        "products": ["Trichoderma", "Vintec"],
+        "waiting_period": "N/A"
+      },
+      "organic_treatment": {
+        "name": "Bordeaux Mixture",
+        "dosage": "1g copper sulfate + 1g lime per liter",
+        "frequency": "Apply in spring",
+        "method": "Spray on trunks",
+        "precautions": "Use stainless steel equipment",
+        "alternative": "Sulfur"
+      },
+      "cultural_practices": [
+        "Remove infected wood",
+        "Protect pruning wounds",
+        "Maintain vine health",
+        "Avoid mechanical damage"
+      ],
+      "prevention_tips": [
+        "Use disease-free planting material",
+        "Protect wounds after pruning",
+        "Maintain vine vigor",
+        "Remove infected vines"
+      ],
+      "urgency": "Immediate action required",
+      "season": "Spring to fall",
+      "symptoms": "Brown spots with dark borders on leaves. White rot in wood.",
+      "causes": "Phaeomoniella chlamydospora fungus. Enters through pruning wounds."
+    },
+    
+    "Grape Healthy": {
+      "disease_name": "Grape Healthy",
+      "crop": "Grape",
+      "severity": "Low",
+      "chemical_treatment": {
+        "name": "No treatment needed",
+        "dosage": "N/A",
+        "frequency": "N/A",
+        "method": "N/A",
+        "precautions": "N/A",
+        "products": [],
+        "waiting_period": "N/A"
+      },
+      "organic_treatment": {
+        "name": "Compost Tea",
+        "dosage": "1 cup per gallon",
+        "frequency": "Apply monthly",
+        "method": "Foliar spray",
+        "precautions": "Use well-aged compost",
+        "alternative": "Seaweed extract"
+      },
+      "cultural_practices": [
+        "Regular pruning",
+        "Canopy management",
+        "Proper irrigation",
+        "Weed control"
+      ],
+      "prevention_tips": [
+        "Integrated pest management",
+        "Regular monitoring",
+        "Balanced nutrition",
+        "Sanitation practices"
+      ],
+      "urgency": "No action needed",
+      "season": "All seasons",
+      "symptoms": "No visible symptoms. Vine appears healthy.",
+      "causes": "N/A - Vine is healthy"
+    },
+    
+    "Grape Leaf Blight": {
+      "disease_name": "Grape Leaf Blight",
+      "crop": "Grape",
+      "severity": "Moderate",
+      "chemical_treatment": {
+        "name": "Mancozeb or copper",
+        "dosage": "2g per liter of water",
+        "frequency": "Apply at first sign",
+        "method": "Spray on foliage",
+        "precautions": "Rotate fungicides",
+        "products": ["Manzate", "Kocide"],
+        "waiting_period": "14 days before harvest"
+      },
+      "organic_treatment": {
+        "name": "Neem Oil",
+        "dosage": "5ml per liter of water",
+        "frequency": "Apply weekly",
+        "method": "Spray on leaves",
+        "precautions": "Test on small area",
+        "alternative": "Compost tea"
+      },
+      "cultural_practices": [
+        "Remove infected leaves",
+        "Improve air circulation",
+        "Avoid overhead watering",
+        "Train vines properly"
+      ],
+      "prevention_tips": [
+        "Good canopy management",
+        "Proper spacing",
+        "Remove leaf litter",
+        "Apply preventive sprays"
+      ],
+      "urgency": "Action within 7 days",
+      "season": "Warm, humid weather",
+      "symptoms": "Brown spots on leaves that enlarge and coalesce.",
+      "causes": "Pseudocercospora vitis fungus. Favors wet conditions."
+    },
+    
+    "Peach Bacterial Spot": {
+      "disease_name": "Peach Bacterial Spot",
+      "crop": "Peach",
+      "severity": "Moderate",
+      "chemical_treatment": {
+        "name": "Copper-based bactericide",
+        "dosage": "2g per liter of water",
+        "frequency": "Apply at petal fall",
+        "method": "Spray on foliage and fruit",
+        "precautions": "Do not exceed recommended dose",
+        "products": ["Kocide", "Cuprofix"],
+        "waiting_period": "14 days before harvest"
+      },
+      "organic_treatment": {
+        "name": "Bacillus subtilis",
+        "dosage": "5ml per liter of water",
+        "frequency": "Apply weekly",
+        "method": "Spray on leaves",
+        "precautions": "Apply in morning",
+        "alternative": "Compost tea"
+      },
+      "cultural_practices": [
+        "Avoid overhead irrigation",
+        "Prune for air circulation",
+        "Remove infected fruit",
+        "Sanitize tools"
+      ],
+      "prevention_tips": [
+        "Plant resistant varieties",
+        "Apply preventive copper sprays",
+        "Maintain tree health",
+        "Remove infected branches"
+      ],
+      "urgency": "Action within 7 days",
+      "season": "Warm, wet weather",
+      "symptoms": "Small, angular water-soaked spots on leaves that turn purple-brown.",
+      "causes": "Xanthomonas arboricola bacteria. Spreads by splashing water."
+    },
+    
+    "Peach Healthy": {
+      "disease_name": "Peach Healthy",
+      "crop": "Peach",
+      "severity": "Low",
+      "chemical_treatment": {
+        "name": "No treatment needed",
+        "dosage": "N/A",
+        "frequency": "N/A",
+        "method": "N/A",
+        "precautions": "N/A",
+        "products": [],
+        "waiting_period": "N/A"
+      },
+      "organic_treatment": {
+        "name": "Neem Oil",
+        "dosage": "5ml per liter of water",
+        "frequency": "Apply monthly",
+        "method": "Spray on foliage",
+        "precautions": "Test on small area",
+        "alternative": "Dormant oil"
+      },
+      "cultural_practices": [
+        "Regular pruning",
+        "Proper fertilization",
+        "Mulch around base",
+        "Monitor for pests"
+      ],
+      "prevention_tips": [
+        "Regular monitoring",
+        "Proper orchard sanitation",
+        "Balanced nutrition",
+        "Integrated pest management"
+      ],
+      "urgency": "No action needed",
+      "season": "All seasons",
+      "symptoms": "No visible symptoms. Tree appears healthy.",
+      "causes": "N/A - Tree is healthy"
+    },
+    
+    "Potato Early Blight": {
+      "disease_name": "Potato Early Blight",
+      "crop": "Potato",
+      "severity": "Moderate",
+      "chemical_treatment": {
+        "name": "Chlorothalonil",
+        "dosage": "2ml per liter of water",
+        "frequency": "Apply at first sign",
+        "method": "Spray on foliage",
+        "precautions": "Follow pre-harvest interval",
+        "products": ["Bravo", "Daconil"],
+        "waiting_period": "14 days before harvest"
+      },
+      "organic_treatment": {
+        "name": "Baking Soda Solution",
+        "dosage": "1 tbsp + 1 tsp oil per liter",
+        "frequency": "Apply weekly",
+        "method": "Spray on leaves",
+        "precautions": "Test on small area",
+        "alternative": "Compost tea"
+      },
+      "cultural_practices": [
+        "Crop rotation",
+        "Remove plant debris",
+        "Proper spacing",
+        "Avoid overhead irrigation"
+      ],
+      "prevention_tips": [
+        "Use disease-free seed potatoes",
+        "Crop rotation (3-4 years)",
+        "Maintain proper fertility",
+        "Hill soil around plants"
+      ],
+      "urgency": "Action within 5 days",
+      "season": "Warm, humid weather",
+      "symptoms": "Small dark spots with concentric rings on lower leaves. Leaves turn yellow and die.",
+      "causes": "Alternaria solani fungus. Common in warm, humid conditions."
+    },
+    
+    "Potato Healthy": {
+      "disease_name": "Potato Healthy",
+      "crop": "Potato",
+      "severity": "Low",
+      "chemical_treatment": {
+        "name": "No treatment needed",
+        "dosage": "N/A",
+        "frequency": "N/A",
+        "method": "N/A",
+        "precautions": "N/A",
+        "products": [],
+        "waiting_period": "N/A"
+      },
+      "organic_treatment": {
+        "name": "Seaweed Extract",
+        "dosage": "2ml per liter of water",
+        "frequency": "Apply monthly",
+        "method": "Foliar spray",
+        "precautions": "Use in morning",
+        "alternative": "Compost tea"
+      },
+      "cultural_practices": [
+        "Regular hilling",
+        "Consistent moisture",
+        "Weed control",
+        "Monitor for pests"
+      ],
+      "prevention_tips": [
+        "Use certified seed potatoes",
+        "Crop rotation",
+        "Regular monitoring",
+        "Proper storage"
+      ],
+      "urgency": "No action needed",
+      "season": "All seasons",
+      "symptoms": "No visible symptoms. Plant appears healthy.",
+      "causes": "N/A - Plant is healthy"
+    },
+    
+    "Potato Late Blight": {
+      "disease_name": "Potato Late Blight",
+      "crop": "Potato",
+      "severity": "Severe",
+      "chemical_treatment": {
+        "name": "Mancozeb",
+        "dosage": "2g per liter of water",
+        "frequency": "Apply preventatively",
+        "method": "Spray on foliage",
+        "precautions": "Do not apply within 14 days of harvest",
+        "products": ["Dithane", "Manzate"],
+        "waiting_period": "14 days before harvest"
+      },
+      "organic_treatment": {
+        "name": "Copper Spray (Bordeaux)",
+        "dosage": "1g copper sulfate + 1g lime per liter",
+        "frequency": "Apply every 10-14 days",
+        "method": "Spray on plants",
+        "precautions": "Use stainless steel equipment",
+        "alternative": "Neem oil"
+      },
+      "cultural_practices": [
+        "Hill soil around stems",
+        "Destroy volunteer potatoes",
+        "Remove infected plants",
+        "Harvest promptly"
+      ],
+      "prevention_tips": [
+        "Use certified disease-free seed potatoes",
+        "Avoid overhead irrigation",
+        "Destroy potato volunteers",
+        "Store tubers in cool, dry place"
+      ],
+      "urgency": "Immediate action required",
+      "season": "Cool, wet weather",
+      "symptoms": "Dark brown to black lesions on leaves. White mold on leaf undersides. Tubers show dark, shrunken areas.",
+      "causes": "Phytophthora infestans - same pathogen as tomato late blight."
+    },
+    
+    "Strawberry Healthy": {
+      "disease_name": "Strawberry Healthy",
+      "crop": "Strawberry",
+      "severity": "Low",
+      "chemical_treatment": {
+        "name": "No treatment needed",
+        "dosage": "N/A",
+        "frequency": "N/A",
+        "method": "N/A",
+        "precautions": "N/A",
+        "products": [],
+        "waiting_period": "N/A"
+      },
+      "organic_treatment": {
+        "name": "Seaweed Extract",
+        "dosage": "2ml per liter of water",
+        "frequency": "Apply monthly",
+        "method": "Foliar spray",
+        "precautions": "Use in morning",
+        "alternative": "Compost tea"
+      },
+      "cultural_practices": [
+        "Regular watering",
+        "Mulch to retain moisture",
+        "Remove runners",
+        "Monitor for pests"
+      ],
+      "prevention_tips": [
+        "Regular monitoring",
+        "Proper spacing",
+        "Remove old leaves",
+        "Renovate beds after harvest"
+      ],
+      "urgency": "No action needed",
+      "season": "All seasons",
+      "symptoms": "No visible symptoms. Plant appears healthy.",
+      "causes": "N/A - Plant is healthy"
+    },
+    
+    "Strawberry Leaf Scorch": {
+      "disease_name": "Strawberry Leaf Scorch",
+      "crop": "Strawberry",
+      "severity": "Moderate",
+      "chemical_treatment": {
+        "name": "Captan or myclobutanil",
+        "dosage": "2g per liter of water",
+        "frequency": "Apply at first sign",
+        "method": "Spray on foliage",
+        "precautions": "Follow label directions",
+        "products": ["Captan", "Immunox"],
+        "waiting_period": "7 days before harvest"
+      },
+      "organic_treatment": {
+        "name": "Compost Tea + Neem Oil",
+        "dosage": "5ml neem oil + 1 cup compost tea per liter",
+        "frequency": "Apply weekly",
+        "method": "Spray on leaves",
+        "precautions": "Test on small area",
+        "alternative": "Baking soda"
+      },
+      "cultural_practices": [
+        "Remove infected leaves",
+        "Improve air circulation",
+        "Avoid overhead watering",
+        "Mulch around plants"
+      ],
+      "prevention_tips": [
+        "Use disease-free plants",
+        "Crop rotation (3-4 years)",
+        "Remove old leaves after harvest",
+        "Apply preventive fungicides"
+      ],
+      "urgency": "Action within 7 days",
+      "season": "Warm, wet weather",
+      "symptoms": "Purple to brown spots on leaves that enlarge and coalesce.",
+      "causes": "Diplocarpon earliana fungus. Favors wet, humid conditions."
+    },
+    
+    "Tomato Bacterial Spot": {
+      "disease_name": "Tomato Bacterial Spot",
+      "crop": "Tomato",
+      "severity": "Moderate",
+      "chemical_treatment": {
+        "name": "Copper-based bactericide",
+        "dosage": "2g per liter of water",
+        "frequency": "Apply at first sign",
+        "method": "Spray on foliage",
+        "precautions": "Do not exceed recommended dose",
+        "products": ["Kocide", "Cuprofix"],
+        "waiting_period": "7 days before harvest"
+      },
+      "organic_treatment": {
+        "name": "Bacillus subtilis",
+        "dosage": "5ml per liter of water",
+        "frequency": "Apply weekly",
+        "method": "Spray on leaves",
+        "precautions": "Apply in morning",
+        "alternative": "Compost tea"
+      },
+      "cultural_practices": [
+        "Avoid overhead irrigation",
+        "Remove infected leaves",
+        "Practice crop rotation",
+        "Sanitize tools"
+      ],
+      "prevention_tips": [
+        "Use disease-free seeds",
+        "Crop rotation (3-4 years)",
+        "Avoid working with wet plants",
+        "Apply preventive copper sprays"
+      ],
+      "urgency": "Action within 5 days",
+      "season": "Warm, wet weather",
+      "symptoms": "Small, water-soaked spots on leaves that turn brown with yellow halos.",
+      "causes": "Xanthomonas campestris bacteria. Spreads by splashing water."
+    },
+    
+    "Tomato Early Blight": {
+      "disease_name": "Tomato Early Blight",
+      "crop": "Tomato",
+      "severity": "Moderate",
+      "chemical_treatment": {
+        "name": "Chlorothalonil",
+        "dosage": "2ml per liter of water",
+        "frequency": "Apply at first sign",
+        "method": "Spray on foliage",
+        "precautions": "Rotate with different fungicides",
+        "products": ["Bravo", "Daconil"],
+        "waiting_period": "7 days before harvest"
+      },
+      "organic_treatment": {
+        "name": "Baking Soda Solution",
+        "dosage": "1 tbsp + 1 tsp oil per liter",
+        "frequency": "Apply weekly",
+        "method": "Spray on leaves",
+        "precautions": "Test on small area",
+        "alternative": "Compost tea"
+      },
+      "cultural_practices": [
+        "Remove lower leaves",
+        "Mulch to prevent soil splash",
+        "Water at base",
+        "Stake plants"
+      ],
+      "prevention_tips": [
+        "Use disease-free seeds",
+        "Crop rotation",
+        "Avoid overhead watering",
+        "Remove plant debris"
+      ],
+      "urgency": "Action within 5 days",
+      "season": "Warm, humid weather",
+      "symptoms": "Dark spots with concentric rings (target-like appearance) on lower leaves. Yellowing around spots.",
+      "causes": "Alternaria solani fungus. Survives in soil and plant debris."
+    },
+    
+    "Tomato Healthy": {
+      "disease_name": "Tomato Healthy",
+      "crop": "Tomato",
+      "severity": "Low",
+      "chemical_treatment": {
+        "name": "No treatment needed",
+        "dosage": "N/A",
+        "frequency": "Continue regular preventive care",
+        "method": "N/A",
+        "precautions": "N/A",
+        "products": [],
+        "waiting_period": "N/A"
+      },
+      "organic_treatment": {
+        "name": "Compost Tea",
+        "dosage": "1 cup per gallon",
+        "frequency": "Apply monthly",
+        "method": "Foliar spray",
+        "precautions": "Use well-aged compost",
+        "alternative": "Seaweed extract"
+      },
+      "cultural_practices": [
+        "Consistent watering",
+        "Fertilize every 2-3 weeks",
+        "Prune suckers",
+        "Monitor for pests"
+      ],
+      "prevention_tips": [
+        "Regular monitoring",
+        "Remove yellowing leaves",
+        "Proper spacing",
+        "Use disease-free seeds"
+      ],
+      "urgency": "No action needed",
+      "season": "All seasons",
+      "symptoms": "No visible symptoms. Plant appears healthy.",
+      "causes": "N/A - Plant is healthy"
+    },
+    
+    "Tomato Late Blight": {
+      "disease_name": "Tomato Late Blight",
+      "crop": "Tomato",
+      "severity": "Severe",
+      "chemical_treatment": {
+        "name": "Copper Hydroxide",
+        "dosage": "2g per liter of water",
+        "frequency": "Apply every 7-10 days",
+        "method": "Spray on both sides of leaves",
+        "precautions": "Wear protective gear",
+        "products": ["Kocide 3000", "Champ DP"],
+        "waiting_period": "7 days before harvest"
+      },
+      "organic_treatment": {
+        "name": "Neem Oil + Garlic",
+        "dosage": "5ml neem oil + 3 garlic cloves per liter",
+        "frequency": "Spray twice weekly",
+        "method": "Mix well and strain",
+        "precautions": "Test on small area first",
+        "alternative": "Bordeaux mixture"
+      },
+      "cultural_practices": [
+        "Remove infected leaves",
+        "Avoid overhead watering",
+        "Ensure air circulation",
+        "Mulch around plants"
+      ],
+      "prevention_tips": [
+        "Use resistant varieties",
+        "Practice crop rotation",
+        "Apply preventive copper spray",
+        "Avoid planting near potatoes"
+      ],
+      "urgency": "Immediate action required",
+      "season": "Cool, wet weather",
+      "symptoms": "Dark, water-soaked spots on leaves that turn brown and crispy. White fuzzy growth on undersides.",
+      "causes": "Phytophthora infestans fungus. Spreads rapidly in cool, wet weather."
+    },
+    
+    "Tomato Septoria Leaf Spot": {
+      "disease_name": "Tomato Septoria Leaf Spot",
+      "crop": "Tomato",
+      "severity": "Moderate",
+      "chemical_treatment": {
+        "name": "Chlorothalonil or mancozeb",
+        "dosage": "2ml per liter of water",
+        "frequency": "Apply at first sign",
+        "method": "Spray on lower leaves first",
+        "precautions": "Rotate fungicides",
+        "products": ["Bravo", "Dithane"],
+        "waiting_period": "7 days before harvest"
+      },
+      "organic_treatment": {
+        "name": "Baking Soda Solution",
+        "dosage": "1 tbsp + 1 tsp oil per liter",
+        "frequency": "Apply weekly",
+        "method": "Spray on affected areas",
+        "precautions": "Test on small area",
+        "alternative": "Neem oil"
+      },
+      "cultural_practices": [
+        "Remove lower leaves",
+        "Mulch to prevent soil splash",
+        "Avoid overhead watering",
+        "Stake plants"
+      ],
+      "prevention_tips": [
+        "Use disease-free seeds",
+        "Crop rotation",
+        "Remove plant debris",
+        "Apply preventive fungicides"
+      ],
+      "urgency": "Action within 7 days",
+      "season": "Warm, humid weather",
+      "symptoms": "Small circular spots with gray centers and dark borders on lower leaves.",
+      "causes": "Septoria lycopersici fungus. Survives on plant debris."
+    },
+    
+    "Tomato Yellow Leaf Curl Virus": {
+      "disease_name": "Tomato Yellow Leaf Curl Virus",
+      "crop": "Tomato",
+      "severity": "Severe",
+      "chemical_treatment": {
+        "name": "No cure - Control whitefly vectors",
+        "dosage": "Use insecticidal soap",
+        "frequency": "As needed for whitefly control",
+        "method": "Spray on undersides of leaves",
+        "precautions": "Use in evening",
+        "products": ["Insecticidal soap", "Neem oil"],
+        "waiting_period": "N/A"
+      },
+      "organic_treatment": {
+        "name": "Neem Oil + Sticky Traps",
+        "dosage": "5ml neem oil per liter",
+        "frequency": "Apply weekly for whiteflies",
+        "method": "Spray + yellow sticky traps",
+        "precautions": "Test on small area",
+        "alternative": "Reflective mulch"
+      },
+      "cultural_practices": [
+        "Remove infected plants immediately",
+        "Control whiteflies",
+        "Use reflective mulches",
+        "Row covers for young plants"
+      ],
+      "prevention_tips": [
+        "Use resistant varieties",
+        "Insect netting",
+        "Control whiteflies",
+        "Remove weed hosts"
+      ],
+      "urgency": "Immediate action required",
+      "season": "Warm weather (whitefly activity)",
+      "symptoms": "Yellowing and curling of leaves. Stunted growth. Reduced fruit production.",
+      "causes": "Begomovirus transmitted by whiteflies."
+    }
+  }
+}

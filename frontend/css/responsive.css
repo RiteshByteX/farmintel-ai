@@ -1,0 +1,1353 @@
+/* ========================================
+   FarmIntel AI - Complete Responsive CSS
+   Premium Responsive Design for All Devices
+   ======================================== */
+
+/* ========================================
+   1. BREAKPOINT VARIABLES
+   ======================================== */
+
+/* Breakpoints System
+   xs: 0 - 480px    (Mobile Phones)
+   sm: 481 - 768px  (Tablets Portrait)
+   md: 769 - 1024px (Tablets Landscape / Small Laptops)
+   lg: 1025 - 1280px (Laptops / Desktops)
+   xl: 1281 - 1440px (Large Desktops)
+   2xl: 1441px+      (Extra Large Screens)
+*/
+
+/* ========================================
+   2. X-SMALL DEVICES (0 - 480px)
+   ======================================== */
+
+@media (max-width: 480px) {
+    /* Typography */
+    html {
+        font-size: 14px;
+    }
+    
+    h1 {
+        font-size: 1.75rem;
+    }
+    
+    h2 {
+        font-size: 1.5rem;
+    }
+    
+    h3 {
+        font-size: 1.25rem;
+    }
+    
+    h4 {
+        font-size: 1.125rem;
+    }
+    
+    /* Layout */
+    .dashboard-container {
+        flex-direction: column;
+    }
+    
+    .main-content {
+        margin-left: 0;
+        padding: 1rem;
+        padding-top: 4rem;
+    }
+    
+    /* Sidebar Mobile */
+    .sidebar {
+        width: 280px;
+        transform: translateX(-100%);
+        position: fixed;
+        z-index: 100;
+    }
+    
+    .sidebar.mobile-open {
+        transform: translateX(0);
+    }
+    
+    .mobile-menu-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: fixed;
+        top: 1rem;
+        left: 1rem;
+        z-index: 101;
+        width: 2.5rem;
+        height: 2.5rem;
+        background: var(--bg-card);
+        backdrop-filter: blur(10px);
+        border: 1px solid var(--border-light);
+        border-radius: var(--radius-md);
+        color: white;
+        cursor: pointer;
+    }
+    
+    .sidebar-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 99;
+    }
+    
+    .sidebar-overlay.active {
+        display: block;
+    }
+    
+    /* Dashboard Header */
+    .dashboard-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+        padding-top: 0.5rem;
+    }
+    
+    .header-left h1 {
+        font-size: 1.5rem;
+    }
+    
+    .header-right {
+        width: 100%;
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+    
+    .search-bar {
+        width: 100%;
+    }
+    
+    .export-buttons {
+        width: 100%;
+        flex-direction: column;
+    }
+    
+    .export-btn {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    /* Welcome Banner */
+    .welcome-banner {
+        padding: 1rem;
+    }
+    
+    .welcome-content {
+        flex-direction: column;
+        text-align: center;
+        gap: 0.75rem;
+    }
+    
+    .welcome-text h2 {
+        font-size: 1.25rem;
+    }
+    
+    /* Stats Grid */
+    .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .stat-card {
+        padding: 1rem;
+    }
+    
+    .stat-value {
+        font-size: 1.5rem;
+    }
+    
+    .stat-icon {
+        width: 2.5rem;
+        height: 2.5rem;
+        font-size: 1rem;
+    }
+    
+    /* Dashboard Row */
+    .dashboard-row {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    /* Quick Actions */
+    .quick-actions {
+        padding: 1rem;
+    }
+    
+    .actions-grid {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+    }
+    
+    .action-btn {
+        padding: 0.75rem;
+    }
+    
+    /* Chart Card */
+    .chart-card {
+        padding: 1rem;
+    }
+    
+    .chart-card canvas {
+        max-height: 200px;
+    }
+    
+    /* Weather Alert */
+    .weather-alert {
+        flex-direction: column;
+        text-align: center;
+        padding: 1rem;
+    }
+    
+    .alert-icon {
+        margin-bottom: 0.5rem;
+    }
+    
+    .alert-action {
+        width: 100%;
+        margin-top: 0.5rem;
+    }
+    
+    /* Recent Scans Table */
+    .recent-scans {
+        padding: 1rem;
+        overflow-x: auto;
+    }
+    
+    .scans-table th,
+    .scans-table td {
+        padding: 0.5rem;
+        font-size: 0.7rem;
+    }
+    
+    /* Hide less important columns on mobile */
+    .scans-table th:nth-child(3),
+    .scans-table td:nth-child(3),
+    .scans-table th:nth-child(4),
+    .scans-table td:nth-child(4) {
+        display: none;
+    }
+    
+    /* Tips Section */
+    .tips-section {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .tip-card {
+        padding: 0.875rem;
+    }
+    
+    /* Forms */
+    .form-actions {
+        flex-direction: column;
+    }
+    
+    .form-actions button {
+        width: 100%;
+    }
+    
+    /* Buttons */
+    .btn,
+    .btn-primary,
+    .btn-outline,
+    .btn-secondary {
+        padding: 0.5rem 1rem;
+        font-size: 0.75rem;
+    }
+    
+    .btn-lg {
+        padding: 0.625rem 1.25rem;
+        font-size: 0.875rem;
+    }
+    
+    /* Cards */
+    .card {
+        padding: 1rem;
+    }
+    
+    /* Modals */
+    .modal-content {
+        width: 95%;
+        margin: 1rem;
+    }
+    
+    .modal-header {
+        padding: 1rem;
+    }
+    
+    .modal-body {
+        padding: 1rem;
+    }
+    
+    .modal-footer {
+        padding: 1rem;
+        flex-direction: column;
+    }
+    
+    .modal-footer button {
+        width: 100%;
+    }
+    
+    /* Toast Notifications */
+    .toast-container {
+        left: 1rem;
+        right: 1rem;
+        bottom: 1rem;
+    }
+    
+    .toast {
+        width: 100%;
+    }
+    
+    /* Pagination */
+    .pagination-container {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+    
+    .page-numbers {
+        order: 3;
+        width: 100%;
+        justify-content: center;
+        margin-top: 0.5rem;
+    }
+    
+    /* Detection Page */
+    .detection-container {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .upload-section,
+    .results-section {
+        padding: 1rem;
+    }
+    
+    .upload-options {
+        flex-direction: column;
+    }
+    
+    .sample-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.5rem;
+    }
+    
+    .action-buttons {
+        flex-direction: column;
+    }
+    
+    /* Weather Page */
+    .current-weather {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .weather-details {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+    }
+    
+    .risk-factors {
+        grid-template-columns: 1fr;
+    }
+    
+    .forecast-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+    }
+    
+    .advisory-section {
+        grid-template-columns: 1fr;
+    }
+    
+    /* Settings Page */
+    .settings-container {
+        flex-direction: column;
+    }
+    
+    .settings-sidebar {
+        width: 100%;
+        position: static;
+        margin-bottom: 1rem;
+    }
+    
+    .settings-nav {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+    
+    .settings-nav-item {
+        width: calc(50% - 0.25rem);
+        justify-content: center;
+    }
+    
+    .profile-avatar-section {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .notification-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+    
+    .theme-cards {
+        flex-direction: column;
+    }
+    
+    .plan-features {
+        grid-template-columns: 1fr;
+    }
+    
+    /* FAQ Page */
+    .faq-hero {
+        padding: 1.5rem;
+    }
+    
+    .category-tabs {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+    
+    .category-tab {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.7rem;
+    }
+    
+    .tips-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    /* Library Page */
+    .disease-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .filter-chips {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    /* Footer */
+    .footer-content {
+        flex-direction: column;
+        text-align: center;
+        gap: 1.5rem;
+    }
+    
+    .footer-links {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+    
+    .social-links {
+        justify-content: center;
+    }
+    
+    /* Hero Section */
+    .hero-container {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+    
+    .hero-title {
+        font-size: 2rem;
+    }
+    
+    .hero-buttons {
+        justify-content: center;
+    }
+    
+    .hero-stats {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    
+    .features-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .steps-container {
+        flex-direction: column;
+    }
+    
+    .step-arrow {
+        transform: rotate(90deg);
+    }
+    
+    .cta-section {
+        padding: 2rem 1rem;
+    }
+    
+    .cta-section h2 {
+        font-size: 1.5rem;
+    }
+}
+
+/* ========================================
+   3. SMALL DEVICES (481px - 768px)
+   ======================================== */
+
+@media (min-width: 481px) and (max-width: 768px) {
+    /* Typography */
+    html {
+        font-size: 15px;
+    }
+    
+    h1 {
+        font-size: 2rem;
+    }
+    
+    h2 {
+        font-size: 1.75rem;
+    }
+    
+    /* Layout */
+    .main-content {
+        margin-left: 0;
+        padding: 1.25rem;
+        padding-top: 4.5rem;
+    }
+    
+    /* Sidebar Mobile */
+    .sidebar {
+        transform: translateX(-100%);
+        position: fixed;
+        z-index: 100;
+    }
+    
+    .sidebar.mobile-open {
+        transform: translateX(0);
+    }
+    
+    .mobile-menu-toggle {
+        display: flex;
+    }
+    
+    /* Dashboard Header */
+    .dashboard-header {
+        padding-top: 0.5rem;
+    }
+    
+    /* Stats Grid */
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+    
+    /* Dashboard Row */
+    .dashboard-row {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    /* Actions Grid */
+    .actions-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    /* Tips Section */
+    .tips-section {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    /* Detection Page */
+    .detection-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .sample-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+    
+    /* Weather Page */
+    .weather-details {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    
+    .risk-factors {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .forecast-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+    
+    /* Settings Page */
+    .settings-container {
+        flex-direction: column;
+    }
+    
+    .settings-sidebar {
+        width: 100%;
+        position: static;
+        margin-bottom: 1.5rem;
+    }
+    
+    .settings-nav {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+    
+    .settings-nav-item {
+        width: auto;
+    }
+    
+    /* FAQ Page */
+    .tips-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    /* Library Page */
+    .disease-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    /* Hero Section */
+    .hero-container {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+    
+    .hero-title {
+        font-size: 2.5rem;
+    }
+    
+    .hero-buttons {
+        justify-content: center;
+    }
+    
+    .hero-stats {
+        justify-content: center;
+    }
+    
+    .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .cta-section {
+        padding: 2.5rem;
+    }
+}
+
+/* ========================================
+   4. MEDIUM DEVICES (769px - 1024px)
+   ======================================== */
+
+@media (min-width: 769px) and (max-width: 1024px) {
+    /* Layout */
+    .main-content {
+        margin-left: 0;
+        padding: 1.5rem;
+        padding-top: 5rem;
+    }
+    
+    /* Sidebar Mobile */
+    .sidebar {
+        transform: translateX(-100%);
+        position: fixed;
+        z-index: 100;
+        width: 280px;
+    }
+    
+    .sidebar.mobile-open {
+        transform: translateX(0);
+    }
+    
+    .mobile-menu-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: fixed;
+        top: 1rem;
+        left: 1rem;
+        z-index: 101;
+        width: 2.5rem;
+        height: 2.5rem;
+        background: var(--bg-card);
+        backdrop-filter: blur(10px);
+        border: 1px solid var(--border-light);
+        border-radius: var(--radius-md);
+        color: white;
+        cursor: pointer;
+    }
+    
+    .sidebar-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 99;
+    }
+    
+    .sidebar-overlay.active {
+        display: block;
+    }
+    
+    .dashboard-header {
+        padding-top: 0.5rem;
+    }
+    
+    /* Stats Grid */
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.25rem;
+    }
+    
+    /* Dashboard Row */
+    .dashboard-row {
+        grid-template-columns: 1fr;
+        gap: 1.25rem;
+    }
+    
+    /* Actions Grid */
+    .actions-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    /* Detection Page */
+    .detection-container {
+        grid-template-columns: 1fr;
+    }
+    
+    /* Weather Page */
+    .forecast-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+    
+    /* Settings Page */
+    .settings-container {
+        flex-direction: column;
+    }
+    
+    .settings-sidebar {
+        width: 100%;
+        position: static;
+        margin-bottom: 1.5rem;
+    }
+    
+    .settings-nav {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+    
+    /* Library Page */
+    .disease-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    /* Hero Section */
+    .hero-container {
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+    }
+    
+    .hero-title {
+        font-size: 2.5rem;
+    }
+    
+    .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* ========================================
+   5. LARGE DEVICES (1025px - 1280px)
+   ======================================== */
+
+@media (min-width: 1025px) and (max-width: 1280px) {
+    /* Layout */
+    .sidebar {
+        width: 260px;
+    }
+    
+    .main-content {
+        margin-left: 260px;
+        padding: 1.5rem;
+    }
+    
+    /* Stats Grid */
+    .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1rem;
+    }
+    
+    /* Dashboard Row */
+    .dashboard-row {
+        grid-template-columns: 1fr 1fr;
+        gap: 1.25rem;
+    }
+    
+    /* Detection Page */
+    .detection-container {
+        grid-template-columns: 1fr 1fr;
+        gap: 1.25rem;
+    }
+    
+    /* Weather Page */
+    .forecast-grid {
+        grid-template-columns: repeat(7, 1fr);
+        gap: 0.75rem;
+    }
+    
+    /* Settings Page */
+    .settings-container {
+        flex-direction: row;
+        gap: 1.5rem;
+    }
+    
+    .settings-sidebar {
+        width: 260px;
+        position: sticky;
+        top: 1rem;
+    }
+    
+    /* Library Page */
+    .disease-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.25rem;
+    }
+    
+    /* Hero Section */
+    .hero-container {
+        gap: 3rem;
+    }
+    
+    .hero-title {
+        font-size: 3rem;
+    }
+}
+
+/* ========================================
+   6. EXTRA LARGE DEVICES (1281px - 1440px)
+   ======================================== */
+
+@media (min-width: 1281px) and (max-width: 1440px) {
+    /* Layout */
+    .sidebar {
+        width: 280px;
+    }
+    
+    .main-content {
+        margin-left: 280px;
+        padding: 2rem;
+    }
+    
+    /* Container Max Width */
+    .container {
+        max-width: 1280px;
+        margin: 0 auto;
+    }
+    
+    /* Stats Grid */
+    .stats-grid {
+        gap: 1.5rem;
+    }
+    
+    /* Dashboard Row */
+    .dashboard-row {
+        gap: 1.5rem;
+    }
+    
+    /* Hero Section */
+    .hero-container {
+        max-width: 1280px;
+        margin: 0 auto;
+    }
+    
+    .hero-title {
+        font-size: 3.5rem;
+    }
+}
+
+/* ========================================
+   7. 2XL DEVICES (1441px+)
+   ======================================== */
+
+@media (min-width: 1441px) {
+    /* Layout */
+    .dashboard-container {
+        max-width: 1600px;
+        margin: 0 auto;
+    }
+    
+    .sidebar {
+        width: 300px;
+    }
+    
+    .main-content {
+        margin-left: 300px;
+        padding: 2.5rem;
+    }
+    
+    /* Typography */
+    html {
+        font-size: 17px;
+    }
+    
+    h1 {
+        font-size: 3.5rem;
+    }
+    
+    .stat-value {
+        font-size: 2rem;
+    }
+    
+    /* Hero Section */
+    .hero-container {
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+    
+    .hero-title {
+        font-size: 4rem;
+    }
+    
+    /* Stats Grid */
+    .stats-grid {
+        gap: 2rem;
+    }
+}
+
+/* ========================================
+   8. TABLET PORTRAIT SPECIFIC
+   ======================================== */
+
+@media (orientation: portrait) and (max-width: 1024px) {
+    /* Adjust for portrait mode */
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .dashboard-row {
+        grid-template-columns: 1fr;
+    }
+    
+    .forecast-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+    
+    .disease-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* ========================================
+   9. TABLET LANDSCAPE SPECIFIC
+   ======================================== */
+
+@media (orientation: landscape) and (max-width: 1024px) {
+    /* Adjust for landscape mode */
+    .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+    
+    .dashboard-row {
+        grid-template-columns: 1fr 1fr;
+    }
+    
+    .forecast-grid {
+        grid-template-columns: repeat(7, 1fr);
+    }
+    
+    .detection-container {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+/* ========================================
+   10. LANDSCAPE MODE ON MOBILE
+   ======================================== */
+
+@media (max-width: 768px) and (orientation: landscape) {
+    .sidebar {
+        width: 250px;
+    }
+    
+    .dashboard-header {
+        padding-top: 0.5rem;
+    }
+    
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .forecast-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+    
+    .disease-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* ========================================
+   11. FOLDABLE DEVICES (Samsung Fold, etc.)
+   ======================================== */
+
+@media (max-width: 280px) {
+    /* Ultra small devices */
+    html {
+        font-size: 12px;
+    }
+    
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .sample-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .forecast-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .settings-nav-item {
+        width: 100%;
+    }
+    
+    .category-tab {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .actions-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .weather-details {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ========================================
+   12. PRINT STYLES
+   ======================================== */
+
+@media print {
+    /* Hide unnecessary elements when printing */
+    .sidebar,
+    .mobile-menu-toggle,
+    .theme-toggle-wrapper,
+    .notification-bell,
+    .header-right,
+    .action-buttons,
+    .btn,
+    .form-actions,
+    .modal,
+    .toast-container,
+    .pagination-container,
+    .quick-actions,
+    .weather-alert,
+    .tips-section {
+        display: none !important;
+    }
+    
+    .main-content {
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    
+    .dashboard-header {
+        padding-top: 0 !important;
+    }
+    
+    .glass-effect,
+    .card,
+    .stat-card {
+        background: white !important;
+        box-shadow: none !important;
+        border: 1px solid #ddd !important;
+        backdrop-filter: none !important;
+    }
+    
+    body {
+        background: white !important;
+        color: black !important;
+    }
+    
+    .card,
+    .stat-card,
+    .recent-scans {
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+    
+    a {
+        text-decoration: none !important;
+        color: black !important;
+    }
+    
+    .stat-value,
+    .stat-label {
+        color: black !important;
+    }
+}
+
+/* ========================================
+   13. HIGH CONTRAST MODE
+   ======================================== */
+
+@media (prefers-contrast: high) {
+    :root {
+        --primary: #0000EE;
+        --border-light: #000000;
+        --text-primary: #000000;
+        --text-secondary: #333333;
+    }
+    
+    .glass-effect,
+    .card,
+    .stat-card {
+        backdrop-filter: none;
+        background: white;
+        border: 2px solid black;
+    }
+    
+    .btn-primary,
+    .btn-outline {
+        border: 2px solid black;
+    }
+}
+
+/* ========================================
+   14. REDUCED MOTION PREFERENCE
+   ======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+    
+    .card:hover,
+    .stat-card:hover,
+    .btn:hover {
+        transform: none !important;
+    }
+    
+    .stagger-children > * {
+        animation: none !important;
+        opacity: 1 !important;
+    }
+}
+
+/* ========================================
+   15. DARK MODE RESPONSIVE OVERRIDES
+   ======================================== */
+
+@media (max-width: 1024px) {
+    body.dark-mode .sidebar {
+        background: var(--bg-sidebar);
+    }
+    
+    body.dark-mode .mobile-menu-toggle {
+        background: var(--bg-card);
+        border-color: var(--border-light);
+    }
+}
+
+/* ========================================
+   16. TOUCH DEVICE OPTIMIZATIONS
+   ======================================== */
+
+@media (hover: none) and (pointer: coarse) {
+    /* Larger touch targets */
+    .btn,
+    .nav-item,
+    .chip,
+    .action-btn,
+    .read-more-btn,
+    .view-detail-btn,
+    .alert-action {
+        min-height: 44px;
+    }
+    
+    /* Remove hover effects on touch devices */
+    .card:hover,
+    .stat-card:hover,
+    .btn:hover {
+        transform: none;
+    }
+    
+    /* Increase spacing for touch */
+    .nav-item,
+    .settings-nav-item {
+        padding: 0.75rem 1rem;
+    }
+    
+    .chip {
+        padding: 0.5rem 1rem;
+    }
+    
+    /* Larger clickable areas */
+    .modal-close,
+    .notification-bell {
+        min-width: 44px;
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+/* ========================================
+   17. SAFE AREA INSETS (Notch devices)
+   ======================================== */
+
+@supports (padding: max(0px)) {
+    .sidebar {
+        padding-top: max(1rem, env(safe-area-inset-top));
+        padding-bottom: max(1rem, env(safe-area-inset-bottom));
+    }
+    
+    .main-content {
+        padding-left: max(1.5rem, env(safe-area-inset-left));
+        padding-right: max(1.5rem, env(safe-area-inset-right));
+    }
+    
+    .mobile-menu-toggle {
+        top: max(1rem, env(safe-area-inset-top));
+        left: max(1rem, env(safe-area-inset-left));
+    }
+    
+    .theme-toggle-wrapper {
+        top: max(1rem, env(safe-area-inset-top));
+        right: max(1rem, env(safe-area-inset-right));
+    }
+    
+    .toast-container {
+        bottom: max(1.5rem, env(safe-area-inset-bottom));
+        right: max(1.5rem, env(safe-area-inset-right));
+    }
+}
+
+/* ========================================
+   18. DESKTOP SPECIFIC OPTIMIZATIONS
+   ======================================== */
+
+@media (min-width: 1025px) {
+    /* Hover effects only on desktop */
+    .stat-card:hover,
+    .disease-card:hover,
+    .forecast-card:hover,
+    .feature-card:hover {
+        transform: translateY(-4px);
+    }
+    
+    /* Custom scrollbar for desktop */
+    ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+    
+    ::-webkit-scrollbar-track {
+        background: var(--bg-darker);
+        border-radius: var(--radius-full);
+    }
+    
+    ::-webkit-scrollbar-thumb {
+        background: var(--primary);
+        border-radius: var(--radius-full);
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+        background: var(--primary-light);
+    }
+}
+
+/* ========================================
+   19. TABLET SPECIFIC ADJUSTMENTS
+   ======================================== */
+
+@media (min-width: 768px) and (max-width: 1024px) and (orientation: portrait) {
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .forecast-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+    }
+    
+    .disease-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* ========================================
+   20. MOBILE KEYBOARD VISIBLE
+   ======================================== */
+
+@media (max-height: 500px) and (max-width: 768px) {
+    /* Adjust for keyboard visible on mobile */
+    .modal-content {
+        max-height: 80vh;
+    }
+    
+    .modal-body {
+        max-height: 50vh;
+        overflow-y: auto;
+    }
+    
+    .sidebar {
+        overflow-y: auto;
+    }
+}
+
+/* ========================================
+   21. SMALL HEIGHT DEVICES
+   ======================================== */
+
+@media (max-height: 600px) {
+    .hero {
+        min-height: auto;
+        padding: 100px 5% 60px;
+    }
+    
+    .sidebar {
+        overflow-y: auto;
+    }
+    
+    .sidebar-nav {
+        gap: 0.25rem;
+    }
+}
+
+/* ========================================
+   22. NOTCH DEVICES (iPhone X, etc.)
+   ======================================== */
+
+@supports (padding: max(0px)) {
+    .navbar {
+        padding-left: max(1rem, env(safe-area-inset-left));
+        padding-right: max(1rem, env(safe-area-inset-right));
+    }
+    
+    .hero,
+    .features,
+    .how-it-works,
+    .cta-section,
+    .footer {
+        padding-left: max(1rem, env(safe-area-inset-left));
+        padding-right: max(1rem, env(safe-area-inset-right));
+    }
+}

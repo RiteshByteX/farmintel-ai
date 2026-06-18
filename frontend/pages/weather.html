@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Weather Analysis - FarmIntel AI</title>
+    <link rel="icon" type="image/x-icon" href="#">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../css/weather.css">
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="animated-bg"></div>
+    <div class="particles" id="particles"></div>
+    
+    <!-- Theme Toggle -->
+    <div class="theme-toggle-wrapper">
+        <button id="themeToggle" class="theme-toggle-btn">
+            <i class="fas fa-sun"></i>
+        </button>
+    </div>
+
+    <!-- Dashboard Container -->
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-logo">
+                <div class="logo-icon">
+                    <i class="fas fa-leaf"></i>
+                </div>
+                <span>FarmIntel AI</span>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="detect.html" class="nav-item">
+                    <i class="fas fa-camera"></i>
+                    <span>Detect Disease</span>
+                </a>
+                <a href="weather.html" class="nav-item active">
+                    <i class="fas fa-cloud-sun-rain"></i>
+                    <span>Weather Analysis</span>
+                </a>
+                <a href="history.html" class="nav-item">
+                    <i class="fas fa-history"></i>
+                    <span>Scan History</span>
+                </a>
+                <a href="library.html" class="nav-item">
+                    <i class="fas fa-book"></i>
+                    <span>Disease Library</span>
+                </a>
+                <a href="report.html" class="nav-item">
+                    <i class="fas fa-file-alt"></i>
+                    <span>Reports</span>
+                </a>
+                <a href="faq.html" class="nav-item">
+                    <i class="fas fa-question-circle"></i>
+                    <span>FAQ</span>
+                </a>
+                <a href="settings.html" class="nav-item">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </a>
+            </nav>
+            
+            <div class="sidebar-footer">
+    <a href="profile.html" class="user-info" id="profileLink">
+        <div class="user-avatar">
+            <i class="fas fa-user"></i>
+        </div>
+        <div class="user-details">
+            <h4 id="userName">John Farmer</h4>
+            <p>Premium Plan</p>
+        </div>
+    </a>
+    <button id="logoutBtn" class="logout-btn">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Logout</span>
+    </button>
+</div>
+        </aside>
+
+        <!-- Mobile Menu Toggle -->
+        <button id="mobileMenuToggle" class="mobile-menu-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+        <div id="sidebarOverlay" class="sidebar-overlay"></div>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="dashboard-header" data-aos="fade-down">
+                <h1>Weather Analysis</h1>
+                <p>Real-time weather data and disease risk forecasting for your location</p>
+            </header>
+
+            <!-- Location Search Bar -->
+            <div class="location-search glass-card" data-aos="fade-up" data-aos-delay="50">
+                <div class="location-input-wrapper">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <input type="text" id="locationInput" placeholder="Enter city name or pincode..." value="Mumbai">
+                    <button id="searchLocationBtn" class="search-location-btn">
+                        <i class="fas fa-search"></i> Search
+                    </button>
+                </div>
+                <button id="detectLocationBtn" class="detect-location-btn">
+                    <i class="fas fa-location-dot"></i> Detect My Location
+                </button>
+            </div>
+
+            <!-- Current Weather Section -->
+            <div class="current-weather glass-card" data-aos="fade-up" data-aos-delay="100">
+                <div class="weather-main">
+                    <div class="weather-icon" id="weatherIcon">
+                        <i class="fas fa-cloud-sun-rain"></i>
+                    </div>
+                    <div class="weather-temp">
+                        <span class="temp-value" id="currentTemp">--</span>
+                        <span class="temp-unit">°C</span>
+                        <span class="weather-condition" id="weatherCondition">Loading...</span>
+                    </div>
+                    <div class="weather-location" id="weatherLocation">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>--</span>
+                    </div>
+                </div>
+                
+                <div class="weather-details">
+                    <div class="detail-item">
+                        <i class="fas fa-tint"></i>
+                        <div class="detail-info">
+                            <span class="detail-label">HUMIDITY</span>
+                            <span class="detail-value" id="humidity">--</span>
+                            <span class="detail-unit">%</span>
+                        </div>
+                    </div>
+                    <div class="detail-item">
+                        <i class="fas fa-wind"></i>
+                        <div class="detail-info">
+                            <span class="detail-label">WIND</span>
+                            <span class="detail-value" id="windSpeed">--</span>
+                            <span class="detail-unit">km/h</span>
+                        </div>
+                    </div>
+                    <div class="detail-item">
+                        <i class="fas fa-cloud-rain"></i>
+                        <div class="detail-info">
+                            <span class="detail-label">RAINFALL</span>
+                            <span class="detail-value" id="rainfall">--</span>
+                            <span class="detail-unit">mm</span>
+                        </div>
+                    </div>
+                    <div class="detail-item">
+                        <i class="fas fa-temperature-low"></i>
+                        <div class="detail-info">
+                            <span class="detail-label">MIN TEMP</span>
+                            <span class="detail-value" id="minTemp">--</span>
+                            <span class="detail-unit">°C</span>
+                        </div>
+                    </div>
+                    <div class="detail-item">
+                        <i class="fas fa-temperature-high"></i>
+                        <div class="detail-info">
+                            <span class="detail-label">MAX TEMP</span>
+                            <span class="detail-value" id="maxTemp">--</span>
+                            <span class="detail-unit">°C</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Disease Risk Index -->
+            <div class="risk-index glass-card" id="riskIndex" data-aos="fade-up" data-aos-delay="150">
+                <div class="risk-header">
+                    <i class="fas fa-chart-line"></i>
+                    <h3>Disease Risk Index</h3>
+                </div>
+                <div class="risk-meter">
+                    <div class="risk-level">
+                        <span class="risk-label">Current Risk:</span>
+                        <span class="risk-value" id="riskValue">--</span>
+                    </div>
+                    <div class="risk-bar">
+                        <div class="risk-fill" id="riskFill" style="width: 0%"></div>
+                    </div>
+                    <p class="risk-message" id="riskMessage">Loading weather data...</p>
+                </div>
+                <div class="risk-factors">
+                    <div class="factor">
+                        <span>Temperature</span>
+                        <div class="factor-bar">
+                            <div class="factor-fill" id="tempFactor" style="width: 0%"></div>
+                        </div>
+                        <span class="factor-status" id="tempStatus">--</span>
+                    </div>
+                    <div class="factor">
+                        <span>Humidity</span>
+                        <div class="factor-bar">
+                            <div class="factor-fill" id="humidityFactor" style="width: 0%"></div>
+                        </div>
+                        <span class="factor-status" id="humidityStatus">--</span>
+                    </div>
+                    <div class="factor">
+                        <span>Wind Speed</span>
+                        <div class="factor-bar">
+                            <div class="factor-fill" id="windFactor" style="width: 0%"></div>
+                        </div>
+                        <span class="factor-status" id="windStatus">--</span>
+                    </div>
+                    <div class="factor">
+                        <span>Rainfall</span>
+                        <div class="factor-bar">
+                            <div class="factor-fill" id="rainFactor" style="width: 0%"></div>
+                        </div>
+                        <span class="factor-status" id="rainStatus">--</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Weather Alerts -->
+            <div class="alerts-section" data-aos="fade-up" data-aos-delay="200">
+                <h3><i class="fas fa-bell"></i> Weather Alerts</h3>
+                <div class="alerts-container" id="alertsContainer">
+                    <div class="alert-card info">
+                        <i class="fas fa-info-circle"></i>
+                        <div class="alert-content">
+                            <h4>Loading Weather Data</h4>
+                            <p>Please wait while we fetch the latest weather information...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 7-Day Forecast -->
+            <div class="forecast-section glass-card" data-aos="fade-up" data-aos-delay="250">
+                <div class="forecast-header">
+                    <h3><i class="fas fa-calendar-week"></i> 7-Day Disease Risk Forecast</h3>
+                </div>
+                <div class="forecast-grid" id="forecastGrid">
+                    <!-- Forecast cards will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Spray Advisory & Recommendations -->
+            <div class="advisory-section" data-aos="fade-up" data-aos-delay="300">
+                <div class="advisory-card glass-card" id="sprayAdvisoryCard">
+                    <i class="fas fa-spray-can-sparkles"></i>
+                    <div class="advisory-content">
+                        <h4>Spray Advisory</h4>
+                        <p id="sprayAdvisory">Loading advisory...</p>
+                    </div>
+                </div>
+                <div class="advisory-card glass-card" id="trendCard">
+                    <i class="fas fa-chart-simple"></i>
+                    <div class="advisory-content">
+                        <h4>Weather Trend Analysis</h4>
+                        <p id="trendAnalysis">Loading trend analysis...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Historical Weather Chart -->
+            <!-- Historical Weather Chart -->
+            <div class="chart-section glass-card" data-aos="fade-up" data-aos-delay="350">
+                <h3><i class="fas fa-chart-line"></i> Temperature & Humidity Trend (Last 7 Days)</h3>
+                    <div class="chart-wrapper">
+                        <canvas id="weatherTrendChart"></canvas>
+                    </div>
+            </div>
+
+
+        </main>
+    </div>
+
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="../js/weather.js"></script>
+</body>
+</html>

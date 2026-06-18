@@ -1,0 +1,37 @@
+{
+  "training_date": "2026-06-13T09:00:59.993807",
+  "completion_date": null,
+  "duration_seconds": null,
+  "configuration": {
+    "base_model": "mobilenetv2",
+    "batch_size": 32,
+    "total_epochs": 50,
+    "initial_epochs": 25,
+    "fine_tune_epochs": 25,
+    "learning_rate": 0.001,
+    "fine_tune_learning_rate": 0.0001,
+    "image_size": [
+      224,
+      224
+    ],
+    "fine_tune_enabled": false
+  },
+  "dataset": {
+    "num_classes": 29,
+    "train_samples": 53693,
+    "val_samples": 12067,
+    "test_samples": 1358
+  },
+  "performance": {
+    "best_val_accuracy": 0,
+    "best_epoch": 0,
+    "final_train_accuracy": 0.9322630763053894,
+    "final_val_accuracy": 0.9619624018669128
+  },
+  "test_performance": {
+    "accuracy": 0.9668630338733432,
+    "precision": 0.9675842263066671,
+    "recall": 0.9668630338733432,
+    "f1_score": 0.9668135687919649
+  }
+}

@@ -1,0 +1,1063 @@
+/* ========================================
+   FarmIntel AI - Complete Dark Mode CSS
+   Premium Dark Theme for All Components
+   ======================================== */
+
+/* ========================================
+   1. DARK MODE VARIABLES
+   ======================================== */
+
+body.dark-mode {
+    /* Color Palette - Premium Dark Theme */
+    --primary: #818CF8;
+    --primary-dark: #6366F1;
+    --primary-light: #A5B4FC;
+    --primary-glow: rgba(129, 140, 248, 0.4);
+    
+    --secondary: #34D399;
+    --secondary-dark: #10B981;
+    --secondary-light: #6EE7B7;
+    
+    --accent: #FBBF24;
+    --accent-dark: #F59E0B;
+    --accent-light: #FCD34D;
+    
+    --danger: #F87171;
+    --danger-dark: #EF4444;
+    --danger-light: #FCA5A5;
+    
+    --success: #34D399;
+    --success-light: #6EE7B7;
+    
+    --info: #60A5FA;
+    --info-light: #93C5FD;
+    
+    /* Neutral Colors - Dark Mode */
+    --bg-dark: #0F0F1A;
+    --bg-darker: #0A0A12;
+    --bg-card: rgba(30, 41, 59, 0.8);
+    --bg-sidebar: rgba(15, 15, 26, 0.95);
+    --bg-hover: rgba(79, 70, 229, 0.15);
+    --bg-secondary: #1E293B;
+    --bg-tertiary: #334155;
+    
+    /* Text Colors - Dark Mode */
+    --text-primary: #F1F5F9;
+    --text-secondary: #CBD5E1;
+    --text-muted: #94A3B8;
+    --text-dark: #64748B;
+    
+    /* Border Colors - Dark Mode */
+    --border-light: rgba(255, 255, 255, 0.05);
+    --border-medium: rgba(255, 255, 255, 0.1);
+    --border-glow: rgba(129, 140, 248, 0.3);
+    
+    /* Glass Effect - Dark Mode */
+    --glass-bg: rgba(30, 41, 59, 0.6);
+    --glass-border: rgba(255, 255, 255, 0.05);
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    
+    /* Shadows - Dark Mode */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.4);
+    --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.5), 0 1px 2px -1px rgba(0, 0, 0, 0.5);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -2px rgba(0, 0, 0, 0.5);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -4px rgba(0, 0, 0, 0.5);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5);
+    --shadow-glow: 0 0 20px rgba(129, 140, 248, 0.2);
+}
+
+/* ========================================
+   2. DARK MODE BODY BACKGROUND
+   ======================================== */
+
+body.dark-mode {
+    background: linear-gradient(135deg, #0F0F1A 0%, #1A1A2E 50%, #16213E 100%);
+}
+
+body.dark-mode::before {
+    background: linear-gradient(135deg, #0F0F1A 0%, #1A1A2E 50%, #16213E 100%);
+}
+
+body.dark-mode::after {
+    background: radial-gradient(circle, rgba(129, 140, 248, 0.1) 0%, transparent 50%);
+}
+
+body.dark-mode .dashboard-container {
+    background: transparent;
+}
+
+/* ========================================
+   3. DARK MODE SIDEBAR
+   ======================================== */
+
+body.dark-mode .sidebar {
+    background: var(--bg-sidebar);
+    backdrop-filter: blur(20px);
+    border-right-color: var(--border-light);
+}
+
+body.dark-mode .sidebar-logo {
+    border-bottom-color: var(--border-light);
+}
+
+body.dark-mode .sidebar-logo span {
+    background: linear-gradient(135deg, #FFFFFF, var(--primary-light));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+body.dark-mode .nav-item {
+    color: var(--text-secondary);
+}
+
+body.dark-mode .nav-item:hover {
+    background: var(--bg-hover);
+    color: var(--primary-light);
+}
+
+body.dark-mode .nav-item.active {
+    background: linear-gradient(135deg, rgba(129, 140, 248, 0.2), rgba(99, 102, 241, 0.1));
+    color: var(--primary-light);
+    border-left-color: var(--primary);
+}
+
+body.dark-mode .sidebar-footer {
+    border-top-color: var(--border-light);
+}
+
+body.dark-mode .user-info {
+    background: var(--bg-card);
+}
+
+body.dark-mode .user-details h4 {
+    color: var(--text-primary);
+}
+
+body.dark-mode .user-details p {
+    color: var(--text-muted);
+}
+
+body.dark-mode .logout-btn {
+    background: rgba(239, 68, 68, 0.1);
+    border-color: rgba(239, 68, 68, 0.2);
+    color: var(--danger-light);
+}
+
+body.dark-mode .logout-btn:hover {
+    background: var(--danger-dark);
+    color: white;
+}
+
+/* ========================================
+   4. DARK MODE CARDS & CONTAINERS
+   ======================================== */
+
+body.dark-mode .glass-effect {
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    border-color: var(--glass-border);
+}
+
+body.dark-mode .card,
+body.dark-mode .stat-card,
+body.dark-mode .quick-actions,
+body.dark-mode .chart-card,
+body.dark-mode .recent-scans,
+body.dark-mode .settings-card,
+body.dark-mode .report-preview,
+body.dark-mode .welcome-banner,
+body.dark-mode .feature-card {
+    background: var(--bg-card);
+    backdrop-filter: blur(12px);
+    border-color: var(--border-light);
+}
+
+body.dark-mode .card:hover,
+body.dark-mode .stat-card:hover {
+    border-color: var(--border-glow);
+    box-shadow: var(--shadow-glow);
+}
+
+/* ========================================
+   5. DARK MODE FORMS & INPUTS
+   ======================================== */
+
+body.dark-mode .input-group input,
+body.dark-mode .input-group select,
+body.dark-mode .input-group textarea {
+    background: rgba(15, 15, 26, 0.8);
+    border-color: var(--border-medium);
+    color: var(--text-primary);
+}
+
+body.dark-mode .input-group label {
+    color: var(--text-secondary);
+}
+
+body.dark-mode .input-group input:focus,
+body.dark-mode .input-group select:focus,
+body.dark-mode .input-group textarea:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.2);
+}
+
+body.dark-mode .input-group input::placeholder {
+    color: var(--text-dark);
+}
+
+body.dark-mode .input-group input:disabled {
+    background: var(--bg-tertiary);
+}
+
+/* ========================================
+   6. DARK MODE BUTTONS
+   ======================================== */
+
+body.dark-mode .btn-primary {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    box-shadow: 0 4px 15px rgba(129, 140, 248, 0.3);
+}
+
+body.dark-mode .btn-primary:hover {
+    box-shadow: 0 8px 25px rgba(129, 140, 248, 0.4);
+}
+
+body.dark-mode .btn-outline {
+    border-color: var(--border-medium);
+    color: var(--primary-light);
+}
+
+body.dark-mode .btn-outline:hover {
+    background: var(--bg-hover);
+    border-color: var(--primary);
+}
+
+body.dark-mode .btn-secondary {
+    background: linear-gradient(135deg, var(--secondary), var(--secondary-dark));
+}
+
+body.dark-mode .btn-danger {
+    background: linear-gradient(135deg, var(--danger), var(--danger-dark));
+}
+
+body.dark-mode .btn-ghost {
+    color: var(--text-secondary);
+}
+
+body.dark-mode .btn-ghost:hover {
+    background: var(--bg-hover);
+    color: var(--primary-light);
+}
+
+/* ========================================
+   7. DARK MODE TABLES
+   ======================================== */
+
+body.dark-mode .history-table th,
+body.dark-mode .scans-table th,
+body.dark-mode .report-table th {
+    background: var(--bg-secondary);
+    color: var(--text-muted);
+    border-bottom-color: var(--border-light);
+}
+
+body.dark-mode .history-table td,
+body.dark-mode .scans-table td,
+body.dark-mode .report-table td {
+    border-bottom-color: var(--border-light);
+    color: var(--text-secondary);
+}
+
+body.dark-mode .history-table tr:hover,
+body.dark-mode .scans-table tr:hover,
+body.dark-mode .report-table tr:hover {
+    background: var(--bg-hover);
+}
+
+body.dark-mode .empty-row td {
+    color: var(--text-muted);
+}
+
+/* ========================================
+   8. DARK MODE MODALS
+   ======================================== */
+
+body.dark-mode .modal {
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(10px);
+}
+
+body.dark-mode .modal-content {
+    background: var(--bg-card);
+    backdrop-filter: blur(20px);
+    border-color: var(--border-glow);
+}
+
+body.dark-mode .modal-header {
+    border-bottom-color: var(--border-light);
+}
+
+body.dark-mode .modal-header h2 {
+    color: var(--text-primary);
+}
+
+body.dark-mode .modal-footer {
+    border-top-color: var(--border-light);
+}
+
+body.dark-mode .modal-close {
+    color: var(--text-muted);
+}
+
+body.dark-mode .modal-close:hover {
+    color: var(--danger-light);
+}
+
+/* ========================================
+   9. DARK MODE TOAST NOTIFICATIONS
+   ======================================== */
+
+body.dark-mode .toast {
+    background: var(--bg-card);
+    backdrop-filter: blur(12px);
+    border-color: var(--border-light);
+    box-shadow: var(--shadow-lg);
+}
+
+body.dark-mode .toast.success {
+    border-left-color: var(--success);
+}
+
+body.dark-mode .toast.error {
+    border-left-color: var(--danger);
+}
+
+body.dark-mode .toast.info {
+    border-left-color: var(--info);
+}
+
+body.dark-mode .toast.warning {
+    border-left-color: var(--accent);
+}
+
+/* ========================================
+   10. DARK MODE SEARCH & FILTERS
+   ======================================== */
+
+body.dark-mode .search-box-large {
+    background: var(--bg-secondary);
+    border-color: var(--border-medium);
+}
+
+body.dark-mode .search-box-large input {
+    color: var(--text-primary);
+}
+
+body.dark-mode .search-box-large input::placeholder {
+    color: var(--text-muted);
+}
+
+body.dark-mode .filter-select {
+    background: var(--bg-secondary);
+    border-color: var(--border-medium);
+    color: var(--text-primary);
+}
+
+body.dark-mode .chip {
+    background: var(--bg-card);
+    border-color: var(--border-medium);
+    color: var(--text-secondary);
+}
+
+body.dark-mode .chip:hover {
+    background: var(--bg-hover);
+    border-color: var(--primary);
+    color: var(--primary-light);
+}
+
+body.dark-mode .chip.active {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: white;
+}
+
+/* ========================================
+   11. DARK MODE DISEASE CARDS
+   ======================================== */
+
+body.dark-mode .disease-card {
+    background: var(--bg-card);
+    border-color: var(--border-light);
+}
+
+body.dark-mode .card-header {
+    border-bottom-color: var(--border-light);
+}
+
+body.dark-mode .card-footer {
+    border-top-color: var(--border-light);
+}
+
+body.dark-mode .read-more-btn {
+    color: var(--primary-light);
+}
+
+body.dark-mode .read-more-btn:hover {
+    background: var(--bg-hover);
+}
+
+body.dark-mode .disease-card h3 {
+    color: var(--text-primary);
+}
+
+body.dark-mode .symptoms-preview {
+    color: var(--text-muted);
+}
+
+/* ========================================
+   12. DARK MODE WEATHER SECTION
+   ======================================== */
+
+body.dark-mode .weather-details .detail-item {
+    background: var(--bg-secondary);
+}
+
+body.dark-mode .detail-label {
+    color: var(--text-muted);
+}
+
+body.dark-mode .detail-value {
+    color: var(--text-primary);
+}
+
+body.dark-mode .forecast-card {
+    background: var(--bg-secondary);
+    border-color: var(--border-light);
+}
+
+body.dark-mode .forecast-card:hover {
+    background: var(--bg-tertiary);
+}
+
+body.dark-mode .forecast-day {
+    color: var(--text-primary);
+}
+
+body.dark-mode .forecast-temp {
+    color: var(--text-primary);
+}
+
+body.dark-mode .forecast-humidity {
+    color: var(--text-muted);
+}
+
+body.dark-mode .alert-card {
+    background: var(--bg-secondary);
+    border-left-color: var(--border-glow);
+}
+
+body.dark-mode .alert-card.high {
+    background: rgba(239, 68, 68, 0.1);
+}
+
+body.dark-mode .alert-card.warning {
+    background: rgba(245, 158, 11, 0.1);
+}
+
+body.dark-mode .advisory-card {
+    background: var(--bg-card);
+}
+
+/* ========================================
+   13. DARK MODE SETTINGS
+   ======================================== */
+
+body.dark-mode .settings-nav-item {
+    color: var(--text-secondary);
+}
+
+body.dark-mode .settings-nav-item:hover {
+    background: var(--bg-hover);
+    color: var(--primary-light);
+}
+
+body.dark-mode .settings-nav-item.active {
+    background: linear-gradient(135deg, rgba(129, 140, 248, 0.2), rgba(99, 102, 241, 0.1));
+    color: var(--primary-light);
+}
+
+body.dark-mode .notification-item {
+    background: var(--bg-secondary);
+}
+
+body.dark-mode .notification-info h4 {
+    color: var(--text-primary);
+}
+
+body.dark-mode .notification-info p {
+    color: var(--text-muted);
+}
+
+body.dark-mode .session-item {
+    background: var(--bg-secondary);
+}
+
+body.dark-mode .session-info h4 {
+    color: var(--text-primary);
+}
+
+body.dark-mode .session-info p {
+    color: var(--text-muted);
+}
+
+body.dark-mode .plan-details {
+    background: linear-gradient(135deg, rgba(129, 140, 248, 0.1), rgba(99, 102, 241, 0.05));
+}
+
+body.dark-mode .billing-table th,
+body.dark-mode .billing-table td {
+    border-bottom-color: var(--border-light);
+    color: var(--text-secondary);
+}
+
+body.dark-mode .danger-zone {
+    border-top-color: var(--danger);
+}
+
+body.dark-mode .data-option {
+    border-bottom-color: var(--border-light);
+}
+
+body.dark-mode .data-option-info h3 {
+    color: var(--text-primary);
+}
+
+body.dark-mode .data-option-info p {
+    color: var(--text-muted);
+}
+
+/* ========================================
+   14. DARK MODE FAQ SECTION
+   ======================================== */
+
+body.dark-mode .faq-item {
+    background: var(--bg-card);
+    border-color: var(--border-light);
+}
+
+body.dark-mode .faq-question {
+    color: var(--text-primary);
+}
+
+body.dark-mode .faq-question:hover {
+    background: var(--bg-hover);
+}
+
+body.dark-mode .faq-answer.open {
+    border-top-color: var(--border-light);
+}
+
+body.dark-mode .answer-content p {
+    color: var(--text-secondary);
+}
+
+body.dark-mode .category-badge {
+    background: var(--bg-secondary);
+    color: var(--text-muted);
+}
+
+body.dark-mode .helpful-btn {
+    color: var(--text-muted);
+}
+
+body.dark-mode .helpful-btn:hover {
+    background: var(--bg-hover);
+    color: var(--primary-light);
+}
+
+/* ========================================
+   15. DARK MODE CHAT MODAL
+   ======================================== */
+
+body.dark-mode .chat-messages {
+    background: var(--bg-secondary);
+}
+
+body.dark-mode .chat-message.bot i {
+    background: rgba(129, 140, 248, 0.15);
+    color: var(--primary-light);
+}
+
+body.dark-mode .chat-message.user i {
+    background: rgba(52, 211, 153, 0.15);
+    color: var(--success);
+}
+
+body.dark-mode .message-content {
+    background: var(--bg-card);
+}
+
+body.dark-mode .message-content p {
+    color: var(--text-primary);
+}
+
+body.dark-mode .message-time {
+    color: var(--text-muted);
+}
+
+body.dark-mode .chat-input-area input {
+    background: var(--bg-secondary);
+    border-color: var(--border-medium);
+    color: var(--text-primary);
+}
+
+body.dark-mode .chat-input-area button {
+    background: var(--primary);
+}
+
+body.dark-mode .suggestion-btn {
+    background: var(--bg-secondary);
+    border-color: var(--border-medium);
+    color: var(--text-secondary);
+}
+
+body.dark-mode .suggestion-btn:hover {
+    background: var(--primary);
+    color: white;
+}
+
+/* ========================================
+   16. DARK MODE DETECTION PAGE
+   ======================================== */
+
+body.dark-mode .upload-option-btn {
+    background: var(--bg-secondary);
+    border-color: var(--border-medium);
+    color: var(--text-primary);
+}
+
+body.dark-mode .upload-option-btn:hover {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: white;
+}
+
+body.dark-mode .preview-area {
+    background: var(--bg-secondary);
+    border-color: var(--border-medium);
+}
+
+body.dark-mode .sample-item span {
+    color: var(--text-muted);
+}
+
+body.dark-mode .result-card {
+    background: var(--bg-secondary);
+}
+
+body.dark-mode .treatment-item {
+    border-bottom-color: var(--border-light);
+}
+
+body.dark-mode .result-header {
+    border-bottom-color: var(--border-light);
+}
+
+body.dark-mode .treatment-content h4 {
+    color: var(--text-primary);
+}
+
+body.dark-mode .treatment-content p {
+    color: var(--text-muted);
+}
+
+/* ========================================
+   17. DARK MODE TYPOGRAPHY
+   ======================================== */
+
+body.dark-mode h1,
+body.dark-mode h2,
+body.dark-mode h3,
+body.dark-mode h4,
+body.dark-mode h5,
+body.dark-mode h6 {
+    color: var(--text-primary);
+}
+
+body.dark-mode p {
+    color: var(--text-secondary);
+}
+
+body.dark-mode .text-muted {
+    color: var(--text-muted);
+}
+
+body.dark-mode .gradient-text {
+    background: linear-gradient(135deg, var(--primary), var(--primary-light), var(--primary-dark));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+/* ========================================
+   18. DARK MODE SCROLLBAR
+   ======================================== */
+
+body.dark-mode ::-webkit-scrollbar-track {
+    background: var(--bg-darker);
+}
+
+body.dark-mode ::-webkit-scrollbar-thumb {
+    background: var(--primary);
+}
+
+body.dark-mode ::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-light);
+}
+
+/* ========================================
+   19. DARK MODE BADGES & TAGS
+   ======================================== */
+
+body.dark-mode .severity-badge.severe {
+    background: rgba(239, 68, 68, 0.15);
+    color: var(--danger-light);
+}
+
+body.dark-mode .severity-badge.moderate {
+    background: rgba(245, 158, 11, 0.15);
+    color: var(--accent-light);
+}
+
+body.dark-mode .severity-badge.mild {
+    background: rgba(16, 185, 129, 0.15);
+    color: var(--success-light);
+}
+
+body.dark-mode .severity-badge.low {
+    background: rgba(100, 116, 139, 0.15);
+    color: var(--text-muted);
+}
+
+body.dark-mode .confidence-badge.high {
+    background: rgba(16, 185, 129, 0.15);
+    color: var(--success-light);
+}
+
+body.dark-mode .confidence-badge.medium {
+    background: rgba(245, 158, 11, 0.15);
+    color: var(--accent-light);
+}
+
+body.dark-mode .confidence-badge.low {
+    background: rgba(239, 68, 68, 0.15);
+    color: var(--danger-light);
+}
+
+/* ========================================
+   20. DARK MODE LOADING STATES
+   ======================================== */
+
+body.dark-mode .skeleton-loading,
+body.dark-mode .skeleton {
+    background: linear-gradient(90deg, var(--bg-secondary) 25%, var(--bg-tertiary) 50%, var(--bg-secondary) 75%);
+}
+
+body.dark-mode .spinner {
+    border-color: var(--border-medium);
+    border-top-color: var(--primary);
+}
+
+body.dark-mode .loader-dot {
+    background: var(--primary);
+}
+
+/* ========================================
+   21. DARK MODE DROPDOWNS & SELECTS
+   ======================================== */
+
+body.dark-mode select {
+    background: var(--bg-secondary);
+    border-color: var(--border-medium);
+    color: var(--text-primary);
+}
+
+body.dark-mode select option {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+}
+
+body.dark-mode .dropdown-menu {
+    background: var(--bg-card);
+    backdrop-filter: blur(12px);
+    border-color: var(--border-light);
+}
+
+body.dark-mode .dropdown-item {
+    color: var(--text-secondary);
+}
+
+body.dark-mode .dropdown-item:hover {
+    background: var(--bg-hover);
+    color: var(--primary-light);
+}
+
+/* ========================================
+   22. DARK MODE LINKS
+   ======================================== */
+
+body.dark-mode a {
+    color: var(--primary-light);
+}
+
+body.dark-mode a:hover {
+    color: var(--primary);
+}
+
+/* ========================================
+   23. DARK MODE STATISTICS CARDS
+   ======================================== */
+
+body.dark-mode .stat-icon-primary {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+}
+
+body.dark-mode .stat-icon-success {
+    background: linear-gradient(135deg, var(--success), var(--success-dark));
+}
+
+body.dark-mode .stat-icon-danger {
+    background: linear-gradient(135deg, var(--danger), var(--danger-dark));
+}
+
+body.dark-mode .stat-icon-warning {
+    background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+}
+
+body.dark-mode .stat-trend-up {
+    background: rgba(16, 185, 129, 0.15);
+    color: var(--success-light);
+}
+
+body.dark-mode .stat-trend-down {
+    background: rgba(239, 68, 68, 0.15);
+    color: var(--danger-light);
+}
+
+/* ========================================
+   24. DARK MODE PAGINATION
+   ======================================== */
+
+body.dark-mode .pagination-item {
+    background: var(--bg-card);
+    border-color: var(--border-light);
+    color: var(--text-secondary);
+}
+
+body.dark-mode .pagination-item:hover {
+    background: var(--bg-hover);
+    border-color: var(--primary);
+    color: var(--primary-light);
+}
+
+body.dark-mode .pagination-item.active {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: white;
+}
+
+/* ========================================
+   25. DARK MODE TRANSITION
+   ======================================== */
+
+body.dark-mode,
+body.dark-mode * {
+    transition: background-color var(--transition), 
+                border-color var(--transition),
+                color var(--transition),
+                box-shadow var(--transition),
+                background var(--transition);
+}
+
+/* ========================================
+   26. DARK MODE THEME TOGGLE BUTTON
+   ======================================== */
+
+body.dark-mode .theme-toggle-btn {
+    background: var(--bg-card);
+    border-color: var(--border-light);
+}
+
+body.dark-mode .theme-toggle-btn .sun-icon {
+    opacity: 0;
+    transform: scale(0.5);
+}
+
+body.dark-mode .theme-toggle-btn .moon-icon {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* ========================================
+   27. DARK MODE EMPTY STATES
+   ======================================== */
+
+body.dark-mode .empty-state i {
+    color: var(--text-muted);
+}
+
+body.dark-mode .empty-state h4 {
+    color: var(--text-primary);
+}
+
+body.dark-mode .empty-state p {
+    color: var(--text-muted);
+}
+
+body.dark-mode .no-results i {
+    color: var(--text-muted);
+}
+
+body.dark-mode .no-results h3 {
+    color: var(--text-primary);
+}
+
+body.dark-mode .no-results p {
+    color: var(--text-muted);
+}
+
+/* ========================================
+   28. DARK MODE TOOLTIPS
+   ======================================== */
+
+body.dark-mode .tooltip-text {
+    background: var(--bg-darker);
+    color: var(--text-primary);
+    border: 1px solid var(--border-light);
+}
+
+/* ========================================
+   29. DARK MODE SELECTION
+   ======================================== */
+
+body.dark-mode ::selection {
+    background: var(--primary);
+    color: white;
+}
+
+body.dark-mode ::-moz-selection {
+    background: var(--primary);
+    color: white;
+}
+
+/* ========================================
+   30. DARK MODE PROGRESS BAR
+   ======================================== */
+
+body.dark-mode .progress {
+    background: var(--border-medium);
+}
+
+body.dark-mode .progress-bar-primary {
+    background: linear-gradient(90deg, var(--primary), var(--primary-light));
+}
+
+/* ========================================
+   31. DARK MODE DIVIDER
+   ======================================== */
+
+body.dark-mode .divider {
+    color: var(--text-muted);
+}
+
+body.dark-mode .divider::before,
+body.dark-mode .divider::after {
+    border-bottom-color: var(--border-light);
+}
+
+/* ========================================
+   32. DARK MODE ACCORDION
+   ======================================== */
+
+body.dark-mode .accordion-item {
+    background: var(--bg-card);
+    border-color: var(--border-light);
+}
+
+body.dark-mode .accordion-header {
+    background: var(--bg-card);
+    color: var(--text-primary);
+}
+
+body.dark-mode .accordion-header:hover {
+    background: var(--bg-hover);
+}
+
+body.dark-mode .accordion-body {
+    color: var(--text-secondary);
+}
+
+/* ========================================
+   33. DARK MODE LIST GROUP
+   ======================================== */
+
+body.dark-mode .list-group {
+    border-color: var(--border-light);
+}
+
+body.dark-mode .list-group-item {
+    background: var(--bg-card);
+    border-bottom-color: var(--border-light);
+    color: var(--text-secondary);
+}
+
+body.dark-mode .list-group-item:hover {
+    background: var(--bg-hover);
+}
+
+body.dark-mode .list-group-item.active {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: white;
+}
+
+/* ========================================
+   34. DARK MODE TABS
+   ======================================== */
+
+body.dark-mode .tabs {
+    border-bottom-color: var(--border-light);
+}
+
+body.dark-mode .tab {
+    color: var(--text-secondary);
+}
+
+body.dark-mode .tab:hover {
+    color: var(--primary-light);
+}
+
+body.dark-mode .tab.active {
+    color: var(--primary-light);
+}
+
+body.dark-mode .tab.active::after {
+    background: var(--primary);
+}
+
+/* ========================================
+   35. DARK MODE BREADCRUMB
+   ======================================== */
+
+body.dark-mode .breadcrumb-item {
+    color: var(--text-muted);
+}
+
+body.dark-mode .breadcrumb-item a {
+    color: var(--text-secondary);
+}
+
+body.dark-mode .breadcrumb-item a:hover {
+    color: var(--primary-light);
+}
+
+body.dark-mode .breadcrumb-item.active {
+    color: var(--text-primary);
+}

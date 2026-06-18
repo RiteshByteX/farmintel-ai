@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Scan History - FarmIntel AI</title>
+    <link rel="icon" type="image/x-icon" href="#">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../css/history.css">
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="animated-bg"></div>
+    <div class="particles" id="particles"></div>
+    
+    <!-- Theme Toggle -->
+    <div class="theme-toggle-wrapper">
+        <button id="themeToggle" class="theme-toggle-btn">
+            <i class="fas fa-sun"></i>
+        </button>
+    </div>
+
+    <!-- Dashboard Container -->
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-logo">
+                <div class="logo-icon">
+                    <i class="fas fa-leaf"></i>
+                </div>
+                <span>FarmIntel AI</span>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="detect.html" class="nav-item">
+                    <i class="fas fa-camera"></i>
+                    <span>Detect Disease</span>
+                </a>
+                <a href="weather.html" class="nav-item">
+                    <i class="fas fa-cloud-sun-rain"></i>
+                    <span>Weather Analysis</span>
+                </a>
+                <a href="history.html" class="nav-item active">
+                    <i class="fas fa-history"></i>
+                    <span>Scan History</span>
+                </a>
+                <a href="library.html" class="nav-item">
+                    <i class="fas fa-book"></i>
+                    <span>Disease Library</span>
+                </a>
+                <a href="report.html" class="nav-item">
+                    <i class="fas fa-file-alt"></i>
+                    <span>Reports</span>
+                </a>
+                <a href="faq.html" class="nav-item">
+                    <i class="fas fa-question-circle"></i>
+                    <span>FAQ</span>
+                </a>
+                <a href="settings.html" class="nav-item">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </a>
+            </nav>
+            
+            <div class="sidebar-footer">
+    <a href="profile.html" class="user-info" id="profileLink">
+        <div class="user-avatar">
+            <i class="fas fa-user"></i>
+        </div>
+        <div class="user-details">
+            <h4 id="userName">John Farmer</h4>
+            <p>Premium Plan</p>
+        </div>
+    </a>
+    <button id="logoutBtn" class="logout-btn">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Logout</span>
+    </button>
+</div>
+        </aside>
+
+        <!-- Mobile Menu Toggle -->
+        <button id="mobileMenuToggle" class="mobile-menu-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+        <div id="sidebarOverlay" class="sidebar-overlay"></div>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="dashboard-header" data-aos="fade-down">
+                <h1>Scan History</h1>
+                <p>View and manage your past disease detection records</p>
+            </header>
+
+            <!-- Search and Filter Bar -->
+            <div class="search-filter-bar glass-card" data-aos="fade-up" data-aos-delay="50">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="Search by disease name...">
+                </div>
+                <div class="filter-group">
+                    <select id="severityFilter" class="filter-select">
+                        <option value="all">All Severity</option>
+                        <option value="Severe">Severe</option>
+                        <option value="Moderate">Moderate</option>
+                        <option value="Mild">Mild</option>
+                        <option value="Low">Low</option>
+                    </select>
+                    <select id="dateFilter" class="filter-select">
+                        <option value="all">All Time</option>
+                        <option value="today">Today</option>
+                        <option value="week">Last 7 Days</option>
+                        <option value="month">Last 30 Days</option>
+                        <option value="year">Last Year</option>
+                    </select>
+                    <button id="clearFiltersBtn" class="clear-filters">
+                        <i class="fas fa-times"></i> Clear
+                    </button>
+                </div>
+            </div>
+
+            <!-- Stats Summary -->
+            <div class="stats-summary glass-card" data-aos="fade-up" data-aos-delay="100">
+                <div class="stat-item">
+                    <i class="fas fa-chart-line"></i>
+                    <div class="stat-info">
+                        <span class="stat-label">Total Scans</span>
+                        <span class="stat-number" id="totalScans">0</span>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-leaf"></i>
+                    <div class="stat-info">
+                        <span class="stat-label">Diseases Detected</span>
+                        <span class="stat-number" id="diseasesDetected">0</span>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-chart-pie"></i>
+                    <div class="stat-info">
+                        <span class="stat-label">Avg Confidence</span>
+                        <span class="stat-number" id="avgConfidence">0</span>
+                        <span class="stat-unit">%</span>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-calendar-alt"></i>
+                    <div class="stat-info">
+                        <span class="stat-label">Last Scan</span>
+                        <span class="stat-number" id="lastScan">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- History Table -->
+            <div class="history-table-container glass-card" data-aos="fade-up" data-aos-delay="150">
+                <div class="table-header">
+                    <h3><i class="fas fa-history"></i> Detection Records</h3>
+                    <div class="table-actions">
+                        <button id="exportCsvBtn" class="export-btn csv">
+                            <i class="fas fa-file-csv"></i> Export CSV
+                        </button>
+                        <button id="exportPdfBtn" class="export-btn pdf">
+                            <i class="fas fa-file-pdf"></i> Export PDF
+                        </button>
+                        <button id="deleteAllBtn" class="delete-all-btn">
+                            <i class="fas fa-trash-alt"></i> Delete All
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="table-responsive">
+                    <table class="history-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 40px;"><input type="checkbox" id="selectAllCheckbox"></th>
+                                <th>Disease</th>
+                                <th>Scan Date</th>
+                                <th>Confidence</th>
+                                <th>Severity</th>
+                                <th>Treatment</th>
+                                <th style="width: 80px;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="historyTableBody">
+                            <tr class="empty-row">
+                                <td colspan="7">
+                                    <div class="empty-state">
+                                        <i class="fas fa-history"></i>
+                                        <h4>No scan history yet</h4>
+                                        <p>Start by detecting a disease from the Detection Page</p>
+                                        <button class="btn-primary" onclick="location.href='detect.html'">
+                                            Start Scanning <i class="fas fa-arrow-right"></i>
+                                        </button>
+                                    </div>
+                                  </td>
+                              </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination -->
+                <div class="pagination-container" id="paginationContainer" style="display: none;">
+                    <button id="prevPageBtn" class="page-btn" disabled>
+                        <i class="fas fa-chevron-left"></i> Previous
+                    </button>
+                    <div class="page-numbers" id="pageNumbers"></div>
+                    <button id="nextPageBtn" class="page-btn" disabled>
+                        Next <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Detail View Modal -->
+    <div id="detailModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-file-medical"></i> Scan Details</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body" id="modalBody"></div>
+            <div class="modal-footer">
+                <button id="downloadDetailPdf" class="btn-primary">Download Report</button>
+                <button id="closeDetailModal" class="btn-outline">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteModal" class="modal">
+        <div class="modal-content small">
+            <div class="modal-header">
+                <h2><i class="fas fa-trash-alt"></i> Confirm Delete</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this record? This action cannot be undone.</p>
+            </div>
+            <div class="modal-footer">
+                <button id="confirmDeleteBtn" class="btn-danger">Delete</button>
+                <button id="cancelDeleteBtn" class="btn-outline">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toastContainer" class="toast-container"></div>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="../js/history.js"></script>
+</body>
+</html>

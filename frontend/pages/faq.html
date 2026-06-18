@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>FAQ - FarmIntel AI</title>
+    <link rel="icon" type="image/x-icon" href="#">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../css/faq.css">
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="animated-bg"></div>
+    <div class="particles" id="particles"></div>
+    
+    <!-- Theme Toggle -->
+    <div class="theme-toggle-wrapper">
+        <button id="themeToggle" class="theme-toggle-btn">
+            <i class="fas fa-sun"></i>
+        </button>
+    </div>
+
+    <!-- Dashboard Container -->
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-logo">
+                <div class="logo-icon">
+                    <i class="fas fa-leaf"></i>
+                </div>
+                <span>FarmIntel AI</span>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="detect.html" class="nav-item">
+                    <i class="fas fa-camera"></i>
+                    <span>Detect Disease</span>
+                </a>
+                <a href="weather.html" class="nav-item">
+                    <i class="fas fa-cloud-sun-rain"></i>
+                    <span>Weather Analysis</span>
+                </a>
+                <a href="history.html" class="nav-item">
+                    <i class="fas fa-history"></i>
+                    <span>Scan History</span>
+                </a>
+                <a href="library.html" class="nav-item">
+                    <i class="fas fa-book"></i>
+                    <span>Disease Library</span>
+                </a>
+                <a href="report.html" class="nav-item">
+                    <i class="fas fa-file-alt"></i>
+                    <span>Reports</span>
+                </a>
+                <a href="faq.html" class="nav-item active">
+                    <i class="fas fa-question-circle"></i>
+                    <span>FAQ</span>
+                </a>
+                <a href="settings.html" class="nav-item">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </a>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <a href="profile.html" class="user-info" id="profileLink">
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="user-details">
+                        <h4 id="userName">John Farmer</h4>
+                        <p>Premium Plan</p>
+                    </div>
+                </a>
+                <button id="logoutBtn" class="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Mobile Menu Toggle -->
+        <button id="mobileMenuToggle" class="mobile-menu-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+        <div id="sidebarOverlay" class="sidebar-overlay"></div>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="dashboard-header" data-aos="fade-down">
+                <h1>Frequently Asked Questions</h1>
+                <p>Find answers to common questions about FarmIntel AI</p>
+            </header>
+
+            <!-- Hero Section -->
+            <div class="faq-hero glass-card" data-aos="fade-up" data-aos-delay="50">
+                <div class="hero-icon">
+                    <i class="fas fa-question-circle"></i>
+                </div>
+                <h2>How can we help you?</h2>
+                <p>Browse questions below or search for specific topics</p>
+                <div class="search-box-large">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="faqSearch" placeholder="Search questions, keywords, or topics...">
+                    <button id="clearSearchBtn" class="clear-search"><i class="fas fa-times"></i></button>
+                </div>
+            </div>
+
+            <!-- Category Tabs -->
+            <div class="category-tabs" data-aos="fade-up" data-aos-delay="100">
+                <button class="category-tab active" data-category="all">
+                    <i class="fas fa-th-large"></i> All Questions
+                </button>
+                <button class="category-tab" data-category="getting-started">
+                    <i class="fas fa-rocket"></i> Getting Started
+                </button>
+                <button class="category-tab" data-category="detection">
+                    <i class="fas fa-camera"></i> Disease Detection
+                </button>
+                <button class="category-tab" data-category="accuracy">
+                    <i class="fas fa-chart-line"></i> Accuracy & AI
+                </button>
+                <button class="category-tab" data-category="privacy">
+                    <i class="fas fa-lock"></i> Privacy & Security
+                </button>
+                <button class="category-tab" data-category="billing">
+                    <i class="fas fa-credit-card"></i> Plans & Billing
+                </button>
+                <button class="category-tab" data-category="technical">
+                    <i class="fas fa-microchip"></i> Technical
+                </button>
+            </div>
+
+            <!-- FAQ Container -->
+            <div class="faq-container" id="faqContainer" data-aos="fade-up" data-aos-delay="150">
+                <!-- FAQ items will be populated by JavaScript -->
+            </div>
+
+            <!-- No Results Message -->
+            <div class="no-results" id="noResults" style="display: none;">
+                <i class="fas fa-search"></i>
+                <h3>No matching questions found</h3>
+                <p>Try different keywords or browse all categories</p>
+                <button id="resetSearchBtn" class="btn-primary">View All Questions</button>
+            </div>
+
+            <!-- Chatbot Section -->
+            <div class="chatbot-section glass-card" data-aos="fade-up" data-aos-delay="200">
+                <div class="chatbot-header">
+                    <div class="chatbot-status">
+                        <i class="fas fa-robot"></i>
+                        <div>
+                            <h3>FarmIntel AI Assistant</h3>
+                            <span class="status-dot online"></span>
+                            <span class="status-text">Online - Ready to help</span>
+                        </div>
+                    </div>
+                    <button id="toggleChatBtn" class="toggle-chat-btn">
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                </div>
+                
+                <div class="chatbot-body" id="chatbotBody">
+                    <div class="chat-messages" id="chatMessages">
+                        <div class="chat-message bot">
+                            <div class="avatar bot-avatar">
+                                <i class="fas fa-robot"></i>
+                            </div>
+                            <div class="message-content">
+                                <p>👋 Hello! I'm FarmIntel AI Assistant. I can help you with:</p>
+                                <ul class="quick-help-list">
+                                    <li>📖 Finding answers to your questions</li>
+                                    <li>🔍 Explaining how FarmIntel AI works</li>
+                                    <li>🌾 Crop disease detection guidance</li>
+                                    <li>💡 Treatment recommendations</li>
+                                    <li>📊 Report and history management</li>
+                                </ul>
+                                <p>Just type your question below!</p>
+                                <span class="message-time">Just now</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="chat-input-area">
+                        <div class="chat-input-wrapper">
+                            <input type="text" id="chatInput" placeholder="Type your question here...">
+                            <button id="sendChatBtn" class="send-btn">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                        <div class="quick-suggestions" id="quickSuggestions">
+                            <button class="suggestion-chip" data-suggestion="How do I detect a disease?">
+                                <i class="fas fa-camera"></i> Detect disease
+                            </button>
+                            <button class="suggestion-chip" data-suggestion="What crops are supported?">
+                                <i class="fas fa-seedling"></i> Supported crops
+                            </button>
+                            <button class="suggestion-chip" data-suggestion="How accurate is the detection?">
+                                <i class="fas fa-chart-line"></i> Accuracy
+                            </button>
+                            <button class="suggestion-chip" data-suggestion="Is my data private?">
+                                <i class="fas fa-lock"></i> Privacy
+                            </button>
+                            <button class="suggestion-chip" data-suggestion="How do I save scans?">
+                                <i class="fas fa-save"></i> Save scans
+                            </button>
+                            <button class="suggestion-chip" data-suggestion="What are the treatment options?">
+                                <i class="fas fa-pills"></i> Treatment
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Still Have Questions -->
+            <div class="contact-section glass-card" data-aos="fade-up" data-aos-delay="250">
+                <div class="contact-content">
+                    <i class="fas fa-headset"></i>
+                    <h3>Still have questions?</h3>
+                    <p>Can't find the answer you're looking for? Please chat with our friendly team.</p>
+                    <div class="contact-buttons">
+                        <button id="contactSupportBtn" class="btn-primary">
+                            <i class="fas fa-envelope"></i> Contact Support
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Tips Section -->
+            <div class="quick-tips glass-card" data-aos="fade-up" data-aos-delay="300">
+                <h3><i class="fas fa-lightbulb"></i> Quick Tips</h3>
+                <div class="tips-grid">
+                    <div class="tip-item">
+                        <i class="fas fa-camera"></i>
+                        <div>
+                            <h4>Best Photo Tips</h4>
+                            <p>Take photos in natural daylight, keep camera steady, and focus on the affected area.</p>
+                        </div>
+                    </div>
+                    <div class="tip-item">
+                        <i class="fas fa-chart-line"></i>
+                        <div>
+                            <h4>Regular Scanning</h4>
+                            <p>Scan your crops every 3-5 days for early disease detection and better treatment outcomes.</p>
+                        </div>
+                    </div>
+                    <div class="tip-item">
+                        <i class="fas fa-cloud-sun-rain"></i>
+                        <div>
+                            <h4>Weather Monitoring</h4>
+                            <p>Check weather alerts daily during high-risk seasons (high humidity, rainfall).</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Contact Modal -->
+    <div id="contactModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-envelope"></i> Contact Support</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="contactForm">
+                    <div class="input-group">
+                        <label><i class="fas fa-user"></i> Name</label>
+                        <input type="text" id="contactName" placeholder="Your name" required>
+                    </div>
+                    <div class="input-group">
+                        <label><i class="fas fa-envelope"></i> Email</label>
+                        <input type="email" id="contactEmail" placeholder="Your email" required>
+                    </div>
+                    <div class="input-group">
+                        <label><i class="fas fa-tag"></i> Subject</label>
+                        <select id="contactSubject">
+                            <option value="general">General Question</option>
+                            <option value="technical">Technical Issue</option>
+                            <option value="billing">Billing Question</option>
+                            <option value="feature">Feature Request</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label><i class="fas fa-comment"></i> Message</label>
+                        <textarea id="contactMessage" rows="5" placeholder="Describe your question or issue..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn-primary btn-block">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="toastContainer" class="toast-container"></div>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="../js/faq.js"></script>
+</body>
+</html>

@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Reports - FarmIntel AI</title>
+    <link rel="icon" type="image/x-icon" href="#">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../css/report.css">
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="animated-bg"></div>
+    <div class="particles" id="particles"></div>
+    
+    <!-- Theme Toggle -->
+    <div class="theme-toggle-wrapper">
+        <button id="themeToggle" class="theme-toggle-btn">
+            <i class="fas fa-sun"></i>
+        </button>
+    </div>
+
+    <!-- Dashboard Container -->
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-logo">
+                <div class="logo-icon">
+                    <i class="fas fa-leaf"></i>
+                </div>
+                <span>FarmIntel AI</span>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="detect.html" class="nav-item">
+                    <i class="fas fa-camera"></i>
+                    <span>Detect Disease</span>
+                </a>
+                <a href="weather.html" class="nav-item">
+                    <i class="fas fa-cloud-sun-rain"></i>
+                    <span>Weather Analysis</span>
+                </a>
+                <a href="history.html" class="nav-item">
+                    <i class="fas fa-history"></i>
+                    <span>Scan History</span>
+                </a>
+                <a href="library.html" class="nav-item">
+                    <i class="fas fa-book"></i>
+                    <span>Disease Library</span>
+                </a>
+                <a href="report.html" class="nav-item active">
+                    <i class="fas fa-file-alt"></i>
+                    <span>Reports</span>
+                </a>
+                <a href="faq.html" class="nav-item">
+                    <i class="fas fa-question-circle"></i>
+                    <span>FAQ</span>
+                </a>
+                <a href="settings.html" class="nav-item">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </a>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <a href="profile.html" class="user-info" id="profileLink">
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="user-details">
+                        <h4 id="userName">John Farmer</h4>
+                        <p>Premium Plan</p>
+                    </div>
+                </a>
+                <button id="logoutBtn" class="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Mobile Menu Toggle -->
+        <button id="mobileMenuToggle" class="mobile-menu-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+        <div id="sidebarOverlay" class="sidebar-overlay"></div>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="dashboard-header" data-aos="fade-down">
+                <h1>Reports</h1>
+                <p>Generate and export detailed disease analysis reports</p>
+            </header>
+
+            <!-- Report Options Section -->
+            <div class="report-options-section glass-card" data-aos="fade-up" data-aos-delay="50">
+                <h3><i class="fas fa-sliders-h"></i> Report Options</h3>
+                <div class="options-grid">
+                    <div class="option-group">
+                        <label>Report Type</label>
+                        <select id="reportType">
+                            <option value="summary">Summary Report</option>
+                            <option value="detailed" selected>Detailed Analysis Report</option>
+                            <option value="weather">Weather Impact Report</option>
+                        </select>
+                    </div>
+                    <div class="option-group">
+                        <label>Date Range</label>
+                        <select id="dateRange">
+                            <option value="today">Today</option>
+                            <option value="week">Last 7 Days</option>
+                            <option value="month" selected>Last 30 Days</option>
+                            <option value="year">Last Year</option>
+                            <option value="all">All Time</option>
+                        </select>
+                    </div>
+                    <div class="option-group">
+                        <label>Format</label>
+                        <div class="format-buttons">
+                            <button class="format-btn active" data-format="pdf">
+                                <i class="fas fa-file-pdf"></i> PDF
+                            </button>
+                            <button class="format-btn" data-format="csv">
+                                <i class="fas fa-file-csv"></i> CSV
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Statistics Cards -->
+            <div class="stats-cards" data-aos="fade-up" data-aos-delay="100">
+                <div class="stat-card glass-card">
+                    <i class="fas fa-chart-line"></i>
+                    <div class="stat-info">
+                        <span class="stat-label">Total Scans</span>
+                        <span class="stat-value" id="totalScansStat">0</span>
+                    </div>
+                </div>
+                <div class="stat-card glass-card">
+                    <i class="fas fa-leaf"></i>
+                    <div class="stat-info">
+                        <span class="stat-label">Diseases Found</span>
+                        <span class="stat-value" id="diseasesFoundStat">0</span>
+                    </div>
+                </div>
+                <div class="stat-card glass-card">
+                    <i class="fas fa-chart-pie"></i>
+                    <div class="stat-info">
+                        <span class="stat-label">Avg. Confidence</span>
+                        <span class="stat-value" id="avgConfidenceStat">0</span>
+                        <span class="stat-unit">%</span>
+                    </div>
+                </div>
+                <div class="stat-card glass-card">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <div class="stat-info">
+                        <span class="stat-label">Health Score</span>
+                        <span class="stat-value" id="healthScoreStat">0</span>
+                        <span class="stat-unit">%</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Section -->
+            <div class="charts-section" data-aos="fade-up" data-aos-delay="150">
+                <div class="chart-card glass-card">
+                    <h4><i class="fas fa-chart-bar"></i> Disease Distribution</h4>
+                    <canvas id="diseaseDistributionChart" height="250"></canvas>
+                </div>
+                <div class="chart-card glass-card">
+                    <h4><i class="fas fa-chart-line"></i> Detection Trend</h4>
+                    <canvas id="detectionTrendChart" height="250"></canvas>
+                </div>
+            </div>
+
+            <!-- Recent Scans Table -->
+            <div class="recent-scans-table glass-card" data-aos="fade-up" data-aos-delay="200">
+                <h4><i class="fas fa-table"></i> Recent Scans Data</h4>
+                <div class="table-responsive">
+                    <table class="report-table" id="reportTable">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Disease</th>
+                                <th>Confidence</th>
+                                <th>Severity</th>
+                                <th>Treatment</th>
+                            </tr>
+                        </thead>
+                        <tbody id="reportTableBody">
+                            <tr class="empty-row">
+                                <td colspan="5" class="empty-row">Loading data...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Generate Report Button -->
+            <div class="generate-section" data-aos="fade-up" data-aos-delay="250">
+                <button id="generateReportBtn" class="generate-btn">
+                    <i class="fas fa-download"></i> Generate Report
+                </button>
+            </div>
+        </main>
+    </div>
+
+    <div id="toastContainer" class="toast-container"></div>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="../js/reports.js"></script>
+</body>
+</html>

@@ -1,0 +1,232 @@
+{
+  "dataset_name": "PlantVillage Dataset",
+  "version": "1.0.0",
+  "description": "Plant disease detection dataset containing images of healthy and diseased crop leaves",
+  "source": "PlantVillage - https://plantvillage.psu.edu/",
+  "total_classes": 29,
+  "total_images": 54305,
+  "image_format": "jpg",
+  "image_size": {
+    "width": 256,
+    "height": 256,
+    "channels": 3
+  },
+  "split_ratios": {
+    "train": 0.7,
+    "validation": 0.2,
+    "test": 0.1
+  },
+  "class_distribution": {
+    "Apple___Apple_scab": {
+      "count": 2016,
+      "type": "disease",
+      "crop": "Apple",
+      "severity": "high"
+    },
+    "Apple___Black_rot": {
+      "count": 1987,
+      "type": "disease",
+      "crop": "Apple",
+      "severity": "high"
+    },
+    "Apple___Cedar_apple_rust": {
+      "count": 1760,
+      "type": "disease",
+      "crop": "Apple",
+      "severity": "medium"
+    },
+    "Apple___healthy": {
+      "count": 1645,
+      "type": "healthy",
+      "crop": "Apple",
+      "severity": "low"
+    },
+    "Pepper,_bell___Bacterial_spot": {
+      "count": 1864,
+      "type": "disease",
+      "crop": "Bell Pepper",
+      "severity": "medium"
+    },
+    "Pepper,_bell___healthy": {
+      "count": 1478,
+      "type": "healthy",
+      "crop": "Bell Pepper",
+      "severity": "low"
+    },
+    "Cherry_(including_sour)___healthy": {
+      "count": 1526,
+      "type": "healthy",
+      "crop": "Cherry",
+      "severity": "low"
+    },
+    "Cherry_(including_sour)___Powdery_mildew": {
+      "count": 1703,
+      "type": "disease",
+      "crop": "Cherry",
+      "severity": "medium"
+    },
+    "Corn_(maize)___Cercospora_leaf_spot Gray_leaf_spot": {
+      "count": 1792,
+      "type": "disease",
+      "crop": "Corn",
+      "severity": "medium"
+    },
+    "Corn_(maize)___Common_rust": {
+      "count": 1854,
+      "type": "disease",
+      "crop": "Corn",
+      "severity": "medium"
+    },
+    "Corn_(maize)___healthy": {
+      "count": 1629,
+      "type": "healthy",
+      "crop": "Corn",
+      "severity": "low"
+    },
+    "Corn_(maize)___Northern_Leaf_Blight": {
+      "count": 1887,
+      "type": "disease",
+      "crop": "Corn",
+      "severity": "high"
+    },
+    "Grape___Black_rot": {
+      "count": 1990,
+      "type": "disease",
+      "crop": "Grape",
+      "severity": "high"
+    },
+    "Grape___Esca_(Black_Measles)": {
+      "count": 1804,
+      "type": "disease",
+      "crop": "Grape",
+      "severity": "high"
+    },
+    "Grape___healthy": {
+      "count": 1692,
+      "type": "healthy",
+      "crop": "Grape",
+      "severity": "low"
+    },
+    "Grape___Leaf_blight_(Isariopsis_Leaf_Spot)": {
+      "count": 1756,
+      "type": "disease",
+      "crop": "Grape",
+      "severity": "medium"
+    },
+    "Peach___Bacterial_spot": {
+      "count": 1831,
+      "type": "disease",
+      "crop": "Peach",
+      "severity": "medium"
+    },
+    "Peach___healthy": {
+      "count": 1528,
+      "type": "healthy",
+      "crop": "Peach",
+      "severity": "low"
+    },
+    "Potato___Early_blight": {
+      "count": 1920,
+      "type": "disease",
+      "crop": "Potato",
+      "severity": "medium"
+    },
+    "Potato___healthy": {
+      "count": 1728,
+      "type": "healthy",
+      "crop": "Potato",
+      "severity": "low"
+    },
+    "Potato___Late_blight": {
+      "count": 1950,
+      "type": "disease",
+      "crop": "Potato",
+      "severity": "high"
+    },
+    "Strawberry___healthy": {
+      "count": 1624,
+      "type": "healthy",
+      "crop": "Strawberry",
+      "severity": "low"
+    },
+    "Strawberry___Leaf_scorch": {
+      "count": 1809,
+      "type": "disease",
+      "crop": "Strawberry",
+      "severity": "medium"
+    },
+    "Tomato___Bacterial_spot": {
+      "count": 2004,
+      "type": "disease",
+      "crop": "Tomato",
+      "severity": "medium"
+    },
+    "Tomato___Early_blight": {
+      "count": 2100,
+      "type": "disease",
+      "crop": "Tomato",
+      "severity": "medium"
+    },
+    "Tomato___healthy": {
+      "count": 2100,
+      "type": "healthy",
+      "crop": "Tomato",
+      "severity": "low"
+    },
+    "Tomato___Late_blight": {
+      "count": 2300,
+      "type": "disease",
+      "crop": "Tomato",
+      "severity": "high"
+    },
+    "Tomato___Septoria_leaf_spot": {
+      "count": 2150,
+      "type": "disease",
+      "crop": "Tomato",
+      "severity": "medium"
+    },
+    "Tomato___Tomato_Yellow_Leaf_Curl_Virus": {
+      "count": 1845,
+      "type": "disease",
+      "crop": "Tomato",
+      "severity": "high"
+    }
+  },
+  "crop_distribution": {
+    "Apple": 7408,
+    "Bell Pepper": 3342,
+    "Cherry": 3229,
+    "Corn": 7162,
+    "Grape": 7242,
+    "Peach": 3359,
+    "Potato": 5598,
+    "Strawberry": 3433,
+    "Tomato": 13532
+  },
+  "severity_distribution": {
+    "high": 6,
+    "medium": 13,
+    "low": 10
+  },
+  "created_date": "2024-01-01",
+  "last_updated": "2024-06-11",
+  "recommended_split": {
+    "train": "dataset/train",
+    "validation": "dataset/validation",
+    "test": "dataset/test"
+  },
+  "preprocessing": {
+    "resize_dimensions": [224, 224],
+    "normalization": "scale [0, 1]",
+    "color_space": "RGB"
+  },
+  "augmentation": {
+    "rotation_range": 40,
+    "width_shift_range": 0.2,
+    "height_shift_range": 0.2,
+    "shear_range": 0.2,
+    "zoom_range": 0.2,
+    "horizontal_flip": true,
+    "fill_mode": "nearest"
+  }
+}

@@ -1,0 +1,267 @@
+{
+  "version": "1.0.0",
+  "last_updated": "2024-01-15",
+  "total_faqs": 28,
+  "categories": {
+    "getting_started": {
+      "name": "Getting Started",
+      "description": "Basic information about FarmIntel AI",
+      "icon": "🚀",
+      "faqs": [
+        {
+          "id": "faq_001",
+          "question": "What is FarmIntel AI?",
+          "answer": "FarmIntel AI is an AI-powered crop disease detection and farm advisory system. It helps farmers identify plant diseases by simply uploading a photo of a diseased leaf. The system uses machine learning to analyze the image and provides disease identification, treatment recommendations, weather analysis, and preventive measures.",
+          "keywords": ["what is", "about", "introduction", "farmintel"]
+        },
+        {
+          "id": "faq_002",
+          "question": "How does FarmIntel AI work?",
+          "answer": "FarmIntel AI works in 4 simple steps:\n\n1. 📸 Take a photo of the diseased leaf\n2. 📤 Upload the image to our system\n3. 🤖 AI analyzes the image and identifies the disease\n4. 📋 Get instant results including disease name, confidence score, severity level, and treatment recommendations\n\nThe system also integrates weather data to provide disease risk forecasts and spraying advisories.",
+          "keywords": ["how it works", "process", "steps", "detection"]
+        },
+        {
+          "id": "faq_003",
+          "question": "What crops does FarmIntel AI support?",
+          "answer": "FarmIntel AI currently supports 9 major crops with 29 disease classes:\n\n• 🍎 Apple (4 diseases)\n• 🌶️ Bell Pepper (2 diseases)\n• 🍒 Cherry (2 diseases)\n• 🌽 Corn (4 diseases)\n• 🍇 Grape (4 diseases)\n• 🍑 Peach (2 diseases)\n• 🥔 Potato (3 diseases)\n• 🍓 Strawberry (2 diseases)\n• 🍅 Tomato (6 diseases)\n\nWe are continuously adding support for more crops.",
+          "keywords": ["crops", "supported", "vegetables", "fruits", "plants"]
+        },
+        {
+          "id": "faq_004",
+          "question": "Is FarmIntel AI free to use?",
+          "answer": "Yes! FarmIntel AI offers a free tier with basic disease detection features. We also offer premium plans for farmers and agricultural businesses that include advanced analytics, batch processing, API access, and priority support.",
+          "keywords": ["free", "cost", "pricing", "premium", "paid"]
+        }
+      ]
+    },
+    "disease_detection": {
+      "name": "Disease Detection",
+      "description": "Questions about disease identification and accuracy",
+      "icon": "🔬",
+      "faqs": [
+        {
+          "id": "faq_005",
+          "question": "How accurate is the disease detection?",
+          "answer": "Our AI model has been trained on over 50,000 images from the PlantVillage dataset and achieves 95%+ accuracy on test data. The accuracy may vary based on image quality, lighting conditions, and disease stage. For best results, use clear, well-lit photos of symptomatic leaves.",
+          "keywords": ["accuracy", "precise", "reliable", "confidence"]
+        },
+        {
+          "id": "faq_006",
+          "question": "What kind of photos should I upload?",
+          "answer": "For best results, follow these guidelines:\n\n✅ Take photo in natural daylight\n✅ Focus on the affected leaf\n✅ Include both healthy and diseased areas\n✅ Ensure leaf fills most of the frame\n✅ Avoid blurry or dark images\n\n❌ Don't use flash directly on leaf\n❌ Avoid photos with hands or other objects\n❌ Don't upload photos of multiple leaves",
+          "keywords": ["photo", "image", "picture", "quality", "guidelines"]
+        },
+        {
+          "id": "faq_007",
+          "question": "What does the confidence score mean?",
+          "answer": "The confidence score (0-100%) indicates how certain our AI model is about its prediction:\n\n• 85-100%: Very High confidence - Severe disease likely\n• 70-84%: High confidence - Moderate disease\n• 50-69%: Medium confidence - Mild disease\n• Below 50%: Low confidence - Consider retaking photo\n\nHigher confidence scores generally indicate more reliable detections.",
+          "keywords": ["confidence", "score", "percentage", "certainty"]
+        },
+        {
+          "id": "faq_008",
+          "question": "What if the AI misidentifies my plant disease?",
+          "answer": "While our AI is highly accurate, misidentifications can occur. If you suspect a misidentification:\n\n1. Retake the photo in better lighting\n2. Try a different leaf angle\n3. Upload multiple photos of the same plant\n4. Compare with our disease library images\n5. Consult a local agronomist for confirmation\n\nWe continuously improve our model based on user feedback.",
+          "keywords": ["wrong", "incorrect", "misidentified", "error"]
+        },
+        {
+          "id": "faq_009",
+          "question": "Can it detect diseases in early stages?",
+          "answer": "Yes, our AI can detect diseases in early stages with reasonable accuracy (70-80%). However, detection is most reliable when symptoms are clearly visible. For early detection, we recommend regular monitoring and using our weather-based risk alerts as a preventive measure.",
+          "keywords": ["early", "initial", "beginning", "symptoms"]
+        }
+      ]
+    },
+    "treatment": {
+      "name": "Treatment & Prevention",
+      "description": "Questions about treatment recommendations",
+      "icon": "💊",
+      "faqs": [
+        {
+          "id": "faq_010",
+          "question": "Are the treatment recommendations safe?",
+          "answer": "Our treatment recommendations are based on agricultural best practices and include both chemical and organic options. Always read product labels before application. For organic farming, we prioritize natural solutions like neem oil, compost tea, and biological controls. When in doubt, consult a local agricultural extension officer.",
+          "keywords": ["safe", "recommendations", "treatment", "pesticide"]
+        },
+        {
+          "id": "faq_011",
+          "question": "What's the difference between chemical and organic treatments?",
+          "answer": "Chemical treatments use synthetic fungicides/bactericides that are fast-acting and highly effective. Organic treatments use natural substances like neem oil, copper sprays, or biological agents that are environmentally friendly but may require more frequent application. We provide both options so you can choose based on your farming practices.",
+          "keywords": ["chemical", "organic", "difference", "natural", "synthetic"]
+        },
+        {
+          "id": "faq_012",
+          "question": "How often should I apply the recommended treatments?",
+          "answer": "Application frequency depends on:\n\n• Disease severity\n• Weather conditions\n• Crop growth stage\n• Product type\n\nGeneral guidelines:\n• Preventive sprays: Every 7-14 days\n• Curative treatments: As directed (usually 2-3 applications)\n• Organic treatments: More frequent (5-7 days)\n\nAlways follow the specific product label instructions.",
+          "keywords": ["frequency", "often", "apply", "spray"]
+        },
+        {
+          "id": "faq_013",
+          "question": "Can I use both chemical and organic treatments together?",
+          "answer": "Some combinations work well together (integrated pest management), but others may be incompatible. We recommend choosing one approach and sticking with it. If switching between methods, allow a 5-7 day gap. Always test on a small area first and read product labels for compatibility information.",
+          "keywords": ["combine", "together", "integrated", "ipm"]
+        },
+        {
+          "id": "faq_014",
+          "question": "What are the best prevention practices?",
+          "answer": "Top prevention practices include:\n\n1. 🌱 Crop rotation (3-4 year cycles)\n2. 💧 Proper irrigation (water at base, morning only)\n3. 📏 Adequate spacing for air circulation\n4. 🧹 Remove and destroy infected plant debris\n5. 🧼 Sanitize gardening tools\n6. 🌾 Use disease-resistant varieties\n7. 🍂 Apply mulch to prevent soil splash\n8. 👁️ Regular field monitoring",
+          "keywords": ["prevention", "avoid", "stop", "control"]
+        }
+      ]
+    },
+    "weather_analysis": {
+      "name": "Weather Analysis",
+      "description": "Questions about weather features and disease forecasting",
+      "icon": "🌤️",
+      "faqs": [
+        {
+          "id": "faq_015",
+          "question": "How does weather affect plant diseases?",
+          "answer": "Weather plays a crucial role in disease development:\n\n• High humidity (>80%) promotes fungal diseases\n• Extended leaf wetness allows spore germination\n• Moderate temperatures (15-25°C) favor most pathogens\n• Rain spreads bacterial diseases\n• Wind carries fungal spores long distances\n\nOur weather feature analyzes these factors to predict disease risk.",
+          "keywords": ["weather", "humidity", "temperature", "rain", "risk"]
+        },
+        {
+          "id": "faq_016",
+          "question": "How accurate is the disease risk forecast?",
+          "answer": "Our disease risk forecast combines real-time weather data with disease-specific models. Accuracy is typically 80-90% for 24-hour forecasts, decreasing slightly for longer periods. We recommend using it as a planning tool rather than absolute prediction. Always supplement with field scouting.",
+          "keywords": ["forecast", "prediction", "risk", "accurate"]
+        },
+        {
+          "id": "faq_017",
+          "question": "What is the spray advisory feature?",
+          "answer": "The spray advisory tells you if current weather conditions are suitable for applying treatments:\n\n✅ Good: Low wind (<15 km/h), no rain forecast, moderate temperature\n⚠️ Caution: High wind, high temperature, or high humidity\n❌ Poor: Rain expected, extreme wind (>20 km/h)\n\nThis helps maximize treatment effectiveness and reduce waste.",
+          "keywords": ["spray", "advisory", "conditions", "apply"]
+        },
+        {
+          "id": "faq_018",
+          "question": "Do I need to provide my location for weather data?",
+          "answer": "Yes, location is required for accurate weather data. You can either:\n\n• Enter your city name\n• Allow browser location access\n• Enter your pincode (for Indian users)\n• Provide latitude/longitude coordinates\n\nYour location data is never shared with third parties and is only used to fetch relevant weather information.",
+          "keywords": ["location", "privacy", "city", "pincode"]
+        }
+      ]
+    },
+    "history_reports": {
+      "name": "History & Reports",
+      "description": "Questions about scan history and report generation",
+      "icon": "📊",
+      "faqs": [
+        {
+          "id": "faq_019",
+          "question": "How long are my scan history records kept?",
+          "answer": "Scan history is stored indefinitely on your account. You can view, search, and delete records at any time. We recommend periodic cleanup of old records to improve performance. Premium users can export their entire history as CSV or PDF for offline record-keeping.",
+          "keywords": ["history", "stored", "saved", "delete", "records"]
+        },
+        {
+          "id": "faq_020",
+          "question": "Can I export my scan data?",
+          "answer": "Yes! You can export your data in multiple formats:\n\n• CSV - For spreadsheet analysis\n• PDF - For professional reports\n• JSON - For data integration\n\nExport options are available in the Reports section. Premium users get additional export formats and batch export capabilities.",
+          "keywords": ["export", "download", "csv", "pdf", "report"]
+        },
+        {
+          "id": "faq_021",
+          "question": "What information is included in the reports?",
+          "answer": "Reports include:\n\n• Disease detection results with confidence scores\n• Severity assessment\n• Treatment recommendations (chemical & organic)\n• Prevention tips\n• Weather conditions at time of scan\n• Historical trends and statistics\n• Customizable date ranges\n\nYou can generate summary, detailed, or weather-specific reports.",
+          "keywords": ["report", "includes", "content", "pdf"]
+        }
+      ]
+    },
+    "technical": {
+      "name": "Technical Questions",
+      "description": "Technical support and troubleshooting",
+      "icon": "⚙️",
+      "faqs": [
+        {
+          "id": "faq_022",
+          "question": "What devices/browsers are supported?",
+          "answer": "FarmIntel AI works on all modern devices:\n\n📱 Mobile: iOS (Safari), Android (Chrome)\n💻 Desktop: Chrome, Firefox, Safari, Edge\n📷 Camera access works on all supported browsers\n\nFor best experience, use the latest version of your preferred browser. The mobile app (coming soon) will provide additional features.",
+          "keywords": ["browser", "device", "mobile", "desktop", "compatible"]
+        },
+        {
+          "id": "faq_023",
+          "question": "Is my data secure?",
+          "answer": "Yes! We take data security seriously:\n\n• All data encrypted in transit (HTTPS)\n• Passwords hashed and salted\n• No third-party sharing of personal data\n• Regular security audits\n• GDPR compliant practices\n\nYour scan history and personal information are only accessible to you.",
+          "keywords": ["security", "private", "encrypted", "safe", "gdpr"]
+        },
+        {
+          "id": "faq_024",
+          "question": "Why is the app sometimes slow?",
+          "answer": "Response time depends on several factors:\n\n• Image size (larger images take longer)\n• Internet connection speed\n• Server load during peak hours\n• Device processing power\n\nTips for faster performance:\n• Use smaller images (<5MB)\n• Ensure stable internet connection\n• Use during off-peak hours (early morning)\n• Clear browser cache regularly",
+          "keywords": ["slow", "performance", "speed", "lag"]
+        },
+        {
+          "id": "faq_025",
+          "question": "How do I delete my account?",
+          "answer": "To delete your account:\n\n1. Go to Settings → Account\n2. Click 'Delete Account'\n3. Confirm your password\n4. Click 'Permanently Delete'\n\n⚠️ This action is irreversible and will delete all your scan history, reports, and personal data. We recommend exporting your data before deletion.",
+          "keywords": ["delete", "remove", "cancel", "account"]
+        }
+      ]
+    },
+    "general": {
+      "name": "General Questions",
+      "description": "Other common questions",
+      "icon": "❓",
+      "faqs": [
+        {
+          "id": "faq_026",
+          "question": "Can I use FarmIntel AI offline?",
+          "answer": "Currently, an internet connection is required for disease detection as the AI model runs on our servers. However, we are developing an offline version that will allow basic detection on mobile devices without internet. Stay tuned for updates!",
+          "keywords": ["offline", "internet", "connection", "no wifi"]
+        },
+        {
+          "id": "faq_027",
+          "question": "How can I contribute to improving the AI?",
+          "answer": "You can help improve FarmIntel AI by:\n\n• Submitting verified disease images\n• Providing feedback on detection accuracy\n• Reporting misidentifications\n• Suggesting new crops/diseases\n• Becoming a beta tester\n\nContact us at contribute@farmintel.ai for more information.",
+          "keywords": ["contribute", "improve", "help", "feedback"]
+        },
+        {
+          "id": "faq_028",
+          "question": "How do I contact support?",
+          "answer": "We're here to help! Contact us through:\n\n📧 Email: support@farmintel.ai\n💬 Live Chat: Available on website (9 AM - 6 PM IST)\n📱 Phone: +91-XXX-XXX-XXXX (Premium users)\n📝 Contact Form: Available in Settings\n\nResponse time: 24-48 hours for email, instant for chat during business hours.",
+          "keywords": ["contact", "support", "help", "email", "phone"]
+        }
+      ]
+    }
+  },
+  "popular_questions": [
+    "What is FarmIntel AI?",
+    "How accurate is the disease detection?",
+    "What crops does FarmIntel AI support?",
+    "How does weather affect plant diseases?",
+    "Can I export my scan data?",
+    "Is FarmIntel AI free to use?",
+    "What kind of photos should I upload?"
+  ],
+  "quick_answers": {
+    "accuracy": "Our AI achieves 95%+ accuracy on the PlantVillage dataset. For best results, use clear, well-lit photos.",
+    "supported_crops": "9 crops: Apple, Bell Pepper, Cherry, Corn, Grape, Peach, Potato, Strawberry, Tomato (29 disease classes).",
+    "cost": "Free tier available with basic features. Premium plans start at $9.99/month for advanced features.",
+    "photo_guidelines": "Take clear photos in natural light, focus on affected leaf, avoid blurry images.",
+    "weather_risk": "High humidity (>80%) and extended leaf wetness create favorable conditions for fungal diseases."
+  },
+  "helpful_links": [
+    {
+      "title": "Disease Library",
+      "url": "/library",
+      "description": "Browse our complete disease database"
+    },
+    {
+      "title": "Getting Started Guide",
+      "url": "/guide",
+      "description": "Step-by-step tutorial for new users"
+    },
+    {
+      "title": "Video Tutorials",
+      "url": "/videos",
+      "description": "Watch how-to videos"
+    },
+    {
+      "title": "Blog",
+      "url": "/blog",
+      "description": "Latest articles on crop health"
+    },
+    {
+      "title": "Community Forum",
+      "url": "/community",
+      "description": "Connect with other farmers"
+    }
+  ]
+}

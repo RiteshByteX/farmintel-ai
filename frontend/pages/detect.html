@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Detect Disease - FarmIntel AI</title>
+    <link rel="icon" type="image/x-icon" href="#">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../css/detect.css">
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="animated-bg"></div>
+    <div class="particles" id="particles"></div>
+    
+    <!-- Theme Toggle -->
+    <div class="theme-toggle-wrapper">
+        <button id="themeToggle" class="theme-toggle-btn">
+            <i class="fas fa-sun"></i>
+        </button>
+    </div>
+
+    <!-- Dashboard Container -->
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-logo">
+                <div class="logo-icon">
+                    <i class="fas fa-leaf"></i>
+                </div>
+                <span>FarmIntel AI</span>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="detect.html" class="nav-item active">
+                    <i class="fas fa-camera"></i>
+                    <span>Detect Disease</span>
+                </a>
+                <a href="weather.html" class="nav-item">
+                    <i class="fas fa-cloud-sun-rain"></i>
+                    <span>Weather Analysis</span>
+                </a>
+                <a href="history.html" class="nav-item">
+                    <i class="fas fa-history"></i>
+                    <span>Scan History</span>
+                </a>
+                <a href="library.html" class="nav-item">
+                    <i class="fas fa-book"></i>
+                    <span>Disease Library</span>
+                </a>
+                <a href="report.html" class="nav-item">
+                    <i class="fas fa-file-alt"></i>
+                    <span>Reports</span>
+                </a>
+                <a href="faq.html" class="nav-item">
+                    <i class="fas fa-question-circle"></i>
+                    <span>FAQ</span>
+                </a>
+                <a href="settings.html" class="nav-item">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </a>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <a href="profile.html" class="user-info" id="profileLink">
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="user-details">
+                        <h4 id="userName">John Farmer</h4>
+                        <p>Premium Plan</p>
+                    </div>
+                </a>
+                <button id="logoutBtn" class="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Mobile Menu Toggle -->
+        <button id="mobileMenuToggle" class="mobile-menu-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+        <div id="sidebarOverlay" class="sidebar-overlay"></div>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="dashboard-header" data-aos="fade-down">
+                <h1>Detect Disease</h1>
+                <p>Upload or capture a leaf photo for instant AI diagnosis</p>
+            </header>
+
+            <!-- Detection Container -->
+            <div class="detection-container">
+                <!-- Upload Section -->
+                <div class="upload-section glass-card" data-aos="fade-right" data-aos-delay="100">
+                    <div class="section-badge">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <span>Step 1: Capture Image</span>
+                    </div>
+                    <h3>Capture or Upload Leaf</h3>
+                    <p class="section-subtitle">Take a clear photo of a diseased leaf. Ensure the affected area is well-lit and in focus.</p>
+                    
+                    <div class="upload-options">
+                        <button id="takePhotoBtn" class="upload-option-btn" type="button">
+                            <div class="btn-icon-wrapper"><i class="fas fa-camera"></i></div>
+                            <span>Take Photo</span>
+                            <small>Use camera</small>
+                        </button>
+                        <button id="uploadFileBtn" class="upload-option-btn" type="button">
+                            <div class="btn-icon-wrapper"><i class="fas fa-upload"></i></div>
+                            <span>Upload File</span>
+                            <small>From gallery</small>
+                        </button>
+                    </div>
+
+                    <!-- Hidden file inputs -->
+                    <input type="file" id="fileInput" accept="image/*" style="display: none;">
+                    <input type="file" id="cameraInput" accept="image/*" capture="environment" style="display: none;">
+
+                    <!-- Image Preview -->
+                    <div class="preview-area" id="previewArea" style="display: none;">
+                        <div class="preview-header">
+                            <span><i class="fas fa-image"></i> Image Preview</span>
+                            <button id="removeImageBtn" class="remove-image-btn"><i class="fas fa-times"></i></button>
+                        </div>
+                        <img id="imagePreview" src="" alt="Leaf preview">
+                    </div>
+
+                    <!-- Detect Button -->
+                    <button id="detectBtn" class="detect-btn" disabled>
+                        <i class="fas fa-microscope"></i> Detect Disease <i class="fas fa-arrow-right"></i>
+                    </button>
+
+                    <!-- Sample Images (for testing) -->
+                    <div class="sample-images">
+                        <div class="sample-header"><i class="fas fa-images"></i><span>Or try with sample images:</span></div>
+                        <div class="sample-grid" id="sampleGrid">
+                            <div class="sample-item" data-disease="Tomato Late Blight" data-confidence="94">
+                                <div class="sample-img-wrapper"><div class="sample-placeholder tomato">🍅</div></div>
+                                <span>Tomato Late Blight</span>
+                            </div>
+                            <div class="sample-item" data-disease="Tomato Healthy" data-confidence="98">
+                                <div class="sample-img-wrapper"><div class="sample-placeholder healthy">✅</div></div>
+                                <span>Tomato Healthy</span>
+                            </div>
+                            <div class="sample-item" data-disease="Potato Late Blight" data-confidence="91">
+                                <div class="sample-img-wrapper"><div class="sample-placeholder potato">🥔</div></div>
+                                <span>Potato Late Blight</span>
+                            </div>
+                            <div class="sample-item" data-disease="Potato Healthy" data-confidence="97">
+                                <div class="sample-img-wrapper"><div class="sample-placeholder healthy">✅</div></div>
+                                <span>Potato Healthy</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Results Section -->
+                <div class="results-section glass-card" id="resultsSection" data-aos="fade-left" data-aos-delay="200" style="display: none;">
+                    <div class="section-badge"><i class="fas fa-chart-line"></i><span>Step 2: Analysis Results</span></div>
+                    
+                    <!-- Loading Spinner -->
+                    <div class="loading-spinner" id="loadingSpinner" style="display: none;">
+                        <div class="spinner"></div>
+                        <p>Analyzing your image with AI...</p>
+                        <small>This may take a few seconds</small>
+                    </div>
+
+                    <!-- Results Content -->
+                    <div id="resultsContent" style="display: none;">
+                        <!-- Disease Info Card -->
+                        <div class="result-card">
+                            <div class="result-card-header"><i class="fas fa-biohazard"></i><span>Detection Results</span></div>
+                            <div class="disease-name"><i class="fas fa-leaf"></i><span id="diseaseName">-</span></div>
+                            <div class="confidence-meter">
+                                <div class="confidence-label"><span>Confidence Score</span><span id="confidenceValue">0%</span></div>
+                                <div class="progress-bar-container"><div class="progress-fill" id="confidenceBar" style="width: 0%"></div></div>
+                            </div>
+                            <div class="severity-tag" id="severityTag"><i class="fas fa-exclamation-triangle"></i><span id="severityText">-</span></div>
+                        </div>
+
+                        <!-- Treatment Card -->
+                        <div class="result-card">
+                            <div class="result-card-header"><i class="fas fa-pills"></i><span>Treatment Recommendations</span></div>
+                            <div class="treatment-item"><div class="treatment-icon chemical"><i class="fas fa-flask"></i></div><div class="treatment-content"><h4>Chemical Treatment</h4><p id="chemicalTreatment">-</p></div></div>
+                            <div class="treatment-item"><div class="treatment-icon organic"><i class="fas fa-leaf"></i></div><div class="treatment-content"><h4>Organic Treatment</h4><p id="organicTreatment">-</p></div></div>
+                            <div class="treatment-item"><div class="treatment-icon cultural"><i class="fas fa-tractor"></i></div><div class="treatment-content"><h4>Cultural Practices</h4><p id="culturalPractices">-</p></div></div>
+                            <div class="treatment-item"><div class="treatment-icon prevention"><i class="fas fa-shield-alt"></i></div><div class="treatment-content"><h4>Prevention Tips</h4><p id="preventionTips">-</p></div></div>
+                        </div>
+
+                        <!-- Stats Card -->
+                        <div class="result-card">
+                            <div class="stats-row">
+                                <div class="stat-item"><i class="fas fa-chart-pie"></i><span>Affected Area</span><strong id="affectedArea">-</strong></div>
+                                <div class="stat-item"><i class="fas fa-heartbeat"></i><span>Health Status</span><strong id="healthStatus">-</strong></div>
+                                <div class="stat-item"><i class="fas fa-clock"></i><span>Response Time</span><strong id="responseTime">-</strong></div>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="action-buttons">
+                            <button id="saveToHistoryBtn" class="action-btn save-btn"><i class="fas fa-save"></i> Save to History</button>
+                            <button id="downloadPdfBtn" class="action-btn pdf-btn"><i class="fas fa-file-pdf"></i> Download PDF</button>
+                            <button id="shareResultsBtn" class="action-btn share-btn"><i class="fas fa-share-alt"></i> Share Results</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tips Section -->
+            <div class="detection-tips glass-card" data-aos="fade-up" data-aos-delay="300">
+                <h4><i class="fas fa-lightbulb"></i> Tips for Best Results</h4>
+                <div class="tips-grid">
+                    <div class="tip"><i class="fas fa-sun"></i><span>Use natural daylight</span></div>
+                    <div class="tip"><i class="fas fa-focus"></i><span>Keep camera steady</span></div>
+                    <div class="tip"><i class="fas fa-crop"></i><span>Focus on affected area</span></div>
+                    <div class="tip"><i class="fas fa-backward"></i><span>Include healthy leaf for comparison</span></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="../js/detection.js"></script>
+</body>
+</html>

@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Settings - FarmIntel AI</title>
+    <link rel="icon" type="image/x-icon" href="#">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../css/settings.css">
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="animated-bg"></div>
+    <div class="particles" id="particles"></div>
+    
+    <!-- Theme Toggle -->
+    <div class="theme-toggle-wrapper">
+        <button id="themeToggle" class="theme-toggle-btn">
+            <i class="fas fa-sun"></i>
+        </button>
+    </div>
+
+    <!-- Dashboard Container -->
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-logo">
+                <div class="logo-icon">
+                    <i class="fas fa-leaf"></i>
+                </div>
+                <span>FarmIntel AI</span>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="detect.html" class="nav-item">
+                    <i class="fas fa-camera"></i>
+                    <span>Detect Disease</span>
+                </a>
+                <a href="weather.html" class="nav-item">
+                    <i class="fas fa-cloud-sun-rain"></i>
+                    <span>Weather Analysis</span>
+                </a>
+                <a href="history.html" class="nav-item">
+                    <i class="fas fa-history"></i>
+                    <span>Scan History</span>
+                </a>
+                <a href="library.html" class="nav-item">
+                    <i class="fas fa-book"></i>
+                    <span>Disease Library</span>
+                </a>
+                <a href="report.html" class="nav-item">
+                    <i class="fas fa-file-alt"></i>
+                    <span>Reports</span>
+                </a>
+                <a href="faq.html" class="nav-item">
+                    <i class="fas fa-question-circle"></i>
+                    <span>FAQ</span>
+                </a>
+                <a href="settings.html" class="nav-item active">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </a>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <a href="profile.html" class="user-info" id="profileLink">
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="user-details">
+                        <h4 id="userName">John Farmer</h4>
+                        <p>Premium Plan</p>
+                    </div>
+                </a>
+                <button id="logoutBtn" class="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Mobile Menu Toggle -->
+        <button id="mobileMenuToggle" class="mobile-menu-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+        <div id="sidebarOverlay" class="sidebar-overlay"></div>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="dashboard-header" data-aos="fade-down">
+                <h1>Settings</h1>
+                <p>Manage your account preferences and application settings</p>
+            </header>
+
+            <!-- Settings Container -->
+            <div class="settings-container">
+                <!-- Settings Sidebar -->
+                <div class="settings-sidebar glass-card" data-aos="fade-right" data-aos-delay="50">
+                    <div class="settings-nav">
+                        <button class="settings-nav-item active" data-target="profile">
+                            <i class="fas fa-user"></i>
+                            <span>Profile</span>
+                        </button>
+                        <button class="settings-nav-item" data-target="notifications">
+                            <i class="fas fa-bell"></i>
+                            <span>Notifications</span>
+                        </button>
+                        <button class="settings-nav-item" data-target="location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Location</span>
+                        </button>
+                        <button class="settings-nav-item" data-target="security">
+                            <i class="fas fa-lock"></i>
+                            <span>Security</span>
+                        </button>
+                        <button class="settings-nav-item" data-target="appearance">
+                            <i class="fas fa-palette"></i>
+                            <span>Appearance</span>
+                        </button>
+                        <button class="settings-nav-item" data-target="data">
+                            <i class="fas fa-database"></i>
+                            <span>Data Management</span>
+                        </button>
+                        <button class="settings-nav-item" data-target="account">
+                            <i class="fas fa-credit-card"></i>
+                            <span>Account</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Settings Content -->
+                <div class="settings-content" data-aos="fade-left" data-aos-delay="100">
+                    <!-- Profile Section -->
+                    <div id="section-profile" class="settings-section active">
+                        <div class="settings-card glass-card">
+                            <h2><i class="fas fa-user-circle"></i> Profile Information</h2>
+                            
+                            <div class="profile-avatar-section">
+                                <div class="avatar-container">
+                                    <div class="profile-avatar" id="profileAvatar">
+                                        <i class="fas fa-user"></i>
+                                    </div>
+                                    <button id="changePhotoBtn" class="change-photo-btn">
+                                        <i class="fas fa-camera"></i> Change Photo
+                                    </button>
+                                    <input type="file" id="avatarUpload" accept="image/*" style="display: none;">
+                                </div>
+                                <div class="avatar-info">
+                                    <h3 id="profileName">John Farmer</h3>
+                                    <p>Joined June 2024 · Premium Plan</p>
+                                </div>
+                            </div>
+                            
+                            <form id="profileForm" class="settings-form">
+                                <div class="form-group">
+                                    <label><i class="fas fa-user"></i> Full Name</label>
+                                    <input type="text" id="fullName" placeholder="John Farmer" value="John Farmer">
+                                </div>
+                                <div class="form-group">
+                                    <label><i class="fas fa-envelope"></i> Email Address</label>
+                                    <input type="email" id="email" placeholder="farmer@farmintel.ai" value="farmer@farmintel.ai">
+                                </div>
+                                <div class="form-group">
+                                    <label><i class="fas fa-phone"></i> Mobile Number</label>
+                                    <input type="tel" id="mobile" placeholder="+91 98765 43210" value="+91 98765 43210">
+                                </div>
+                                <div class="form-group">
+                                    <label><i class="fas fa-tractor"></i> Farm Type</label>
+                                    <select id="farmType">
+                                        <option value="vegetable">Vegetable Farming</option>
+                                        <option value="fruit">Fruit Farming</option>
+                                        <option value="grain">Grain Farming</option>
+                                        <option value="mixed" selected>Mixed Farming</option>
+                                        <option value="organic">Organic Farming</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label><i class="fas fa-map-pin"></i> Farm Size (acres)</label>
+                                    <input type="number" id="farmSize" placeholder="Farm size in acres" value="25">
+                                </div>
+                                <div class="form-actions">
+                                    <button type="submit" class="btn-primary">Save Changes</button>
+                                    <button type="button" id="cancelProfileBtn" class="btn-outline">Cancel</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Notifications Section -->
+                    <div id="section-notifications" class="settings-section">
+                        <div class="settings-card glass-card">
+                            <h2><i class="fas fa-bell"></i> Notification Preferences</h2>
+                            <p class="section-desc">Choose what you want to be notified about.</p>
+                            
+                            <div class="notifications-list">
+                                <div class="notification-item">
+                                    <div class="notification-info">
+                                        <i class="fas fa-comment"></i>
+                                        <div>
+                                            <h4>Comments</h4>
+                                            <p>Get notified when someone comments on your post</p>
+                                        </div>
+                                    </div>
+                                    <label class="switch">
+                                        <input type="checkbox" id="notifyComments" checked>
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+                                <div class="notification-item">
+                                    <div class="notification-info">
+                                        <i class="fas fa-at"></i>
+                                        <div>
+                                            <h4>Mentions</h4>
+                                            <p>Get notified when you are mentioned</p>
+                                        </div>
+                                    </div>
+                                    <label class="switch">
+                                        <input type="checkbox" id="notifyMentions" checked>
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+                                <div class="notification-item">
+                                    <div class="notification-info">
+                                        <i class="fas fa-user-plus"></i>
+                                        <div>
+                                            <h4>New followers</h4>
+                                            <p>Get notified when someone follows you</p>
+                                        </div>
+                                    </div>
+                                    <label class="switch">
+                                        <input type="checkbox" id="notifyFollowers" checked>
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+                                <div class="notification-item">
+                                    <div class="notification-info">
+                                        <i class="fas fa-flask"></i>
+                                        <div>
+                                            <h4>Disease Alerts</h4>
+                                            <p>Receive alerts when high-risk diseases are detected in your area</p>
+                                        </div>
+                                    </div>
+                                    <label class="switch">
+                                        <input type="checkbox" id="notifyDisease" checked>
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+                                <div class="notification-item">
+                                    <div class="notification-info">
+                                        <i class="fas fa-cloud-sun-rain"></i>
+                                        <div>
+                                            <h4>Weather Alerts</h4>
+                                            <p>Get notified about extreme weather conditions</p>
+                                        </div>
+                                    </div>
+                                    <label class="switch">
+                                        <input type="checkbox" id="notifyWeather" checked>
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+                                <div class="notification-item">
+                                    <div class="notification-info">
+                                        <i class="fas fa-newspaper"></i>
+                                        <div>
+                                            <h4>Product updates</h4>
+                                            <p>Receive emails about new features and improvements</p>
+                                        </div>
+                                    </div>
+                                    <label class="switch">
+                                        <input type="checkbox" id="notifyUpdates" checked>
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+                                <div class="notification-item">
+                                    <div class="notification-info">
+                                        <i class="fas fa-chart-line"></i>
+                                        <div>
+                                            <h4>Weekly digest</h4>
+                                            <p>A summary of activity from the past week</p>
+                                        </div>
+                                    </div>
+                                    <label class="switch">
+                                        <input type="checkbox" id="notifyDigest">
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+                                <div class="notification-item">
+                                    <div class="notification-info">
+                                        <i class="fas fa-shield-alt"></i>
+                                        <div>
+                                            <h4>Security alerts</h4>
+                                            <p>Important alerts about your account security</p>
+                                        </div>
+                                    </div>
+                                    <label class="switch">
+                                        <input type="checkbox" id="notifySecurity" checked>
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div class="form-actions">
+                                <button id="saveNotificationsBtn" class="btn-primary">Save Preferences</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Location Section -->
+                    <div id="section-location" class="settings-section">
+                        <div class="settings-card glass-card">
+                            <h2><i class="fas fa-map-marker-alt"></i> Location Settings</h2>
+                            <p class="section-desc">Set your location for accurate weather data and disease risk alerts.</p>
+                            
+                            <form id="locationForm" class="settings-form">
+                                <div class="form-group">
+                                    <label><i class="fas fa-city"></i> City / District</label>
+                                    <input type="text" id="city" placeholder="Your city" value="Mumbai">
+                                </div>
+                                <div class="form-group">
+                                    <label><i class="fas fa-map-pin"></i> State</label>
+                                    <select id="state">
+                                        <option value="maharashtra" selected>Maharashtra</option>
+                                        <option value="punjab">Punjab</option>
+                                        <option value="haryana">Haryana</option>
+                                        <option value="uttar-pradesh">Uttar Pradesh</option>
+                                        <option value="gujarat">Gujarat</option>
+                                        <option value="karnataka">Karnataka</option>
+                                        <option value="tamil-nadu">Tamil Nadu</option>
+                                        <option value="andhra-pradesh">Andhra Pradesh</option>
+                                        <option value="telangana">Telangana</option>
+                                        <option value="west-bengal">West Bengal</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label><i class="fas fa-tachometer-alt"></i> Pin Code</label>
+                                    <input type="text" id="pincode" placeholder="Pin code" value="400001">
+                                </div>
+                                <div class="form-group">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" id="autoDetectLocation">
+                                        <span>Automatically detect my location</span>
+                                    </label>
+                                </div>
+                                <div class="form-actions">
+                                    <button type="submit" class="btn-primary">Update Location</button>
+                                    <button type="button" id="detectLocationBtn" class="btn-outline">
+                                        <i class="fas fa-location-dot"></i> Detect Current Location
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Security Section -->
+                    <div id="section-security" class="settings-section">
+                        <div class="settings-card glass-card">
+                            <h2><i class="fas fa-lock"></i> Security Settings</h2>
+                            
+                            <form id="passwordForm" class="settings-form">
+                                <h3>Change Password</h3>
+                                <div class="form-group">
+                                    <label><i class="fas fa-key"></i> Current Password</label>
+                                    <input type="password" id="currentPassword" placeholder="Enter current password">
+                                </div>
+                                <div class="form-group">
+                                    <label><i class="fas fa-lock"></i> New Password</label>
+                                    <input type="password" id="newPassword" placeholder="Enter new password">
+                                </div>
+                                <div class="form-group">
+                                    <label><i class="fas fa-check-circle"></i> Confirm New Password</label>
+                                    <input type="password" id="confirmPassword" placeholder="Confirm new password">
+                                </div>
+                                <div class="form-actions">
+                                    <button type="submit" class="btn-primary">Update Password</button>
+                                </div>
+                            </form>
+                            
+                            <div class="security-divider"></div>
+                            
+                            <div class="two-factor-section">
+                                <div class="two-factor-info">
+                                    <div>
+                                        <h3><i class="fas fa-mobile-alt"></i> Two-Factor Authentication</h3>
+                                        <p>Add an extra layer of security to your account</p>
+                                    </div>
+                                    <label class="switch">
+                                        <input type="checkbox" id="twoFactorAuth">
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div class="security-divider"></div>
+                            
+                            <div class="sessions-section">
+                                <h3><i class="fas fa-globe"></i> Active Sessions</h3>
+                                <div class="session-item">
+                                    <div class="session-info">
+                                        <i class="fas fa-laptop"></i>
+                                        <div>
+                                            <h4>Chrome on Windows</h4>
+                                            <p>Mumbai, India · Last active 2 minutes ago</p>
+                                        </div>
+                                    </div>
+                                    <button class="btn-outline-small">Logout</button>
+                                </div>
+                                <div class="session-item">
+                                    <div class="session-info">
+                                        <i class="fas fa-mobile-alt"></i>
+                                        <div>
+                                            <h4>Safari on iPhone</h4>
+                                            <p>Mumbai, India · Last active 3 hours ago</p>
+                                        </div>
+                                    </div>
+                                    <button class="btn-outline-small">Logout</button>
+                                </div>
+                                <button class="btn-outline" id="logoutAllDevices">Logout from all devices</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Appearance Section -->
+                    <div id="section-appearance" class="settings-section">
+                        <div class="settings-card glass-card">
+                            <h2><i class="fas fa-palette"></i> Appearance Settings</h2>
+                            
+                            <div class="theme-options">
+                                <h3>Theme Mode</h3>
+                                <div class="theme-cards">
+                                    <div class="theme-card active" data-theme="light">
+                                        <i class="fas fa-sun"></i>
+                                        <span>Light Mode</span>
+                                    </div>
+                                    <div class="theme-card" data-theme="dark">
+                                        <i class="fas fa-moon"></i>
+                                        <span>Dark Mode</span>
+                                    </div>
+                                    <div class="theme-card" data-theme="auto">
+                                        <i class="fas fa-mobile-alt"></i>
+                                        <span>Auto (System)</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="font-options">
+                                <h3>Font Size</h3>
+                                <div class="font-size-controls">
+                                    <button id="decreaseFontBtn" class="font-size-btn"><i class="fas fa-minus"></i></button>
+                                    <span id="fontSizeLabel">Medium</span>
+                                    <button id="increaseFontBtn" class="font-size-btn"><i class="fas fa-plus"></i></button>
+                                </div>
+                            </div>
+                            
+                            <div class="language-options">
+                                <h3>Language</h3>
+                                <select id="languageSelect" class="language-select">
+                                    <option value="en">English</option>
+                                    <option value="hi">हिंदी (Hindi)</option>
+                                    <option value="mr">मराठी (Marathi)</option>
+                                    <option value="ta">தமிழ் (Tamil)</option>
+                                    <option value="te">తెలుగు (Telugu)</option>
+                                    <option value="pa">ਪੰਜਾਬੀ (Punjabi)</option>
+                                    <option value="bn">বাংলা (Bengali)</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-actions">
+                                <button id="saveAppearanceBtn" class="btn-primary">Save Appearance Settings</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Data Management Section -->
+                    <div id="section-data" class="settings-section">
+                        <div class="settings-card glass-card">
+                            <h2><i class="fas fa-database"></i> Data Management</h2>
+                            
+                            <div class="data-option">
+                                <div class="data-option-info">
+                                    <i class="fas fa-history"></i>
+                                    <div>
+                                        <h3>Clear Scan History</h3>
+                                        <p>Remove all your scan records from the database</p>
+                                    </div>
+                                </div>
+                                <button id="clearHistoryBtn" class="btn-danger">Clear History</button>
+                            </div>
+                            
+                            <div class="data-option">
+                                <div class="data-option-info">
+                                    <i class="fas fa-download"></i>
+                                    <div>
+                                        <h3>Export Your Data</h3>
+                                        <p>Download all your data including scans, reports, and settings</p>
+                                    </div>
+                                </div>
+                                <button id="exportDataBtn" class="btn-outline">Export Data</button>
+                            </div>
+                            
+                            <div class="data-option">
+                                <div class="data-option-info">
+                                    <i class="fas fa-upload"></i>
+                                    <div>
+                                        <h3>Backup Data</h3>
+                                        <p>Create a backup of your settings and scan history</p>
+                                    </div>
+                                </div>
+                                <button id="backupDataBtn" class="btn-outline">Create Backup</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Account Section -->
+                    <div id="section-account" class="settings-section">
+                        <div class="settings-card glass-card">
+                            <h2><i class="fas fa-credit-card"></i> Account & Subscription</h2>
+                            
+                            <div class="plan-details">
+                                <div class="plan-badge premium">Premium Plan</div>
+                                <p>You're on the Premium plan. Enjoy unlimited scans, priority support, and advanced analytics.</p>
+                                <div class="plan-features">
+                                    <div class="feature"><i class="fas fa-check-circle"></i> Unlimited disease scans</div>
+                                    <div class="feature"><i class="fas fa-check-circle"></i> Detailed PDF reports</div>
+                                    <div class="feature"><i class="fas fa-check-circle"></i> Priority customer support</div>
+                                    <div class="feature"><i class="fas fa-check-circle"></i> Advanced weather analytics</div>
+                                    <div class="feature"><i class="fas fa-check-circle"></i> Multi-language support</div>
+                                </div>
+                                <button class="btn-outline" id="manageSubscription">Manage Subscription</button>
+                            </div>
+                            
+                            <div class="billing-history">
+                                <h3>Billing History</h3>
+                                <div class="table-responsive">
+                                    <table class="billing-table">
+                                        <thead>
+                                            <tr><th>Date</th><th>Plan</th><th>Amount</th><th>Status</th></tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr><td>Jun 1, 2025</td><td>Premium Monthly</td><td>₹499</td><td><span class="status-paid">Paid</span></td></tr>
+                                            <tr><td>May 1, 2025</td><td>Premium Monthly</td><td>₹499</td><td><span class="status-paid">Paid</span></td></tr>
+                                            <tr><td>Apr 1, 2025</td><td>Basic Plan</td><td>Free</td><td><span class="status-paid">Paid</span></td></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            
+                            <div class="danger-zone">
+                                <h3><i class="fas fa-exclamation-triangle"></i> Danger Zone</h3>
+                                <div class="data-option">
+                                    <div class="data-option-info">
+                                        <div>
+                                            <h3>Delete Account</h3>
+                                            <p>Permanently delete your account and all associated data. This action cannot be undone.</p>
+                                        </div>
+                                    </div>
+                                    <button id="deleteAccountBtn" class="btn-danger">Delete Account</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Delete Account Confirmation Modal -->
+    <div id="deleteModal" class="modal">
+        <div class="modal-content small">
+            <div class="modal-header">
+                <h2><i class="fas fa-exclamation-triangle"></i> Delete Account</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete your account?</p>
+                <p class="warning-text">This action is permanent and cannot be undone. All your data including scan history, reports, and settings will be permanently deleted.</p>
+                <div class="form-group">
+                    <label>Type "DELETE" to confirm</label>
+                    <input type="text" id="deleteConfirmInput" placeholder="DELETE">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="confirmDeleteAccountBtn" class="btn-danger">Permanently Delete</button>
+                <button id="cancelDeleteBtn" class="btn-outline">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Clear History Confirmation Modal -->
+    <div id="clearHistoryModal" class="modal">
+        <div class="modal-content small">
+            <div class="modal-header">
+                <h2><i class="fas fa-trash-alt"></i> Clear Scan History</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to clear your entire scan history?</p>
+                <p class="warning-text">This will permanently delete all your scan records. This action cannot be undone.</p>
+            </div>
+            <div class="modal-footer">
+                <button id="confirmClearHistoryBtn" class="btn-danger">Clear History</button>
+                <button id="cancelClearBtn" class="btn-outline">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toastContainer" class="toast-container"></div>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="../js/settings.js"></script>
+</body>
+</html>

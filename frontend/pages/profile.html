@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>My Profile - FarmIntel AI</title>
+    <link rel="icon" type="image/x-icon" href="#">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../css/profile.css">
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="animated-bg"></div>
+    <div class="particles" id="particles"></div>
+    
+    <!-- Theme Toggle -->
+    <div class="theme-toggle-wrapper">
+        <button id="themeToggle" class="theme-toggle-btn">
+            <i class="fas fa-sun"></i>
+        </button>
+    </div>
+
+    <!-- Dashboard Container -->
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-logo">
+                <div class="logo-icon">
+                    <i class="fas fa-leaf"></i>
+                </div>
+                <span>FarmIntel AI</span>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="detect.html" class="nav-item">
+                    <i class="fas fa-camera"></i>
+                    <span>Detect Disease</span>
+                </a>
+                <a href="weather.html" class="nav-item">
+                    <i class="fas fa-cloud-sun-rain"></i>
+                    <span>Weather Analysis</span>
+                </a>
+                <a href="history.html" class="nav-item">
+                    <i class="fas fa-history"></i>
+                    <span>Scan History</span>
+                </a>
+                <a href="library.html" class="nav-item">
+                    <i class="fas fa-book"></i>
+                    <span>Disease Library</span>
+                </a>
+                <a href="report.html" class="nav-item">
+                    <i class="fas fa-file-alt"></i>
+                    <span>Reports</span>
+                </a>
+                <a href="faq.html" class="nav-item">
+                    <i class="fas fa-question-circle"></i>
+                    <span>FAQ</span>
+                </a>
+                <a href="settings.html" class="nav-item">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </a>
+            </nav>
+            
+            <div class="sidebar-footer">
+    <a href="profile.html" class="user-info" id="profileLink">
+        <div class="user-avatar">
+            <i class="fas fa-user"></i>
+        </div>
+        <div class="user-details">
+            <h4 id="userName">John Farmer</h4>
+            <p>Premium Plan</p>
+        </div>
+    </a>
+    <button id="logoutBtn" class="logout-btn">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Logout</span>
+    </button>
+</div>
+        </aside>
+
+        <!-- Mobile Menu Toggle -->
+        <button id="mobileMenuToggle" class="mobile-menu-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+        <div id="sidebarOverlay" class="sidebar-overlay"></div>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="dashboard-header" data-aos="fade-down">
+                <h1>My Profile</h1>
+                <p>View and manage your personal information</p>
+            </header>
+
+            <div class="profile-container">
+                <!-- Profile Header -->
+                <div class="profile-header glass-card" data-aos="fade-up">
+                    <div class="profile-avatar-large" id="profileAvatarLarge">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <h2 class="profile-name" id="profileName">John Farmer</h2>
+                    <p class="profile-email" id="profileEmail">farmer@farmintel.ai</p>
+                    <span class="profile-badge" id="profilePlan">Premium Plan</span>
+                </div>
+
+                <!-- Profile Stats -->
+                <div class="profile-stats" data-aos="fade-up" data-aos-delay="100">
+                    <div class="stat-box glass-card">
+                        <div class="stat-number" id="totalScans">0</div>
+                        <div class="stat-label">Total Scans</div>
+                    </div>
+                    <div class="stat-box glass-card">
+                        <div class="stat-number" id="memberSince">2024</div>
+                        <div class="stat-label">Member Since</div>
+                    </div>
+                    <div class="stat-box glass-card">
+                        <div class="stat-number" id="detectionRate">0</div>
+                        <div class="stat-label">Detection Rate</div>
+                    </div>
+                </div>
+
+                <!-- Personal Information -->
+                <div class="info-card glass-card" data-aos="fade-up" data-aos-delay="200">
+                    <h3><i class="fas fa-user-circle"></i> Personal Information</h3>
+                    <div class="info-row">
+                        <span class="info-label"><i class="fas fa-user"></i> Full Name</span>
+                        <span class="info-value" id="infoFullName">John Farmer</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label"><i class="fas fa-envelope"></i> Email Address</span>
+                        <span class="info-value" id="infoEmail">farmer@farmintel.ai</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label"><i class="fas fa-phone"></i> Mobile Number</span>
+                        <span class="info-value" id="infoMobile">+91 98765 43210</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label"><i class="fas fa-calendar-alt"></i> Joined Date</span>
+                        <span class="info-value" id="infoJoined">June 15, 2024</span>
+                    </div>
+                </div>
+
+                <!-- Farm Information -->
+                <div class="info-card glass-card" data-aos="fade-up" data-aos-delay="300">
+                    <h3><i class="fas fa-tractor"></i> Farm Information</h3>
+                    <div class="info-row">
+                        <span class="info-label"><i class="fas fa-map-marker-alt"></i> Location</span>
+                        <span class="info-value" id="infoLocation">Mumbai, Maharashtra</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label"><i class="fas fa-tractor"></i> Farm Type</span>
+                        <span class="info-value" id="infoFarmType">Mixed Farming</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label"><i class="fas fa-map-pin"></i> Farm Size</span>
+                        <span class="info-value" id="infoFarmSize">25 acres</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label"><i class="fas fa-seedling"></i> Primary Crops</span>
+                        <span class="info-value" id="infoCrops">Tomato, Potato, Wheat</span>
+                    </div>
+                </div>
+
+                <!-- Edit Button -->
+                <button class="edit-profile-btn" id="editProfileBtn" data-aos="fade-up" data-aos-delay="400">
+                    <i class="fas fa-edit"></i> Edit Profile
+                </button>
+            </div>
+        </main>
+    </div>
+
+    <!-- Edit Profile Modal -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-edit"></i> Edit Profile</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="editProfileForm">
+                    <div class="form-group">
+                        <label><i class="fas fa-user"></i> Full Name</label>
+                        <input type="text" id="editFullName" placeholder="Enter your full name">
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-phone"></i> Mobile Number</label>
+                        <input type="tel" id="editMobile" placeholder="Enter mobile number">
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-map-marker-alt"></i> Location</label>
+                        <input type="text" id="editLocation" placeholder="City, State">
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-tractor"></i> Farm Type</label>
+                        <select id="editFarmType">
+                            <option value="Vegetable Farming">Vegetable Farming</option>
+                            <option value="Fruit Farming">Fruit Farming</option>
+                            <option value="Grain Farming">Grain Farming</option>
+                            <option value="Mixed Farming">Mixed Farming</option>
+                            <option value="Organic Farming">Organic Farming</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-map-pin"></i> Farm Size (acres)</label>
+                        <input type="number" id="editFarmSize" placeholder="Farm size in acres">
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-seedling"></i> Primary Crops</label>
+                        <input type="text" id="editCrops" placeholder="e.g., Tomato, Potato, Wheat">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button id="saveProfileBtn" class="btn-primary">Save Changes</button>
+                <button id="cancelEditBtn" class="btn-outline">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toastContainer" class="toast-container"></div>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="../js/profile.js"></script>
+</body>
+</html>
