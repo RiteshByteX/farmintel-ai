@@ -5,7 +5,7 @@ Initializes and configures the Flask application
 
 import os
 import json
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, send_from_directory
 from flask_cors import CORS
 from datetime import datetime
 
@@ -38,7 +38,8 @@ def create_app(config_object=None):
             HISTORY_FILE='database/history.json',
             APP_NAME='FarmIntel AI',
             APP_VERSION='1.0.0',
-            APP_DESCRIPTION='AI-powered crop disease detection and farm advisory system'
+            APP_DESCRIPTION='AI-powered crop disease detection and farm advisory system',
+            FRONTEND_FOLDER=os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'frontend')
         )
     
     # Configure CORS (no wildcard for production)
@@ -46,7 +47,8 @@ def create_app(config_object=None):
         'http://localhost:5500',
         'http://127.0.0.1:5500', 
         'http://localhost:5000',
-        'http://127.0.0.1:5000'
+        'http://127.0.0.1:5000',
+        'http://192.168.1.14:5000'
     ])
     
     # Create required directories
@@ -57,6 +59,51 @@ def create_app(config_object=None):
     
     # Register request/response handlers
     _register_request_handlers(app)
+    
+    # ============================================
+    # SERVE FRONTEND STATIC FILES
+    # ============================================
+    @app.route('/')
+    def serve_index():
+        """Serve the main index.html"""
+        frontend_path = app.config.get('FRONTEND_FOLDER', '../frontend')
+        return send_from_directory(frontend_path, 'index.html')
+    
+    @app.route('/pages/<path:filename>')
+    def serve_pages(filename):
+        """Serve pages from /pages directory"""
+        frontend_path = app.config.get('FRONTEND_FOLDER', '../frontend')
+        return send_from_directory(os.path.join(frontend_path, 'pages'), filename)
+    
+    @app.route('/css/<path:filename>')
+    def serve_css(filename):
+        """Serve CSS files from /css directory"""
+        frontend_path = app.config.get('FRONTEND_FOLDER', '../frontend')
+        return send_from_directory(os.path.join(frontend_path, 'css'), filename)
+    
+    @app.route('/js/<path:filename>')
+    def serve_js(filename):
+        """Serve JS files from /js directory"""
+        frontend_path = app.config.get('FRONTEND_FOLDER', '../frontend')
+        return send_from_directory(os.path.join(frontend_path, 'js'), filename)
+    
+    @app.route('/assets/<path:filename>')
+    def serve_assets(filename):
+        """Serve assets from /assets directory"""
+        frontend_path = app.config.get('FRONTEND_FOLDER', '../frontend')
+        return send_from_directory(os.path.join(frontend_path, 'assets'), filename)
+    
+    @app.route('/<path:filename>')
+    def serve_root_files(filename):
+        """Serve files from frontend root (favicon, etc.)"""
+        frontend_path = app.config.get('FRONTEND_FOLDER', '../frontend')
+        # Skip API routes that might be caught here
+        if filename.startswith('api/') or filename.startswith('health'):
+            return jsonify({'error': 'Not found'}), 404
+        try:
+            return send_from_directory(frontend_path, filename)
+        except:
+            return jsonify({'error': 'File not found'}), 404
     
     # Register blueprints (routes)
     _register_blueprints(app)

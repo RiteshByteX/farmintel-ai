@@ -17,6 +17,138 @@
     
     <!-- Custom CSS -->
     <link rel="stylesheet" href="../css/detect.css">
+    
+    <style>
+        /* Additional inline styles for better layout */
+        .detection-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            align-items: start;
+        }
+        
+        .upload-section {
+            order: 1;
+        }
+        
+        .results-section {
+            order: 2;
+            min-height: 400px;
+            display: none;
+        }
+        
+        .results-section.visible {
+            display: block !important;
+        }
+        
+        .results-section .result-card {
+            margin-bottom: 1rem;
+        }
+        
+        .results-section .result-card:last-child {
+            margin-bottom: 0;
+        }
+        
+        /* Camera overlay styles */
+        .camera-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            z-index: 9999;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        
+        .camera-overlay.active {
+            display: flex;
+        }
+        
+        .camera-overlay video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .camera-overlay .camera-controls {
+            position: fixed;
+            bottom: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            z-index: 10000;
+        }
+        
+        .camera-overlay .capture-btn {
+            padding: 16px 48px;
+            border-radius: 50px;
+            background: linear-gradient(135deg, #4F46E5, #7C3AED);
+            border: none;
+            color: white;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(79, 70, 229, 0.4);
+        }
+        
+        .camera-overlay .capture-btn:hover {
+            transform: scale(1.05);
+        }
+        
+        .camera-overlay .close-camera-btn {
+            padding: 12px 24px;
+            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .camera-overlay .close-camera-btn:hover {
+            background: rgba(239, 68, 68, 0.3);
+        }
+        
+        @media (max-width: 1024px) {
+            .detection-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .upload-section {
+                order: 1;
+            }
+            
+            .results-section {
+                order: 2;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .camera-overlay .camera-controls {
+                flex-direction: column;
+                gap: 12px;
+                bottom: 40px;
+            }
+            
+            .camera-overlay .capture-btn {
+                padding: 14px 32px;
+                font-size: 16px;
+            }
+            
+            .camera-overlay .close-camera-btn {
+                padding: 10px 20px;
+                font-size: 14px;
+            }
+        }
+    </style>
 </head>
 <body>
     <!-- Animated Background -->
@@ -28,6 +160,19 @@
         <button id="themeToggle" class="theme-toggle-btn">
             <i class="fas fa-sun"></i>
         </button>
+    </div>
+
+    <!-- Camera Overlay for Desktop -->
+    <div class="camera-overlay" id="cameraOverlay">
+        <video id="cameraVideo" autoplay playsinline></video>
+        <div class="camera-controls">
+            <button class="capture-btn" id="capturePhotoBtn">
+                <i class="fas fa-camera"></i> Capture
+            </button>
+            <button class="close-camera-btn" id="closeCameraBtn">
+                <i class="fas fa-times"></i> Close
+            </button>
+        </div>
     </div>
 
     <!-- Dashboard Container -->
@@ -108,7 +253,7 @@
 
             <!-- Detection Container -->
             <div class="detection-container">
-                <!-- Upload Section -->
+                <!-- Upload Section (Left Side) -->
                 <div class="upload-section glass-card" data-aos="fade-right" data-aos-delay="100">
                     <div class="section-badge">
                         <i class="fas fa-cloud-upload-alt"></i>
@@ -172,9 +317,12 @@
                     </div>
                 </div>
 
-                <!-- Results Section -->
+                <!-- Results Section (Right Side) -->
                 <div class="results-section glass-card" id="resultsSection" data-aos="fade-left" data-aos-delay="200" style="display: none;">
-                    <div class="section-badge"><i class="fas fa-chart-line"></i><span>Step 2: Analysis Results</span></div>
+                    <div class="section-badge">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Step 2: Analysis Results</span>
+                    </div>
                     
                     <!-- Loading Spinner -->
                     <div class="loading-spinner" id="loadingSpinner" style="display: none;">
@@ -187,38 +335,97 @@
                     <div id="resultsContent" style="display: none;">
                         <!-- Disease Info Card -->
                         <div class="result-card">
-                            <div class="result-card-header"><i class="fas fa-biohazard"></i><span>Detection Results</span></div>
-                            <div class="disease-name"><i class="fas fa-leaf"></i><span id="diseaseName">-</span></div>
-                            <div class="confidence-meter">
-                                <div class="confidence-label"><span>Confidence Score</span><span id="confidenceValue">0%</span></div>
-                                <div class="progress-bar-container"><div class="progress-fill" id="confidenceBar" style="width: 0%"></div></div>
+                            <div class="result-card-header">
+                                <i class="fas fa-biohazard"></i>
+                                <span>Detection Results</span>
                             </div>
-                            <div class="severity-tag" id="severityTag"><i class="fas fa-exclamation-triangle"></i><span id="severityText">-</span></div>
+                            <div class="disease-name">
+                                <i class="fas fa-leaf"></i>
+                                <span id="diseaseName">-</span>
+                            </div>
+                            <div class="confidence-meter">
+                                <div class="confidence-label">
+                                    <span>Confidence Score</span>
+                                    <span id="confidenceValue">0%</span>
+                                </div>
+                                <div class="progress-bar-container">
+                                    <div class="progress-fill" id="confidenceBar" style="width: 0%;"></div>
+                                </div>
+                            </div>
+                            <div class="severity-tag" id="severityTag">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <span id="severityText">-</span>
+                            </div>
                         </div>
 
                         <!-- Treatment Card -->
                         <div class="result-card">
-                            <div class="result-card-header"><i class="fas fa-pills"></i><span>Treatment Recommendations</span></div>
-                            <div class="treatment-item"><div class="treatment-icon chemical"><i class="fas fa-flask"></i></div><div class="treatment-content"><h4>Chemical Treatment</h4><p id="chemicalTreatment">-</p></div></div>
-                            <div class="treatment-item"><div class="treatment-icon organic"><i class="fas fa-leaf"></i></div><div class="treatment-content"><h4>Organic Treatment</h4><p id="organicTreatment">-</p></div></div>
-                            <div class="treatment-item"><div class="treatment-icon cultural"><i class="fas fa-tractor"></i></div><div class="treatment-content"><h4>Cultural Practices</h4><p id="culturalPractices">-</p></div></div>
-                            <div class="treatment-item"><div class="treatment-icon prevention"><i class="fas fa-shield-alt"></i></div><div class="treatment-content"><h4>Prevention Tips</h4><p id="preventionTips">-</p></div></div>
+                            <div class="result-card-header">
+                                <i class="fas fa-pills"></i>
+                                <span>Treatment Recommendations</span>
+                            </div>
+                            <div class="treatment-item">
+                                <div class="treatment-icon chemical"><i class="fas fa-flask"></i></div>
+                                <div class="treatment-content">
+                                    <h4>Chemical Treatment</h4>
+                                    <p id="chemicalTreatment">-</p>
+                                </div>
+                            </div>
+                            <div class="treatment-item">
+                                <div class="treatment-icon organic"><i class="fas fa-leaf"></i></div>
+                                <div class="treatment-content">
+                                    <h4>Organic Treatment</h4>
+                                    <p id="organicTreatment">-</p>
+                                </div>
+                            </div>
+                            <div class="treatment-item">
+                                <div class="treatment-icon cultural"><i class="fas fa-tractor"></i></div>
+                                <div class="treatment-content">
+                                    <h4>Cultural Practices</h4>
+                                    <p id="culturalPractices">-</p>
+                                </div>
+                            </div>
+                            <div class="treatment-item">
+                                <div class="treatment-icon prevention"><i class="fas fa-shield-alt"></i></div>
+                                <div class="treatment-content">
+                                    <h4>Prevention Tips</h4>
+                                    <p id="preventionTips">-</p>
+                                </div>
+                            </div>
                         </div>
 
                         <!-- Stats Card -->
                         <div class="result-card">
                             <div class="stats-row">
-                                <div class="stat-item"><i class="fas fa-chart-pie"></i><span>Affected Area</span><strong id="affectedArea">-</strong></div>
-                                <div class="stat-item"><i class="fas fa-heartbeat"></i><span>Health Status</span><strong id="healthStatus">-</strong></div>
-                                <div class="stat-item"><i class="fas fa-clock"></i><span>Response Time</span><strong id="responseTime">-</strong></div>
+                                <div class="stat-item">
+                                    <i class="fas fa-chart-pie"></i>
+                                    <span>Affected Area</span>
+                                    <strong id="affectedArea">-</strong>
+                                </div>
+                                <div class="stat-item">
+                                    <i class="fas fa-heartbeat"></i>
+                                    <span>Health Status</span>
+                                    <strong id="healthStatus">-</strong>
+                                </div>
+                                <div class="stat-item">
+                                    <i class="fas fa-clock"></i>
+                                    <span>Response Time</span>
+                                    <strong id="responseTime">-</strong>
+                                </div>
                             </div>
                         </div>
 
                         <!-- Action Buttons -->
                         <div class="action-buttons">
-                            <button id="saveToHistoryBtn" class="action-btn save-btn"><i class="fas fa-save"></i> Save to History</button>
-                            <button id="downloadPdfBtn" class="action-btn pdf-btn"><i class="fas fa-file-pdf"></i> Download PDF</button>
-                            <button id="shareResultsBtn" class="action-btn share-btn"><i class="fas fa-share-alt"></i> Share Results</button>
+                            <button id="saveToHistoryBtn" class="action-btn save-btn">
+                                <i class="fas fa-save"></i> Save to History
+                            </button>
+                            <button id="downloadPdfBtn" class="action-btn pdf-btn">
+                                <i class="fas fa-file-pdf"></i> Download PDF
+                            </button>
+                            <button id="shareResultsBtn" class="action-btn share-btn">
+                                <i class="fas fa-share-alt"></i> Share Results
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -242,5 +449,20 @@
     <!-- Scripts -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="../js/detection.js"></script>
+    
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 800,
+            once: true,
+            offset: 50
+        });
+        
+        // Log page load
+        console.log('📄 Detect page loaded');
+        console.log('🔍 Results section element:', document.getElementById('resultsSection'));
+        console.log('🔍 Loading spinner element:', document.getElementById('loadingSpinner'));
+        console.log('🔍 Results content element:', document.getElementById('resultsContent'));
+    </script>
 </body>
 </html>

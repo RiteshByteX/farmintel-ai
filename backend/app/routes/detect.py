@@ -5,6 +5,7 @@ Handles file uploads, image processing, and AI model prediction
 
 import os
 import uuid
+import numpy as np
 from flask import Blueprint, request, jsonify, current_app
 from werkzeug.utils import secure_filename
 from datetime import datetime
@@ -30,6 +31,34 @@ def allowed_file(filename):
     """
     allowed_extensions = current_app.config.get('ALLOWED_EXTENSIONS', {'png', 'jpg', 'jpeg', 'gif', 'bmp', 'webp'})
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in allowed_extensions
+
+
+def convert_numpy_types(obj):
+    """
+    Convert numpy types to Python native types for JSON serialization
+    
+    Args:
+        obj: Any object that might contain numpy types
+        
+    Returns:
+        Python native types
+    """
+    if isinstance(obj, np.integer):
+        return int(obj)
+    elif isinstance(obj, np.floating):
+        return float(obj)
+    elif isinstance(obj, np.ndarray):
+        return obj.tolist()
+    elif isinstance(obj, np.bool_):
+        return bool(obj)
+    elif isinstance(obj, dict):
+        return {k: convert_numpy_types(v) for k, v in obj.items()}
+    elif isinstance(obj, list):
+        return [convert_numpy_types(item) for item in obj]
+    elif isinstance(obj, tuple):
+        return tuple(convert_numpy_types(item) for item in obj)
+    else:
+        return obj
 
 
 @detect_bp.route('/upload', methods=['POST'])
@@ -116,85 +145,209 @@ def detect_disease():
     """
     Detect disease from uploaded image
     POST /api/detect
-    Content-Type: application/json
-    Body: {"image_path": "path/to/image.jpg"} or {"base64_image": "data:image/jpeg;base64,..."}
+    Supports both:
+    - Content-Type: multipart/form-data with "image" file field
+    - Content-Type: application/json with {"image_path": "..."} or {"base64_image": "..."}
     
     Returns:
         JSON with disease detection results
     """
     try:
-        data = request.get_json()
+        # === DEBUG: Log request details ===
+        current_app.logger.info(f"📥 Request Method: {request.method}")
+        current_app.logger.info(f"📥 Request Content-Type: {request.content_type}")
+        current_app.logger.info(f"📥 Request files: {request.files}")
+        current_app.logger.info(f"📥 Request is_json: {request.is_json}")
         
-        if not data:
-            return jsonify({
-                'success': False,
-                'error': 'No data provided',
-                'message': 'Please provide image_path or base64_image'
-            }), 400
+        # === HANDLE FILE UPLOAD (multipart/form-data) - CHECK THIS FIRST ===
+        # Check if request has files first (most specific)
+        if request.files and 'image' in request.files:
+            current_app.logger.info('📤 Detecting from file upload')
+            
+            file = request.files['image']
+            
+            if file.filename == '':
+                return jsonify({
+                    'success': False,
+                    'error': 'No file selected',
+                    'message': 'Please select an image file'
+                }), 400
+            
+            # Check file type
+            if not allowed_file(file.filename):
+                allowed = current_app.config.get('ALLOWED_EXTENSIONS', {'png', 'jpg', 'jpeg'})
+                return jsonify({
+                    'success': False,
+                    'error': 'Invalid file type',
+                    'message': f'Allowed file types: {", ".join(allowed)}'
+                }), 400
+            
+            # Save the file temporarily
+            save_result = DiseaseController.save_uploaded_image(file)
+            
+            if not save_result['success']:
+                return jsonify({
+                    'success': False,
+                    'error': save_result.get('error', 'Upload failed')
+                }), 500
+            
+            current_app.logger.info(f"📁 Image saved: {save_result['filepath']}")
+            
+            # Perform detection on the saved file
+            result = DiseaseController.detect_disease(save_result['filepath'])
+            
+            # Clean up temp file
+            try:
+                if os.path.exists(save_result['filepath']):
+                    os.remove(save_result['filepath'])
+                    current_app.logger.info(f"🧹 Temp file cleaned: {save_result['filepath']}")
+            except Exception as e:
+                current_app.logger.warning(f"⚠️ Could not clean temp file: {e}")
+            
+            if result['success']:
+                # Get treatment recommendations
+                treatment = TreatmentController.get_treatment(
+                    result['disease'], 
+                    result['confidence']
+                )
+                
+                # Get additional disease info
+                disease_info = DiseaseController.get_disease_info(result['disease'])
+                
+                # === FIX: Convert numpy types to Python native types ===
+                result = convert_numpy_types(result)
+                treatment = convert_numpy_types(treatment)
+                disease_info = convert_numpy_types(disease_info)
+                
+                response_data = {
+                    'success': True,
+                    'disease': result.get('disease', 'Unknown'),
+                    'confidence': float(result.get('confidence', 0)),
+                    'class_index': result.get('class_index'),
+                    'class_name': result.get('class_name', ''),
+                    'severity': result.get('severity', 'Unknown'),
+                    'severity_color': result.get('severity_color', ''),
+                    'confidence_level': result.get('confidence_level', ''),
+                    'is_healthy': bool(result.get('is_healthy', False)),
+                    'crop': result.get('crop', ''),
+                    'symptoms': disease_info.get('symptoms', []),
+                    'causes': disease_info.get('causes', []),
+                    'season': disease_info.get('season', ''),
+                    'treatment': {
+                        'chemical_name': treatment.get('chemical_name', ''),
+                        'chemical_dosage': treatment.get('chemical_dosage', ''),
+                        'chemical_frequency': treatment.get('chemical_frequency', ''),
+                        'chemical_method': treatment.get('chemical_method', ''),
+                        'chemical_precautions': treatment.get('chemical_precautions', ''),
+                        'organic_name': treatment.get('organic_name', ''),
+                        'organic_dosage': treatment.get('organic_dosage', ''),
+                        'organic_frequency': treatment.get('organic_frequency', ''),
+                        'organic_method': treatment.get('organic_method', ''),
+                        'organic_precautions': treatment.get('organic_precautions', ''),
+                        'cultural_practices': treatment.get('cultural_practices', []),
+                        'prevention_tips': treatment.get('prevention_tips', []),
+                        'urgency': treatment.get('urgency', '')
+                    },
+                    'timestamp': datetime.now().isoformat()
+                }
+                
+                current_app.logger.info(f"✅ Detection successful: {response_data['disease']} ({response_data['confidence']}%)")
+                return jsonify(response_data)
+            else:
+                return jsonify({
+                    'success': False,
+                    'error': result.get('error', 'Detection failed'),
+                    'message': 'Could not detect disease from the provided image'
+                }), 500
         
-        # Validate request
-        detection_request = DetectionRequest.from_dict(data)
-        detection_request.validate()
+        # === HANDLE JSON (application/json) ===
+        elif request.is_json:
+            current_app.logger.info('📤 Detecting from JSON')
+            data = request.get_json()
+            
+            if not data:
+                return jsonify({
+                    'success': False,
+                    'error': 'No data provided',
+                    'message': 'Please provide image_path or base64_image'
+                }), 400
+            
+            # Validate request
+            detection_request = DetectionRequest.from_dict(data)
+            detection_request.validate()
+            
+            # Perform detection
+            if detection_request.image_path:
+                result = DiseaseController.detect_disease(detection_request.image_path)
+            elif detection_request.base64_image:
+                result = DiseaseController.detect_from_base64(detection_request.base64_image)
+            else:
+                return jsonify({
+                    'success': False,
+                    'error': 'No image provided',
+                    'message': 'Please provide image_path or base64_image'
+                }), 400
+            
+            if result['success']:
+                # Get treatment recommendations
+                treatment = TreatmentController.get_treatment(
+                    result['disease'], 
+                    result['confidence']
+                )
+                
+                # Get additional disease info
+                disease_info = DiseaseController.get_disease_info(result['disease'])
+                
+                # === FIX: Convert numpy types to Python native types ===
+                result = convert_numpy_types(result)
+                treatment = convert_numpy_types(treatment)
+                disease_info = convert_numpy_types(disease_info)
+                
+                return jsonify({
+                    'success': True,
+                    'disease': result.get('disease', 'Unknown'),
+                    'confidence': float(result.get('confidence', 0)),
+                    'class_index': result.get('class_index'),
+                    'class_name': result.get('class_name', ''),
+                    'severity': result.get('severity', 'Unknown'),
+                    'severity_color': result.get('severity_color', ''),
+                    'confidence_level': result.get('confidence_level', ''),
+                    'is_healthy': bool(result.get('is_healthy', False)),
+                    'crop': result.get('crop', ''),
+                    'symptoms': disease_info.get('symptoms', []),
+                    'causes': disease_info.get('causes', []),
+                    'season': disease_info.get('season', ''),
+                    'treatment': {
+                        'chemical_name': treatment.get('chemical_name', ''),
+                        'chemical_dosage': treatment.get('chemical_dosage', ''),
+                        'chemical_frequency': treatment.get('chemical_frequency', ''),
+                        'chemical_method': treatment.get('chemical_method', ''),
+                        'chemical_precautions': treatment.get('chemical_precautions', ''),
+                        'organic_name': treatment.get('organic_name', ''),
+                        'organic_dosage': treatment.get('organic_dosage', ''),
+                        'organic_frequency': treatment.get('organic_frequency', ''),
+                        'organic_method': treatment.get('organic_method', ''),
+                        'organic_precautions': treatment.get('organic_precautions', ''),
+                        'cultural_practices': treatment.get('cultural_practices', []),
+                        'prevention_tips': treatment.get('prevention_tips', []),
+                        'urgency': treatment.get('urgency', '')
+                    },
+                    'timestamp': datetime.now().isoformat()
+                })
+            else:
+                return jsonify({
+                    'success': False,
+                    'error': result.get('error', 'Detection failed'),
+                    'message': 'Could not detect disease from the provided image'
+                }), 500
         
-        # Perform detection
-        if detection_request.image_path:
-            result = DiseaseController.detect_disease(detection_request.image_path)
-        elif detection_request.base64_image:
-            result = DiseaseController.detect_from_base64(detection_request.base64_image)
+        # === Unsupported content type ===
         else:
             return jsonify({
                 'success': False,
-                'error': 'No image provided',
-                'message': 'Please provide image_path or base64_image'
-            }), 400
-        
-        if result['success']:
-            # Get treatment recommendations
-            treatment = TreatmentController.get_treatment(
-                result['disease'], 
-                result['confidence']
-            )
-            
-            # Get additional disease info
-            disease_info = DiseaseController.get_disease_info(result['disease'])
-            
-            return jsonify({
-                'success': True,
-                'disease': result['disease'],
-                'confidence': result['confidence'],
-                'class_index': result.get('class_index'),
-                'class_name': result.get('class_name'),
-                'severity': result['severity'],
-                'severity_color': result.get('severity_color'),
-                'confidence_level': result.get('confidence_level'),
-                'is_healthy': result.get('is_healthy', False),
-                'crop': result.get('crop'),
-                'symptoms': disease_info.get('symptoms'),
-                'causes': disease_info.get('causes'),
-                'season': disease_info.get('season'),
-                'treatment': {
-                    'chemical_name': treatment.get('chemical_name'),
-                    'chemical_dosage': treatment.get('chemical_dosage'),
-                    'chemical_frequency': treatment.get('chemical_frequency'),
-                    'chemical_method': treatment.get('chemical_method'),
-                    'chemical_precautions': treatment.get('chemical_precautions'),
-                    'organic_name': treatment.get('organic_name'),
-                    'organic_dosage': treatment.get('organic_dosage'),
-                    'organic_frequency': treatment.get('organic_frequency'),
-                    'organic_method': treatment.get('organic_method'),
-                    'organic_precautions': treatment.get('organic_precautions'),
-                    'cultural_practices': treatment.get('cultural_practices', []),
-                    'prevention_tips': treatment.get('prevention_tips', []),
-                    'urgency': treatment.get('urgency')
-                },
-                'timestamp': datetime.now().isoformat()
-            })
-        else:
-            return jsonify({
-                'success': False,
-                'error': result.get('error', 'Detection failed'),
-                'message': 'Could not detect disease from the provided image'
-            }), 500
+                'error': 'Unsupported content type',
+                'message': f'Use multipart/form-data with "image" field or application/json. Got: {request.content_type}'
+            }), 415
             
     except ValidationError as e:
         return jsonify({
@@ -245,16 +398,20 @@ def detect_from_base64():
                 result['confidence']
             )
             
+            # === FIX: Convert numpy types to Python native types ===
+            result = convert_numpy_types(result)
+            treatment = convert_numpy_types(treatment)
+            
             return jsonify({
                 'success': True,
-                'disease': result['disease'],
-                'confidence': result['confidence'],
-                'severity': result['severity'],
+                'disease': result.get('disease', 'Unknown'),
+                'confidence': float(result.get('confidence', 0)),
+                'severity': result.get('severity', 'Unknown'),
                 'treatment': {
-                    'chemical_name': treatment.get('chemical_name'),
-                    'chemical_dosage': treatment.get('chemical_dosage'),
-                    'organic_name': treatment.get('organic_name'),
-                    'organic_dosage': treatment.get('organic_dosage'),
+                    'chemical_name': treatment.get('chemical_name', ''),
+                    'chemical_dosage': treatment.get('chemical_dosage', ''),
+                    'organic_name': treatment.get('organic_name', ''),
+                    'organic_dosage': treatment.get('organic_dosage', ''),
                     'cultural_practices': treatment.get('cultural_practices', []),
                     'prevention_tips': treatment.get('prevention_tips', [])
                 },
@@ -336,13 +493,16 @@ def batch_detect():
                 # Detect disease
                 detection_result = DiseaseController.detect_disease(save_result['filepath'])
                 
+                # === FIX: Convert numpy types ===
+                detection_result = convert_numpy_types(detection_result)
+                
                 if detection_result['success']:
                     results.append({
                         'filename': file.filename,
                         'success': True,
-                        'disease': detection_result['disease'],
-                        'confidence': detection_result['confidence'],
-                        'severity': detection_result['severity']
+                        'disease': detection_result.get('disease', 'Unknown'),
+                        'confidence': float(detection_result.get('confidence', 0)),
+                        'severity': detection_result.get('severity', 'Unknown')
                     })
                     success_count += 1
                 else:

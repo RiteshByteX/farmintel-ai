@@ -1,1220 +1,479 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>FarmIntel AI - Smart Farming Assistant</title>
-    <link rel="icon" type="image/x-icon" href="#">
-    
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    
-    <!-- Font Awesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    
-    <!-- AOS Animation Library -->
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    
-    <style>
-        /* ========================================
-           PREMIUM LANDING PAGE STYLES
-           ======================================== */
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Inter', sans-serif;
-            background: #0F0F1A;
-            overflow-x: hidden;
-        }
-        
-        /* Animated Background */
-        .animated-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -2;
-            background: linear-gradient(135deg, #0F0F1A 0%, #1A1A2E 50%, #16213E 100%);
-        }
-        
-        .animated-bg::before {
-            content: '';
-            position: absolute;
-            width: 200%;
-            height: 200%;
-            top: -50%;
-            left: -50%;
-            background: radial-gradient(circle, rgba(79, 70, 229, 0.15) 0%, transparent 50%);
-            animation: rotate 30s linear infinite;
-        }
-        
-        .animated-bg::after {
-            content: '';
-            position: absolute;
-            width: 150%;
-            height: 150%;
-            bottom: -50%;
-            right: -50%;
-            background: radial-gradient(circle, rgba(16, 185, 129, 0.1) 0%, transparent 50%);
-            animation: rotateReverse 25s linear infinite;
-        }
-        
-        @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-        
-        @keyframes rotateReverse {
-            from { transform: rotate(360deg); }
-            to { transform: rotate(0deg); }
-        }
-        
-        /* Floating Particles */
-        .particles {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            overflow: hidden;
-        }
-        
-        .particle {
-            position: absolute;
-            background: rgba(79, 70, 229, 0.4);
-            border-radius: 50%;
-            animation: float 15s infinite ease-in-out;
-        }
-        
-        @keyframes float {
-            0%, 100% { transform: translateY(0) translateX(0); opacity: 0; }
-            10% { opacity: 0.5; }
-            90% { opacity: 0.5; }
-            100% { transform: translateY(-100vh) translateX(100px); opacity: 0; }
-        }
-        
-        /* Navigation */
-        .navbar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 1000;
-            padding: 1rem 5%;
-            transition: all 0.3s ease;
-            background: rgba(15, 15, 26, 0.8);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-        
-        .navbar.scrolled {
-            padding: 0.75rem 5%;
-            background: rgba(15, 15, 26, 0.95);
-            backdrop-filter: blur(20px);
-        }
-        
-        .nav-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .logo-icon {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, #4F46E5, #7C3AED);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            animation: pulse 2s infinite;
-        }
-        
-        @keyframes pulse {
-            0%, 100% { box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.4); }
-            50% { box-shadow: 0 0 0 20px rgba(79, 70, 229, 0); }
-        }
-        
-        .logo-icon i {
-            font-size: 1.5rem;
-            color: white;
-        }
-        
-        .logo-text {
-            font-size: 1.5rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, #FFFFFF, #A5B4FC);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-        
-        .nav-links {
-            display: flex;
-            gap: 2rem;
-        }
-        
-        .nav-links a {
-            color: #94A3B8;
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-        
-        .nav-links a:hover {
-            color: #A5B4FC;
-        }
-        
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 0;
-            height: 2px;
-            background: linear-gradient(90deg, #4F46E5, #7C3AED);
-            transition: width 0.3s ease;
-        }
-        
-        .nav-links a:hover::after {
-            width: 100%;
-        }
-        
-        .nav-buttons {
-            display: flex;
-            gap: 1rem;
-        }
-        
-        .btn-outline-light {
-            padding: 0.5rem 1.25rem;
-            background: transparent;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 999px;
-            color: white;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: 500;
-        }
-        
-        .btn-outline-light:hover {
-            border-color: #4F46E5;
-            background: rgba(79, 70, 229, 0.1);
-        }
-        
-        .btn-primary-glow {
-            padding: 0.5rem 1.5rem;
-            background: linear-gradient(135deg, #4F46E5, #7C3AED);
-            border: none;
-            border-radius: 999px;
-            color: white;
-            cursor: pointer;
-            font-weight: 500;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s ease;
-        }
-        
-        .btn-primary-glow:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px -5px rgba(79, 70, 229, 0.4);
-        }
-        
-        .mobile-menu-btn {
-            display: none;
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-        
-        /* Hero Section */
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            padding: 120px 5% 80px;
-            position: relative;
-        }
-        
-        .hero-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            align-items: center;
-        }
-        
-        .hero-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: rgba(79, 70, 229, 0.15);
-            backdrop-filter: blur(10px);
-            padding: 0.5rem 1rem;
-            border-radius: 999px;
-            margin-bottom: 1.5rem;
-            border: 1px solid rgba(79, 70, 229, 0.3);
-        }
-        
-        .hero-badge i {
-            color: #4F46E5;
-            font-size: 0.875rem;
-        }
-        
-        .hero-badge span {
-            color: #A5B4FC;
-            font-size: 0.875rem;
-            font-weight: 500;
-        }
-        
-        .hero-title {
-            font-size: 3.5rem;
-            font-weight: 800;
-            line-height: 1.2;
-            margin-bottom: 1.5rem;
-            color: white;
-        }
-        
-        .gradient-text {
-            background: linear-gradient(135deg, #4F46E5, #A5B4FC, #7C3AED);
-            background-size: 200% 200%;
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            animation: gradientShift 3s ease infinite;
-        }
-        
-        @keyframes gradientShift {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-        }
-        
-        .hero-description {
-            font-size: 1.125rem;
-            color: #94A3B8;
-            line-height: 1.6;
-            margin-bottom: 2rem;
-        }
-        
-        .hero-buttons {
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-            margin-bottom: 3rem;
-        }
-        
-        .btn-large {
-            padding: 0.875rem 2rem;
-            font-size: 1rem;
-        }
-        
-        .hero-stats {
-            display: flex;
-            gap: 2rem;
-        }
-        
-        .stat-item {
-            text-align: center;
-        }
-        
-        .stat-number {
-            font-size: 2rem;
-            font-weight: 800;
-            color: white;
-            display: flex;
-            align-items: baseline;
-            gap: 0.25rem;
-        }
-        
-        .stat-number .suffix {
-            font-size: 1rem;
-            font-weight: 500;
-            color: #4F46E5;
-        }
-        
-        .stat-label {
-            font-size: 0.75rem;
-            color: #64748B;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        
-        /* Hero Image */
-        .hero-image {
-            position: relative;
-        }
-        
-        .hero-image .image-wrapper {
-            position: relative;
-            border-radius: 2rem;
-            overflow: hidden;
-            background: linear-gradient(135deg, rgba(79, 70, 229, 0.2), rgba(124, 58, 237, 0.1));
-            padding: 1rem;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .floating-card {
-            position: absolute;
-            background: rgba(30, 41, 59, 0.9);
-            backdrop-filter: blur(10px);
-            border-radius: 1rem;
-            padding: 0.75rem 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            animation: floatCard 3s ease infinite;
-        }
-        
-        .floating-card-1 {
-            top: 10%;
-            left: -10%;
-        }
-        
-        .floating-card-2 {
-            bottom: 15%;
-            right: -10%;
-            animation-delay: 1.5s;
-        }
-        
-        @keyframes floatCard {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-        
-        .floating-card i {
-            font-size: 1.5rem;
-        }
-        
-        .floating-card .detect {
-            color: #4F46E5;
-        }
-        
-        .floating-card .weather {
-            color: #F59E0B;
-        }
-        
-        /* Features Section */
-        .features {
-            padding: 80px 5%;
-            background: linear-gradient(180deg, transparent, rgba(79, 70, 229, 0.05));
-        }
-        
-        .section-header {
-            text-align: center;
-            max-width: 700px;
-            margin: 0 auto 3rem;
-        }
-        
-        .section-badge {
-            display: inline-block;
-            padding: 0.25rem 1rem;
-            background: rgba(79, 70, 229, 0.15);
-            border-radius: 999px;
-            color: #A5B4FC;
-            font-size: 0.75rem;
-            font-weight: 500;
-            margin-bottom: 1rem;
-        }
-        
-        .section-header h2 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: white;
-            margin-bottom: 1rem;
-        }
-        
-        .section-header p {
-            color: #94A3B8;
-            font-size: 1.125rem;
-        }
-        
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-        
-        .feature-card {
-            background: rgba(30, 41, 59, 0.5);
-            backdrop-filter: blur(10px);
-            border-radius: 1.5rem;
-            padding: 2rem;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: all 0.3s ease;
-        }
-        
-        .feature-card:hover {
-            transform: translateY(-8px);
-            border-color: rgba(79, 70, 229, 0.3);
-            box-shadow: 0 20px 40px -20px rgba(79, 70, 229, 0.3);
-        }
-        
-        .feature-icon {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, rgba(79, 70, 229, 0.2), rgba(124, 58, 237, 0.1));
-            border-radius: 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 1.5rem;
-        }
-        
-        .feature-icon i {
-            font-size: 1.75rem;
-            color: #4F46E5;
-        }
-        
-        .feature-card h3 {
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: white;
-            margin-bottom: 0.75rem;
-        }
-        
-        .feature-card p {
-            color: #94A3B8;
-            line-height: 1.6;
-            margin-bottom: 1rem;
-        }
-        
-        .feature-tag {
-            display: inline-block;
-            padding: 0.25rem 0.75rem;
-            background: rgba(79, 70, 229, 0.2);
-            border-radius: 999px;
-            font-size: 0.7rem;
-            font-weight: 600;
-            color: #A5B4FC;
-        }
-        
-        /* How It Works */
-        .how-it-works {
-            padding: 80px 5%;
-        }
-        
-        .steps-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
-        .step {
-            text-align: center;
-            flex: 1;
-            min-width: 200px;
-        }
-        
-        .step-number {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, #4F46E5, #7C3AED);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: white;
-            margin: 0 auto 1rem;
-        }
-        
-        .step-icon {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-        }
-        
-        .step h4 {
-            font-size: 1.125rem;
-            font-weight: 600;
-            color: white;
-            margin-bottom: 0.5rem;
-        }
-        
-        .step p {
-            color: #94A3B8;
-            font-size: 0.875rem;
-        }
-        
-        .step-arrow {
-            font-size: 2rem;
-            color: #4F46E5;
-        }
-        
-        /* CTA Section */
-        .cta-section {
-            margin: 40px 5%;
-            padding: 4rem;
-            background: linear-gradient(135deg, rgba(79, 70, 229, 0.1), rgba(124, 58, 237, 0.05));
-            border-radius: 2rem;
-            text-align: center;
-            border: 1px solid rgba(79, 70, 229, 0.2);
-            backdrop-filter: blur(10px);
-        }
-        
-        .cta-section h2 {
-            font-size: 2rem;
-            font-weight: 700;
-            color: white;
-            margin-bottom: 1rem;
-        }
-        
-        .cta-section p {
-            color: #94A3B8;
-            margin-bottom: 2rem;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        
-        /* Footer */
-        .footer {
-            background: rgba(15, 15, 26, 0.95);
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            padding: 3rem 5% 1.5rem;
-        }
-        
-        .footer-content {
-            max-width: 1400px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 2fr 3fr;
-            gap: 3rem;
-            margin-bottom: 2rem;
-        }
-        
-        .footer-logo i {
-            font-size: 2rem;
-            background: linear-gradient(135deg, #4F46E5, #7C3AED);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-        
-        .footer-logo span {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: white;
-        }
-        
-        .footer-logo p {
-            color: #64748B;
-            font-size: 0.875rem;
-            margin-top: 0.5rem;
-        }
-        
-        .footer-links {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 2rem;
-        }
-        
-        .link-group h4 {
-            color: white;
-            font-size: 0.875rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-        }
-        
-        .link-group a {
-            display: block;
-            color: #94A3B8;
-            text-decoration: none;
-            font-size: 0.875rem;
-            margin-bottom: 0.5rem;
-            transition: color 0.3s ease;
-        }
-        
-        .link-group a:hover {
-            color: #A5B4FC;
-        }
-        
-        .footer-bottom {
-            text-align: center;
-            padding-top: 1.5rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            color: #64748B;
-            font-size: 0.75rem;
-        }
-        
-        .social-links {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-        
-        .social-links a {
-            color: #64748B;
-            transition: color 0.3s ease;
-        }
-        
-        .social-links a:hover {
-            color: #A5B4FC;
-        }
-        
-        /* Modals */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(10px);
-            z-index: 2000;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .modal-content {
-            background: #1E293B;
-            border-radius: 1.5rem;
-            max-width: 450px;
-            width: 90%;
-            padding: 2rem;
-            border: 1px solid rgba(79, 70, 229, 0.3);
-        }
-        
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-        }
-        
-        .modal-header h2 {
-            color: white;
-            font-size: 1.5rem;
-        }
-        
-        .modal-close {
-            background: none;
-            border: none;
-            color: #94A3B8;
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-        
-        .input-group {
-            margin-bottom: 1rem;
-        }
-        
-        .input-group label {
-            display: block;
-            color: #94A3B8;
-            font-size: 0.875rem;
-            margin-bottom: 0.5rem;
-        }
-        
-        .input-group input {
-            width: 100%;
-            padding: 0.75rem;
-            background: #0F172A;
-            border: 1px solid #334155;
-            border-radius: 0.75rem;
-            color: white;
-        }
-        
-        .demo-login {
-            margin-top: 1rem;
-            padding: 0.75rem;
-            background: rgba(79, 70, 229, 0.1);
-            border-radius: 0.75rem;
-            font-size: 0.75rem;
-            text-align: center;
-        }
-        
-        /* Responsive */
-        @media (max-width: 1024px) {
-            .hero-container {
-                grid-template-columns: 1fr;
-                text-align: center;
-            }
-            
-            .hero-buttons {
-                justify-content: center;
-            }
-            
-            .hero-stats {
-                justify-content: center;
-            }
-            
-            .nav-links {
-                display: none;
-            }
-            
-            .mobile-menu-btn {
-                display: block;
-            }
-            
-            .steps-container {
-                flex-direction: column;
-            }
-            
-            .step-arrow {
-                transform: rotate(90deg);
-            }
-            
-            .footer-content {
-                grid-template-columns: 1fr;
-            }
-            
-            .footer-links {
-                grid-template-columns: repeat(3, 1fr);
-            }
-        }
-        
-        @media (max-width: 768px) {
-            .hero-title {
-                font-size: 2rem;
-            }
-            
-            .section-header h2 {
-                font-size: 1.75rem;
-            }
-            
-            .features-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .footer-links {
-                grid-template-columns: 1fr;
-                gap: 1.5rem;
-            }
-            
-            .cta-section {
-                padding: 2rem;
-            }
-            
-            .cta-section h2 {
-                font-size: 1.5rem;
-            }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>FarmIntel AI - Smart Farming Assistant</title>
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <!-- AOS Animation -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+  <!-- main CSS -->
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-    <!-- Animated Background -->
-    <div class="animated-bg"></div>
-    <div class="particles" id="particles"></div>
-    
-    <!-- Navigation -->
-    <nav class="navbar" id="navbar">
-        <div class="nav-container">
-            <div class="logo">
-                <div class="logo-icon">
-                    <i class="fas fa-leaf"></i>
-                </div>
-                <span class="logo-text">FarmIntel AI</span>
-            </div>
-            <div class="nav-links">
-                <a href="#home">Home</a>
-                <a href="#features">Features</a>
-                <a href="#how-it-works">How It Works</a>
-                <a href="#contact">Contact</a>
-            </div>
-            <div class="nav-buttons">
-                <button class="btn-outline-light" id="loginBtn">Log In</button>
-                <button class="btn-primary-glow" id="signupBtn">Sign Up</button>
-                <button class="mobile-menu-btn" id="mobileMenuBtn"><i class="fas fa-bars"></i></button>
-            </div>
+  <!-- Animated Background -->
+  <div class="animated-bg"></div>
+  <div class="particles" id="particles"></div>
+  
+  <!-- Navigation -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <div class="logo">
+        <div class="logo-icon"><i class="fas fa-leaf"></i></div>
+        <span class="logo-text">FarmIntel AI</span>
+      </div>
+      <div class="nav-links">
+        <a href="#home">Home</a>
+        <a href="#features">Features</a>
+        <a href="#how-it-works">How It Works</a>
+        <a href="#contact">Contact</a>
+      </div>
+      <div class="nav-buttons">
+        <!-- Show different buttons based on auth state -->
+        <div id="authButtons">
+          <button class="btn-outline-light" id="loginBtn">Log In</button>
+          <button class="btn-primary-glow" id="signupBtn">Sign Up</button>
         </div>
-    </nav>
-    
-    <!-- Hero Section -->
-    <section class="hero" id="home">
-        <div class="hero-container">
-            <div class="hero-content" data-aos="fade-right" data-aos-duration="1000">
-                <div class="hero-badge">
-                    <i class="fas fa-robot"></i>
-                    <span>AI-Powered Farming Assistant</span>
-                </div>
-                <h1 class="hero-title">
-                    Smart Farming Advisory for <span class="gradient-text">Every Farmer</span>
-                </h1>
-                <p class="hero-description">
-                    Get personalized crop recommendations, instant pest detection, real-time weather alerts, 
-                    and market insights powered by advanced AI - all in your preferred language.
-                </p>
-                <div class="hero-buttons">
-                    <button class="btn-primary-glow btn-large" id="getStartedBtn">
-                        <i class="fas fa-microphone-alt"></i> Start Advisory Chat
-                    </button>
-                    <button class="btn-outline-light btn-large" id="learnMoreBtn">
-                        <i class="fas fa-play-circle"></i> Learn More
-                    </button>
-                </div>
-                <div class="hero-stats">
-                    <div class="stat-item" data-aos="fade-up" data-aos-delay="200">
-                        <div class="stat-number"><span class="counter" data-target="10000">0</span><span class="suffix">+</span></div>
-                        <div class="stat-label">Active Farmers</div>
-                    </div>
-                    <div class="stat-item" data-aos="fade-up" data-aos-delay="400">
-                        <div class="stat-number"><span class="counter" data-target="25">0</span><span class="suffix">%</span></div>
-                        <div class="stat-label">Yield Increase</div>
-                    </div>
-                    <div class="stat-item" data-aos="fade-up" data-aos-delay="600">
-                        <div class="stat-number"><span class="counter" data-target="50">0</span><span class="suffix">K</span></div>
-                        <div class="stat-label">Avg. Savings (₹)</div>
-                    </div>
-                </div>
-            </div>
-            <div class="hero-image" data-aos="fade-left" data-aos-duration="1000">
-                <div class="image-wrapper">
-                    <img src="https://placehold.co/500x500/1E293B/4F46E5?text=FarmIntel+AI" alt="FarmIntel AI" style="width:100%; border-radius:1rem;">
-                </div>
-                <div class="floating-card floating-card-1">
-                    <i class="fas fa-camera detect"></i>
-                    <span style="color:white;">Disease Detected!</span>
-                </div>
-                <div class="floating-card floating-card-2">
-                    <i class="fas fa-cloud-sun-rain weather"></i>
-                    <span style="color:white;">High Risk Alert</span>
-                </div>
-            </div>
+        <div id="userButtons" style="display: none; display: flex; gap: 1rem; align-items: center;">
+          <span id="userNameDisplay" style="color: white; font-weight: 500;"></span>
+          <button class="btn-outline-light" id="logoutBtn">Logout</button>
         </div>
-    </section>
-    
-    <!-- Features Section -->
-    <section class="features" id="features">
-        <div class="section-header" data-aos="fade-up">
-            <span class="section-badge">Why Choose Us</span>
-            <h2>Complete Farming Intelligence</h2>
-            <p>Everything you need to make informed farming decisions</p>
+        <button class="mobile-menu-btn" id="mobileMenuBtn"><i class="fas fa-bars"></i></button>
+      </div>
+    </div>
+  </nav>
+  
+  <!-- Hero -->
+  <section class="hero" id="home">
+    <div class="hero-container">
+      <div class="hero-content" data-aos="fade-right" data-aos-duration="1000">
+        <div class="hero-badge">
+          <i class="fas fa-robot"></i>
+          <span>AI-Powered Farming Assistant</span>
         </div>
-        <div class="features-grid">
-            <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
-                <div class="feature-icon">
-                    <i class="fas fa-camera"></i>
-                </div>
-                <h3>AI Pest Detection</h3>
-                <p>Snap a photo of any diseased leaf and get instant diagnosis with treatment recommendations</p>
-                <span class="feature-tag">95% Accuracy</span>
-            </div>
-            <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
-                <div class="feature-icon">
-                    <i class="fas fa-cloud-sun-rain"></i>
-                </div>
-                <h3>Weather Intelligence</h3>
-                <p>Real-time weather alerts with disease risk forecasting for proactive crop protection</p>
-                <span class="feature-tag">Hyperlocal</span>
-            </div>
-            <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
-                <div class="feature-icon">
-                    <i class="fas fa-chart-simple"></i>
-                </div>
-                <h3>Market Prices</h3>
-                <p>Live mandi prices, price trends, and best selling times for your crops</p>
-                <span class="feature-tag">Real-time</span>
-            </div>
-            <div class="feature-card" data-aos="fade-up" data-aos-delay="400">
-                <div class="feature-icon">
-                    <i class="fas fa-language"></i>
-                </div>
-                <h3>Multi-Language Support</h3>
-                <p>Available in Hindi, Marathi, Tamil, Telugu, Punjabi, and more regional languages</p>
-                <span class="feature-tag">12+ Languages</span>
-            </div>
+        <h1 class="hero-title">
+          Smart Farming Advisory for <span class="gradient-text">Every Farmer</span>
+        </h1>
+        <p class="hero-description">
+          Get personalized crop recommendations, instant pest detection, real-time weather alerts, 
+          and market insights powered by advanced AI - all in your preferred language.
+        </p>
+        <div class="hero-buttons">
+          <button class="btn-primary-glow btn-large" id="getStartedBtn">
+            <i class="fas fa-microphone-alt"></i> Start Advisory Chat
+          </button>
+          <button class="btn-outline-light btn-large" id="learnMoreBtn">
+            <i class="fas fa-play-circle"></i> Learn More
+          </button>
         </div>
-    </section>
-    
-    <!-- How It Works -->
-    <section class="how-it-works" id="how-it-works">
-        <div class="section-header" data-aos="fade-up">
-            <span class="section-badge">Simple Process</span>
-            <h2>How FarmIntel AI Works</h2>
-            <p>Three simple steps to smarter farming</p>
+        <div class="hero-stats">
+          <div class="stat-item" data-aos="fade-up" data-aos-delay="200">
+            <div class="stat-number"><span class="counter" data-target="10000">0</span><span class="suffix">+</span></div>
+            <div class="stat-label">Active Farmers</div>
+          </div>
+          <div class="stat-item" data-aos="fade-up" data-aos-delay="400">
+            <div class="stat-number"><span class="counter" data-target="25">0</span><span class="suffix">%</span></div>
+            <div class="stat-label">Yield Increase</div>
+          </div>
+          <div class="stat-item" data-aos="fade-up" data-aos-delay="600">
+            <div class="stat-number"><span class="counter" data-target="50">0</span><span class="suffix">K</span></div>
+            <div class="stat-label">Avg. Savings (₹)</div>
+          </div>
         </div>
-        <div class="steps-container">
-            <div class="step" data-aos="fade-up" data-aos-delay="100">
-                <div class="step-number">1</div>
-                <div class="step-icon"><i class="fas fa-camera-retro"></i></div>
-                <h4>Capture</h4>
-                <p>Take a clear photo of the affected crop leaf</p>
-            </div>
-            <div class="step-arrow"><i class="fas fa-arrow-right"></i></div>
-            <div class="step" data-aos="fade-up" data-aos-delay="300">
-                <div class="step-number">2</div>
-                <div class="step-icon"><i class="fas fa-microchip"></i></div>
-                <h4>Analyze</h4>
-                <p>AI instantly identifies disease & severity</p>
-            </div>
-            <div class="step-arrow"><i class="fas fa-arrow-right"></i></div>
-            <div class="step" data-aos="fade-up" data-aos-delay="500">
-                <div class="step-number">3</div>
-                <div class="step-icon"><i class="fas fa-leaf"></i></div>
-                <h4>Act</h4>
-                <p>Get organic & chemical treatment plans</p>
-            </div>
+      </div>
+      <div class="hero-image" data-aos="fade-left" data-aos-duration="1000">
+        <div class="image-wrapper">
+          <img src="https://placehold.co/500x500/1E293B/4F46E5?text=FarmIntel+AI" alt="FarmIntel AI" style="width:100%; border-radius:1rem;" />
         </div>
-    </section>
-    
-    <!-- CTA Section -->
-    <section class="cta-section" data-aos="zoom-in">
-        <h2>Ready to Transform Your Farming?</h2>
-        <p>Join thousands of farmers already using FarmIntel AI to increase yield and reduce losses</p>
-        <button class="btn-primary-glow btn-large" id="ctaGetStartedBtn">
-            <i class="fas fa-rocket"></i> Get Started for Free
+        <div class="floating-card floating-card-1">
+          <i class="fas fa-camera detect"></i>
+          <span style="color:white;">Disease Detected!</span>
+        </div>
+        <div class="floating-card floating-card-2">
+          <i class="fas fa-cloud-sun-rain weather"></i>
+          <span style="color:white;">High Risk Alert</span>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Features -->
+  <section class="features" id="features">
+    <div class="section-header" data-aos="fade-up">
+      <span class="section-badge">Why Choose Us</span>
+      <h2>Complete Farming Intelligence</h2>
+      <p>Everything you need to make informed farming decisions</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
+        <div class="feature-icon"><i class="fas fa-camera"></i></div>
+        <h3>AI Pest Detection</h3>
+        <p>Snap a photo of any diseased leaf and get instant diagnosis with treatment recommendations</p>
+        <span class="feature-tag">95% Accuracy</span>
+      </div>
+      <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+        <div class="feature-icon"><i class="fas fa-cloud-sun-rain"></i></div>
+        <h3>Weather Intelligence</h3>
+        <p>Real-time weather alerts with disease risk forecasting for proactive crop protection</p>
+        <span class="feature-tag">Hyperlocal</span>
+      </div>
+      <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
+        <div class="feature-icon"><i class="fas fa-chart-simple"></i></div>
+        <h3>Market Prices</h3>
+        <p>Live mandi prices, price trends, and best selling times for your crops</p>
+        <span class="feature-tag">Real-time</span>
+      </div>
+      <div class="feature-card" data-aos="fade-up" data-aos-delay="400">
+        <div class="feature-icon"><i class="fas fa-language"></i></div>
+        <h3>Multi-Language Support</h3>
+        <p>Available in Hindi, Marathi, Tamil, Telugu, Punjabi, and more regional languages</p>
+        <span class="feature-tag">12+ Languages</span>
+      </div>
+    </div>
+  </section>
+  
+  <!-- How It Works -->
+  <section class="how-it-works" id="how-it-works">
+    <div class="section-header" data-aos="fade-up">
+      <span class="section-badge">Simple Process</span>
+      <h2>How FarmIntel AI Works</h2>
+      <p>Three simple steps to smarter farming</p>
+    </div>
+    <div class="steps-container">
+      <div class="step" data-aos="fade-up" data-aos-delay="100">
+        <div class="step-number">1</div>
+        <div class="step-icon"><i class="fas fa-camera-retro"></i></div>
+        <h4>Capture</h4>
+        <p>Take a clear photo of the affected crop leaf</p>
+      </div>
+      <div class="step-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="step" data-aos="fade-up" data-aos-delay="300">
+        <div class="step-number">2</div>
+        <div class="step-icon"><i class="fas fa-microchip"></i></div>
+        <h4>Analyze</h4>
+        <p>AI instantly identifies disease & severity</p>
+      </div>
+      <div class="step-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="step" data-aos="fade-up" data-aos-delay="500">
+        <div class="step-number">3</div>
+        <div class="step-icon"><i class="fas fa-leaf"></i></div>
+        <h4>Act</h4>
+        <p>Get organic & chemical treatment plans</p>
+      </div>
+    </div>
+  </section>
+  
+  <!-- CTA -->
+  <section class="cta-section" data-aos="zoom-in">
+    <h2>Ready to Transform Your Farming?</h2>
+    <p>Join thousands of farmers already using FarmIntel AI to increase yield and reduce losses</p>
+    <button class="btn-primary-glow btn-large" id="ctaGetStartedBtn">
+      <i class="fas fa-rocket"></i> Get Started for Free
+    </button>
+  </section>
+  
+  <!-- Footer -->
+  <footer class="footer" id="contact">
+    <div class="footer-content">
+      <div class="footer-logo">
+        <i class="fas fa-leaf"></i> <span>FarmIntel AI</span>
+        <p>Empowering farmers with AI technology</p>
+      </div>
+      <div class="footer-links">
+        <div class="link-group">
+          <h4>Product</h4>
+          <a href="#features">Features</a>
+          <a href="#how-it-works">How It Works</a>
+          <a href="#">Pricing</a>
+          <a href="#">API</a>
+        </div>
+        <div class="link-group">
+          <h4>Company</h4>
+          <a href="#">About Us</a>
+          <a href="#">Blog</a>
+          <a href="#">Careers</a>
+          <a href="#">Press</a>
+        </div>
+        <div class="link-group">
+          <h4>Support</h4>
+          <a href="#">Help Center</a>
+          <a href="#">Contact Us</a>
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2024 FarmIntel AI. All rights reserved.</p>
+      <div class="social-links">
+        <a href="#"><i class="fab fa-facebook"></i></a>
+        <a href="#"><i class="fab fa-twitter"></i></a>
+        <a href="#"><i class="fab fa-instagram"></i></a>
+        <a href="#"><i class="fab fa-linkedin"></i></a>
+        <a href="#"><i class="fab fa-youtube"></i></a>
+      </div>
+    </div>
+  </footer>
+  
+  <!-- Login Modal -->
+  <div id="loginModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-header-left">
+          <div class="modal-icon-wrapper">
+            <i class="fas fa-leaf"></i>
+          </div>
+          <div>
+            <h2>Welcome Back</h2>
+            <p class="modal-subtitle">Sign in to continue your farming journey</p>
+          </div>
+        </div>
+        <button class="modal-close" aria-label="Close modal">
+          <i class="fas fa-times"></i>
         </button>
-    </section>
-    
-    <!-- Footer -->
-    <footer class="footer" id="contact">
-        <div class="footer-content">
-            <div class="footer-logo">
-                <i class="fas fa-leaf"></i> <span>FarmIntel AI</span>
-                <p>Empowering farmers with AI technology</p>
-            </div>
-            <div class="footer-links">
-                <div class="link-group">
-                    <h4>Product</h4>
-                    <a href="#features">Features</a>
-                    <a href="#how-it-works">How It Works</a>
-                    <a href="#">Pricing</a>
-                    <a href="#">API</a>
-                </div>
-                <div class="link-group">
-                    <h4>Company</h4>
-                    <a href="#">About Us</a>
-                    <a href="#">Blog</a>
-                    <a href="#">Careers</a>
-                    <a href="#">Press</a>
-                </div>
-                <div class="link-group">
-                    <h4>Support</h4>
-                    <a href="#">Help Center</a>
-                    <a href="#">Contact Us</a>
-                    <a href="#">Privacy Policy</a>
-                    <a href="#">Terms of Service</a>
-                </div>
-            </div>
+      </div>
+      <div class="modal-body">
+        <div class="social-login">
+          <button class="social-btn google-btn" id="googleLoginBtn">
+            <i class="fab fa-google"></i>
+            <span>Continue with Google</span>
+          </button>
+          <button class="social-btn github-btn" id="githubLoginBtn">
+            <i class="fab fa-github"></i>
+            <span>Continue with GitHub</span>
+          </button>
         </div>
-        <div class="footer-bottom">
-            <p>&copy; 2024 FarmIntel AI. All rights reserved.</p>
-            <div class="social-links">
-                <a href="#"><i class="fab fa-facebook"></i></a>
-                <a href="#"><i class="fab fa-twitter"></i></a>
-                <a href="#"><i class="fab fa-instagram"></i></a>
-                <a href="#"><i class="fab fa-linkedin"></i></a>
-                <a href="#"><i class="fab fa-youtube"></i></a>
-            </div>
+        <div class="divider">
+          <span>or sign in with email</span>
         </div>
-    </footer>
-    
-    <!-- Login Modal -->
-    <div id="loginModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2><i class="fas fa-sign-in-alt"></i> Welcome Back</h2>
-                <button class="modal-close">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="input-group">
-                    <label>Email</label>
-                    <input type="email" id="loginEmail" placeholder="farmer@farmintel.ai">
-                </div>
-                <div class="input-group">
-                    <label>Password</label>
-                    <input type="password" id="loginPassword" placeholder="••••••••">
-                </div>
-                <button class="btn-primary-glow btn-block" id="submitLogin" style="width:100%; padding:0.75rem;">Log In</button>
-                <div class="demo-login">
-                    <p>Demo Credentials:</p>
-                    <code>admin@farmintel.ai / admin123</code>
-                </div>
-            </div>
+        <div class="input-group">
+          <label for="loginEmail">
+            <i class="fas fa-envelope"></i>
+            Email Address
+          </label>
+          <input type="email" id="loginEmail" placeholder="farmer@farmintel.ai" class="input-field" />
+          <div class="input-hint"><i class="fas fa-info-circle"></i> We'll never share your email</div>
         </div>
+        <div class="input-group">
+          <label for="loginPassword">
+            <i class="fas fa-lock"></i>
+            Password
+          </label>
+          <div class="password-wrapper">
+            <input type="password" id="loginPassword" placeholder="Enter your password" class="input-field" />
+            <button class="toggle-password" type="button">
+              <i class="fas fa-eye"></i>
+            </button>
+          </div>
+          <div class="forgot-password">
+            <a href="#" id="forgotPasswordLink" class="forgot-link">Forgot password?</a>
+          </div>
+        </div>
+        <div class="checkbox-group">
+          <label class="checkbox-label">
+            <input type="checkbox" id="rememberMe" checked />
+            <span class="custom-checkbox"></span>
+            Remember me
+          </label>
+          <a href="#" class="terms-link">Terms of Service</a>
+        </div>
+        <button class="btn-primary-glow btn-block" id="submitLogin">
+          <span>Sign In</span>
+          <i class="fas fa-arrow-right"></i>
+        </button>
+        <div class="signup-prompt">
+          <span>Don't have an account?</span>
+          <a href="#" id="switchToSignup" class="signup-link">Create one now</a>
+        </div>
+      </div>
     </div>
-    
-    <!-- Signup Modal -->
-    <div id="signupModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2><i class="fas fa-user-plus"></i> Create Account</h2>
-                <button class="modal-close">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="input-group">
-                    <label>Full Name</label>
-                    <input type="text" id="signupName" placeholder="John Farmer">
-                </div>
-                <div class="input-group">
-                    <label>Email</label>
-                    <input type="email" id="signupEmail" placeholder="farmer@farmintel.ai">
-                </div>
-                <div class="input-group">
-                    <label>Password</label>
-                    <input type="password" id="signupPassword" placeholder="Create a password">
-                </div>
-                <button class="btn-primary-glow btn-block" id="submitSignup" style="width:100%; padding:0.75rem;">Sign Up</button>
-            </div>
+  </div>
+  
+  <!-- Signup Modal -->
+  <div id="signupModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-header-left">
+          <div class="modal-icon-wrapper">
+            <i class="fas fa-seedling"></i>
+          </div>
+          <div>
+            <h2>Create Account</h2>
+            <p class="modal-subtitle">Join the smart farming revolution</p>
+          </div>
         </div>
+        <button class="modal-close" aria-label="Close modal">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="social-login">
+          <button class="social-btn google-btn" id="googleSignupBtn">
+            <i class="fab fa-google"></i>
+            <span>Sign up with Google</span>
+          </button>
+          <button class="social-btn github-btn" id="githubSignupBtn">
+            <i class="fab fa-github"></i>
+            <span>Sign up with GitHub</span>
+          </button>
+        </div>
+        <div class="divider">
+          <span>or sign up with email</span>
+        </div>
+        <div class="input-group">
+          <label for="signupName">
+            <i class="fas fa-user"></i>
+            Full Name
+          </label>
+          <input type="text" id="signupName" placeholder="John Farmer" class="input-field" />
+          <div class="input-hint"><i class="fas fa-info-circle"></i> This will be displayed on your profile</div>
+        </div>
+        <div class="input-group">
+          <label for="signupEmail">
+            <i class="fas fa-envelope"></i>
+            Email Address
+          </label>
+          <input type="email" id="signupEmail" placeholder="farmer@farmintel.ai" class="input-field" />
+          <div class="input-hint"><i class="fas fa-check-circle" style="color: #10B981;"></i> We'll send you a verification email</div>
+        </div>
+        <div class="input-group">
+          <label for="signupPassword">
+            <i class="fas fa-lock"></i>
+            Password
+          </label>
+          <div class="password-wrapper">
+            <input type="password" id="signupPassword" placeholder="Create a strong password" class="input-field" />
+            <button class="toggle-password" type="button">
+              <i class="fas fa-eye"></i>
+            </button>
+          </div>
+          <div class="password-strength">
+            <div class="strength-bar">
+              <div class="strength-level" id="strengthLevel"></div>
+            </div>
+            <div class="strength-text" id="strengthText">
+              <i class="fas fa-shield-alt"></i>
+              <span>Use 8+ characters with a mix of letters, numbers & symbols</span>
+            </div>
+          </div>
+          <div class="password-requirements">
+            <div class="requirement" data-rule="length">
+              <i class="fas fa-circle"></i>
+              <span>At least 8 characters</span>
+            </div>
+            <div class="requirement" data-rule="uppercase">
+              <i class="fas fa-circle"></i>
+              <span>One uppercase letter</span>
+            </div>
+            <div class="requirement" data-rule="number">
+              <i class="fas fa-circle"></i>
+              <span>One number</span>
+            </div>
+            <div class="requirement" data-rule="special">
+              <i class="fas fa-circle"></i>
+              <span>One special character (!@#$%^&*)</span>
+            </div>
+          </div>
+        </div>
+        <div class="input-group">
+          <label for="signupConfirmPassword">
+            <i class="fas fa-check-circle"></i>
+            Confirm Password
+          </label>
+          <div class="password-wrapper">
+            <input type="password" id="signupConfirmPassword" placeholder="Confirm your password" class="input-field" />
+            <button class="toggle-password" type="button">
+              <i class="fas fa-eye"></i>
+            </button>
+          </div>
+          <div class="password-match" id="passwordMatch">
+            <i class="fas fa-circle"></i>
+            <span>Passwords match</span>
+          </div>
+        </div>
+        <div class="input-group">
+          <label><i class="fas fa-user-tag"></i> I am a</label>
+          <div class="role-selector">
+            <button class="role-btn active" data-role="farmer">
+              <i class="fas fa-tractor"></i>
+              <span>Farmer</span>
+            </button>
+            <button class="role-btn" data-role="agri-expert">
+              <i class="fas fa-graduation-cap"></i>
+              <span>Agri Expert</span>
+            </button>
+            <button class="role-btn" data-role="student">
+              <i class="fas fa-book"></i>
+              <span>Student</span>
+            </button>
+          </div>
+        </div>
+        <div class="checkbox-group">
+          <label class="checkbox-label">
+            <input type="checkbox" id="agreeTerms" />
+            <span class="custom-checkbox"></span>
+            I agree to the 
+            <a href="#" class="terms-link">Terms of Service</a> 
+            and 
+            <a href="#" class="terms-link">Privacy Policy</a>
+          </label>
+        </div>
+        <button class="btn-primary-glow btn-block" id="submitSignup">
+          <span>Create Account</span>
+          <i class="fas fa-arrow-right"></i>
+        </button>
+        <div class="signup-prompt">
+          <span>Already have an account?</span>
+          <a href="#" id="switchToLogin" class="signup-link">Sign in instead</a>
+        </div>
+      </div>
     </div>
-    
-    <!-- Scripts -->
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script>
-        AOS.init({
-            duration: 800,
-            once: true,
-            offset: 100
-        });
-        
-        // Navbar scroll effect
-        window.addEventListener('scroll', () => {
-            const navbar = document.getElementById('navbar');
-            if (window.scrollY > 50) {
-                navbar.classList.add('scrolled');
-            } else {
-                navbar.classList.remove('scrolled');
-            }
-        });
-        
-        // Counter animation
-        const counters = document.querySelectorAll('.counter');
-        const speed = 50;
-        
-        const animateCounter = (counter) => {
-            const target = parseInt(counter.getAttribute('data-target'));
-            let count = 0;
-            const increment = target / speed;
-            
-            const updateCount = () => {
-                if (count < target) {
-                    count += increment;
-                    counter.innerText = Math.ceil(count);
-                    setTimeout(updateCount, 30);
-                } else {
-                    counter.innerText = target;
-                }
-            };
-            updateCount();
-        };
-        
-        // Intersection Observer for counters
-        const observerOptions = { threshold: 0.5 };
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    animateCounter(entry.target);
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, observerOptions);
-        
-        counters.forEach(counter => observer.observe(counter));
-        
-        // Particles generation
-        function createParticles() {
-            const particlesContainer = document.getElementById('particles');
-            for (let i = 0; i < 50; i++) {
-                const particle = document.createElement('div');
-                particle.classList.add('particle');
-                particle.style.width = Math.random() * 5 + 'px';
-                particle.style.height = particle.style.width;
-                particle.style.left = Math.random() * 100 + '%';
-                particle.style.bottom = '-10px';
-                particle.style.animationDelay = Math.random() * 15 + 's';
-                particle.style.animationDuration = 10 + Math.random() * 10 + 's';
-                particlesContainer.appendChild(particle);
-            }
-        }
-        createParticles();
-        
-        // Modal functionality
-        const loginModal = document.getElementById('loginModal');
-        const signupModal = document.getElementById('signupModal');
-        
-        document.getElementById('loginBtn').onclick = () => loginModal.style.display = 'flex';
-        document.getElementById('signupBtn').onclick = () => signupModal.style.display = 'flex';
-        document.getElementById('getStartedBtn').onclick = () => signupModal.style.display = 'flex';
-        document.getElementById('ctaGetStartedBtn').onclick = () => signupModal.style.display = 'flex';
-        
-        document.querySelectorAll('.modal-close').forEach(btn => {
-            btn.onclick = () => {
-                loginModal.style.display = 'none';
-                signupModal.style.display = 'none';
-            };
-        });
-        
-        window.onclick = (e) => {
-            if (e.target === loginModal) loginModal.style.display = 'none';
-            if (e.target === signupModal) signupModal.style.display = 'none';
-        };
-        
-        // Login/Signup functionality
-        document.getElementById('submitLogin').onclick = () => {
-            localStorage.setItem('isLoggedIn', 'true');
-            localStorage.setItem('userName', 'John');
-            window.location.href = 'pages/dashboard.html';
-        };
-        
-        document.getElementById('submitSignup').onclick = () => {
-            localStorage.setItem('isLoggedIn', 'true');
-            localStorage.setItem('userName', document.getElementById('signupName').value || 'Farmer');
-            window.location.href = 'pages/dashboard.html';
-        };
-        
-        // Mobile menu
-        let mobileMenuOpen = false;
-        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-        const navLinks = document.querySelector('.nav-links');
-        
-        mobileMenuBtn.onclick = () => {
-            mobileMenuOpen = !mobileMenuOpen;
-            if (mobileMenuOpen) {
-                navLinks.style.display = 'flex';
-                navLinks.style.flexDirection = 'column';
-                navLinks.style.position = 'absolute';
-                navLinks.style.top = '70px';
-                navLinks.style.left = '0';
-                navLinks.style.right = '0';
-                navLinks.style.background = '#1E293B';
-                navLinks.style.padding = '1rem';
-                navLinks.style.gap = '1rem';
-            } else {
-                navLinks.style.display = 'none';
-            }
-        };
-        
-        // Smooth scroll
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({ behavior: 'smooth' });
-                }
-            });
-        });
-    </script>
+  </div>
+  
+  <!-- Forgot Password Modal -->
+  <div id="forgotPasswordModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-header-left">
+          <div class="modal-icon-wrapper">
+            <i class="fas fa-key"></i>
+          </div>
+          <div>
+            <h2>Reset Password</h2>
+            <p class="modal-subtitle">We'll send you a password reset link</p>
+          </div>
+        </div>
+        <button class="modal-close" aria-label="Close modal">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="input-group">
+          <label for="resetEmail">
+            <i class="fas fa-envelope"></i>
+            Email Address
+          </label>
+          <input type="email" id="resetEmail" placeholder="farmer@farmintel.ai" class="input-field" />
+          <div class="input-hint"><i class="fas fa-info-circle"></i> Enter the email associated with your account</div>
+        </div>
+        <button class="btn-primary-glow btn-block" id="submitResetPassword">
+          <span>Send Reset Link</span>
+          <i class="fas fa-arrow-right"></i>
+        </button>
+        <div class="signup-prompt">
+          <span>Remember your password?</span>
+          <a href="#" id="switchToLoginFromReset" class="signup-link">Sign in</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Scripts -->
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script type="module" src="script.js"></script>
 </body>
 </html>

@@ -1,15 +1,13 @@
 /**
  * FarmIntel AI - API Integration
  * Complete API service for backend communication
- * Base URL: http://localhost:5000/api
  */
 
 // API Configuration
 const API_CONFIG = {
-    BASE_URL: 'http://localhost:5000/api',
+    BASE_URL: '/api',  // Relative URL - works when served from Flask
     TIMEOUT: 30000,
     headers: {
-        'Content-Type': 'application/json',
         'Accept': 'application/json'
     }
 };
@@ -41,7 +39,7 @@ class FarmIntelAPI {
             
             if (!response.ok) {
                 const errorData = await response.json().catch(() => ({}));
-                throw new Error(errorData.error || `HTTP ${response.status}: ${response.statusText}`);
+                throw new Error(errorData.error || errorData.message || `HTTP ${response.status}`);
             }
             
             return await response.json();
@@ -82,14 +80,62 @@ class FarmIntelAPI {
     }
 
     /**
-     * Detect disease from image
+     * Detect disease from image file (File Upload - multipart/form-data)
+     * This is the primary method for the frontend
+     * @param {File} imageFile - The image file to detect disease from
+     * @returns {Promise} Detection results
+     */
+    async detectDiseaseFromFile(imageFile) {
+        const formData = new FormData();
+        formData.append('image', imageFile);
+        
+        try {
+            console.log('📤 Sending file for detection:', imageFile.name);
+            
+            const response = await fetch(`${this.baseURL}/detect`, {
+                method: 'POST',
+                body: formData
+                // Don't set Content-Type - browser sets it with boundary
+            });
+            
+            if (!response.ok) {
+                const error = await response.json().catch(() => ({}));
+                throw new Error(error.error || `HTTP ${response.status}`);
+            }
+            
+            const result = await response.json();
+            console.log('✅ Detection result:', result);
+            return result;
+            
+        } catch (error) {
+            console.error('❌ Detection error:', error);
+            throw error;
+        }
+    }
+
+    /**
+     * Detect disease from image path (JSON - for server-side processing)
      * @param {string} imagePath - Path of uploaded image
      * @returns {Promise} Detection results
      */
     async detectDisease(imagePath) {
         return this.fetchWithTimeout('/detect', {
             method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ image_path: imagePath })
+        });
+    }
+
+    /**
+     * Detect disease from base64 image (JSON - for base64 uploads)
+     * @param {string} base64Image - Base64 encoded image
+     * @returns {Promise} Detection results
+     */
+    async detectDiseaseFromBase64(base64Image) {
+        return this.fetchWithTimeout('/detect', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ base64_image: base64Image })
         });
     }
 
@@ -102,8 +148,9 @@ class FarmIntelAPI {
     async getTreatment(diseaseName, confidence = 0) {
         return this.fetchWithTimeout('/treatment', {
             method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ 
-                disease_name: diseaseName,
+                disease: diseaseName,
                 confidence: confidence 
             })
         });
@@ -150,6 +197,7 @@ class FarmIntelAPI {
     async saveToHistory(detectionData) {
         return this.fetchWithTimeout('/history', {
             method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(detectionData)
         });
     }
@@ -241,7 +289,7 @@ class FarmIntelAPI {
      */
     async healthCheck() {
         try {
-            const response = await fetch(`${API_CONFIG.BASE_URL.replace('/api', '')}/health`);
+            const response = await fetch('/health');
             return response.ok;
         } catch {
             return false;
@@ -273,27 +321,63 @@ class FarmIntelAPI {
 // Create and export API instance
 const farmintelAPI = new FarmIntelAPI();
 
-// Helper function for demo mode (when backend is not available)
+// Helper function for demo mode
 const DEMO_MODE = {
-    enabled: false, // Set to true to use mock data when backend is unavailable
+    enabled: false,
     
-    // Mock disease detection
-    detectDisease: async (imagePath) => {
+    detectDiseaseFromFile: async (imageFile) => {
         await new Promise(resolve => setTimeout(resolve, 1500));
         const diseases = [
             "Tomato Late Blight", "Tomato Early Blight", "Potato Late Blight",
             "Apple Scab", "Corn Common Rust", "Rice Blast", "Wheat Rust",
             "Tomato Healthy", "Potato Healthy"
         ];
+        const disease = diseases[Math.floor(Math.random() * diseases.length)];
+        const confidence = Math.floor(Math.random() * (98 - 75 + 1) + 75);
+        const severity = confidence >= 85 ? "Severe" : confidence >= 70 ? "Moderate" : "Mild";
+        
         return {
             success: true,
-            disease: diseases[Math.floor(Math.random() * diseases.length)],
-            confidence: Math.floor(Math.random() * (98 - 75 + 1) + 75),
-            class_index: Math.floor(Math.random() * 38)
+            disease: disease,
+            confidence: confidence,
+            severity: severity,
+            severity_color: severity === "Severe" ? "#EF4444" : severity === "Moderate" ? "#F59E0B" : "#10B981",
+            confidence_level: confidence >= 85 ? "High" : confidence >= 70 ? "Medium" : "Low",
+            is_healthy: disease.includes('Healthy'),
+            crop: disease.split(' ')[0],
+            treatment: {
+                chemical_name: "Copper hydroxide (2g/L water)",
+                chemical_dosage: "Apply every 7-10 days",
+                organic_name: "Neem oil 5ml/L",
+                organic_dosage: "Spray twice weekly",
+                cultural_practices: ["Remove infected leaves", "Avoid overhead watering"],
+                prevention_tips: ["Use resistant varieties", "Crop rotation"],
+                urgency: severity === "Severe" ? "Immediate action needed" : "Monitor regularly"
+            },
+            timestamp: new Date().toISOString()
         };
     },
     
-    // Mock treatment
+    detectDisease: async (imagePath) => {
+        await new Promise(resolve => setTimeout(resolve, 1500));
+        return {
+            success: true,
+            disease: "Tomato Late Blight",
+            confidence: 92,
+            severity: "Moderate"
+        };
+    },
+    
+    detectDiseaseFromBase64: async (base64Image) => {
+        await new Promise(resolve => setTimeout(resolve, 1500));
+        return {
+            success: true,
+            disease: "Tomato Early Blight",
+            confidence: 87,
+            severity: "Mild"
+        };
+    },
+    
     getTreatment: async (diseaseName, confidence) => {
         await new Promise(resolve => setTimeout(resolve, 500));
         let severity = 'Moderate';
@@ -317,7 +401,6 @@ const DEMO_MODE = {
         };
     },
     
-    // Mock weather
     getWeather: async (city) => {
         await new Promise(resolve => setTimeout(resolve, 800));
         return {
@@ -333,7 +416,6 @@ const DEMO_MODE = {
         };
     },
     
-    // Mock history
     getHistory: async () => {
         await new Promise(resolve => setTimeout(resolve, 500));
         return { success: true, history: JSON.parse(localStorage.getItem('scanHistory') || '[]') };
@@ -343,7 +425,6 @@ const DEMO_MODE = {
 // Wrapper function to use demo mode if needed
 async function apiCall(apiFunction, ...args) {
     try {
-        // Check if backend is available
         const isOnline = await farmintelAPI.healthCheck();
         if (!isOnline && DEMO_MODE.enabled) {
             console.warn('Backend unavailable, using demo mode');
@@ -363,9 +444,11 @@ async function apiCall(apiFunction, ...args) {
     }
 }
 
-// Export individual functions for easier use
+// Export individual functions
 const uploadImage = (file) => apiCall(farmintelAPI.uploadImage, file);
+const detectDiseaseFromFile = (file) => apiCall(farmintelAPI.detectDiseaseFromFile, file);
 const detectDisease = (imagePath) => apiCall(farmintelAPI.detectDisease, imagePath);
+const detectDiseaseFromBase64 = (base64) => apiCall(farmintelAPI.detectDiseaseFromBase64, base64);
 const getTreatment = (diseaseName, confidence) => apiCall(farmintelAPI.getTreatment, diseaseName, confidence);
 const getWeather = (city) => apiCall(farmintelAPI.getWeather, city);
 const getHistory = () => apiCall(farmintelAPI.getHistory);
@@ -380,19 +463,21 @@ const getAPIStatus = () => farmintelAPI.getAPIStatus();
 // Export everything
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = {
-    farmintelAPI,
-    uploadImage,
-    detectDisease,
-    getTreatment,
-    getWeather,
-    getHistory,
-    saveToHistory,
-    deleteHistoryRecord,
-    searchHistory,
-    generatePDF,
-    generateCSV,
-    getDiseaseLibrary,
-    getAPIStatus,
-    DEMO_MODE
-};
+        farmintelAPI,
+        uploadImage,
+        detectDiseaseFromFile,
+        detectDisease,
+        detectDiseaseFromBase64,
+        getTreatment,
+        getWeather,
+        getHistory,
+        saveToHistory,
+        deleteHistoryRecord,
+        searchHistory,
+        generatePDF,
+        generateCSV,
+        getDiseaseLibrary,
+        getAPIStatus,
+        DEMO_MODE
+    };
 }

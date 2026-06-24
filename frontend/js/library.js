@@ -443,20 +443,22 @@ function loadFromLocalStorage() {
     renderDiseases();
 }
 
-// Get crop icon
+// ========================================
+// FIXED: Get crop icon using EMOJIS
+// ========================================
 function getCropIcon(crop) {
     const icons = {
-        'Apple': 'apple-alt',
-        'Tomato': 'tomato',
-        'Potato': 'potato',
-        'Corn': 'corn',
-        'Grape': 'grape',
-        'Peach': 'peach',
-        'Strawberry': 'strawberry',
-        'Cherry': 'cherry',
-        'Bell Pepper': 'bell-pepper'
+        'Apple': '🍎',
+        'Tomato': '🍅',
+        'Potato': '🥔',
+        'Corn': '🌽',
+        'Grape': '🍇',
+        'Peach': '🍑',
+        'Strawberry': '🍓',
+        'Cherry': '🍒',
+        'Bell Pepper': '🫑'
     };
-    return icons[crop] || 'leaf';
+    return icons[crop] || '🌿';
 }
 
 // Get crop color
@@ -503,7 +505,9 @@ function getFilteredDiseases() {
     return filtered;
 }
 
-// Render diseases
+// ========================================
+// FIXED: Render diseases with EMOJI icons
+// ========================================
 function renderDiseases() {
     const filtered = getFilteredDiseases();
     resultsCountSpan.innerText = filtered.length;
@@ -521,7 +525,7 @@ function renderDiseases() {
         <div class="disease-card" data-id="${disease.id}">
             <div class="card-header">
                 <div class="crop-icon ${getCropColor(disease.crop)}">
-                    <i class="fas fa-${getCropIcon(disease.crop)}"></i>
+                    <span style="font-size: 1.5rem; line-height: 1;">${getCropIcon(disease.crop)}</span>
                 </div>
                 <div class="severity-badge ${getSeverityClass(disease.severity)}">
                     ${disease.severity} Risk
@@ -544,7 +548,9 @@ function renderDiseases() {
     `).join('');
 }
 
-// Show disease detail modal
+// ========================================
+// FIXED: Show disease detail with EMOJI icons
+// ========================================
 window.showDiseaseDetail = function(diseaseId) {
     const disease = diseaseDatabase.find(d => d.id === diseaseId);
     if (!disease) return;
@@ -556,7 +562,7 @@ window.showDiseaseDetail = function(diseaseId) {
         <div class="disease-detail">
             <div class="detail-header">
                 <div class="crop-tag ${getCropColor(disease.crop)}">
-                    <i class="fas fa-${getCropIcon(disease.crop)}"></i>
+                    <span style="font-size: 1.2rem; margin-right: 0.5rem;">${getCropIcon(disease.crop)}</span>
                     <span>${disease.crop}</span>
                 </div>
                 <div class="severity-badge ${getSeverityClass(disease.severity)}">${disease.severity} Risk</div>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Weather Analysis - FarmIntel AI</title>
+    <title>Real-Time Weather Analysis - FarmIntel AI</title>
     <link rel="icon" type="image/x-icon" href="#">
     
     <!-- Google Fonts -->
@@ -80,20 +80,20 @@
             </nav>
             
             <div class="sidebar-footer">
-    <a href="profile.html" class="user-info" id="profileLink">
-        <div class="user-avatar">
-            <i class="fas fa-user"></i>
-        </div>
-        <div class="user-details">
-            <h4 id="userName">John Farmer</h4>
-            <p>Premium Plan</p>
-        </div>
-    </a>
-    <button id="logoutBtn" class="logout-btn">
-        <i class="fas fa-sign-out-alt"></i>
-        <span>Logout</span>
-    </button>
-</div>
+                <a href="profile.html" class="user-info" id="profileLink">
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="user-details">
+                        <h4 id="userName">John Farmer</h4>
+                        <p>Premium Plan</p>
+                    </div>
+                </a>
+                <button id="logoutBtn" class="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </button>
+            </div>
         </aside>
 
         <!-- Mobile Menu Toggle -->
@@ -105,15 +105,15 @@
         <!-- Main Content -->
         <main class="main-content">
             <header class="dashboard-header" data-aos="fade-down">
-                <h1>Weather Analysis</h1>
-                <p>Real-time weather data and disease risk forecasting for your location</p>
+                <h1>🌤️ Real-Time Weather Analysis</h1>
+                <p>Live weather data and disease risk forecasting powered by FarmIntel AI</p>
             </header>
 
             <!-- Location Search Bar -->
             <div class="location-search glass-card" data-aos="fade-up" data-aos-delay="50">
                 <div class="location-input-wrapper">
                     <i class="fas fa-map-marker-alt"></i>
-                    <input type="text" id="locationInput" placeholder="Enter city name or pincode..." value="Mumbai">
+                    <input type="text" id="locationInput" placeholder="Enter city name (e.g., London, New York, Tokyo, Mumbai)..." value="Chandigarh">
                     <button id="searchLocationBtn" class="search-location-btn">
                         <i class="fas fa-search"></i> Search
                     </button>
@@ -121,6 +121,15 @@
                 <button id="detectLocationBtn" class="detect-location-btn">
                     <i class="fas fa-location-dot"></i> Detect My Location
                 </button>
+                <button id="refreshWeatherBtn" class="refresh-btn" title="Refresh weather data">
+                    <i class="fas fa-sync-alt"></i>
+                </button>
+            </div>
+
+            <!-- Loading Spinner -->
+            <div id="loadingSpinner" class="loading-spinner" style="display: none;">
+                <div class="spinner"></div>
+                <p>Fetching real-time weather data...</p>
             </div>
 
             <!-- Current Weather Section -->
@@ -137,6 +146,10 @@
                     <div class="weather-location" id="weatherLocation">
                         <i class="fas fa-map-marker-alt"></i>
                         <span>--</span>
+                    </div>
+                    <div class="weather-update-time" id="updateTime">
+                        <i class="fas fa-clock"></i>
+                        <span>Last updated: --</span>
                     </div>
                 </div>
                 
@@ -181,6 +194,14 @@
                             <span class="detail-unit">°C</span>
                         </div>
                     </div>
+                    <div class="detail-item">
+                        <i class="fas fa-compress-alt"></i>
+                        <div class="detail-info">
+                            <span class="detail-label">PRESSURE</span>
+                            <span class="detail-value" id="pressure">--</span>
+                            <span class="detail-unit">hPa</span>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -189,6 +210,7 @@
                 <div class="risk-header">
                     <i class="fas fa-chart-line"></i>
                     <h3>Disease Risk Index</h3>
+                    <span class="risk-badge" id="riskBadge">--</span>
                 </div>
                 <div class="risk-meter">
                     <div class="risk-level">
@@ -240,7 +262,7 @@
                         <i class="fas fa-info-circle"></i>
                         <div class="alert-content">
                             <h4>Loading Weather Data</h4>
-                            <p>Please wait while we fetch the latest weather information...</p>
+                            <p>Please wait while we fetch the latest real-time weather information...</p>
                         </div>
                     </div>
                 </div>
@@ -249,7 +271,7 @@
             <!-- 7-Day Forecast -->
             <div class="forecast-section glass-card" data-aos="fade-up" data-aos-delay="250">
                 <div class="forecast-header">
-                    <h3><i class="fas fa-calendar-week"></i> 7-Day Disease Risk Forecast</h3>
+                    <h3><i class="fas fa-calendar-week"></i> 7-Day Weather Forecast</h3>
                 </div>
                 <div class="forecast-grid" id="forecastGrid">
                     <!-- Forecast cards will be populated by JavaScript -->
@@ -274,15 +296,13 @@
                 </div>
             </div>
 
-            <!-- Historical Weather Chart -->
-            <!-- Historical Weather Chart -->
+            <!-- Weather Chart -->
             <div class="chart-section glass-card" data-aos="fade-up" data-aos-delay="350">
-                <h3><i class="fas fa-chart-line"></i> Temperature & Humidity Trend (Last 7 Days)</h3>
-                    <div class="chart-wrapper">
-                        <canvas id="weatherTrendChart"></canvas>
-                    </div>
+                <h3><i class="fas fa-chart-line"></i> Temperature & Humidity Trend (7-Day Forecast)</h3>
+                <div class="chart-wrapper">
+                    <canvas id="weatherTrendChart"></canvas>
+                </div>
             </div>
-
 
         </main>
     </div>

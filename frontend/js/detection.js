@@ -114,10 +114,120 @@ function handleImageFile(file) {
 }
 
 // ============================================
-// CAMERA FUNCTIONALITY
+// CAMERA FUNCTIONALITY - FIXED FOR DESKTOP & MOBILE
 // ============================================
+
+// Helper function to capture photo using getUserMedia (works on desktop)
+async function captureWithGetUserMedia() {
+    try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+            video: { 
+                facingMode: 'environment',
+                width: { ideal: 1280 },
+                height: { ideal: 720 }
+            }
+        });
+        
+        // Create video element for preview
+        const video = document.createElement('video');
+        video.srcObject = stream;
+        video.style.position = 'fixed';
+        video.style.top = '0';
+        video.style.left = '0';
+        video.style.width = '100%';
+        video.style.height = '100%';
+        video.style.objectFit = 'cover';
+        video.style.zIndex = '9999';
+        document.body.appendChild(video);
+        await video.play();
+        
+        // Create capture button
+        const captureBtn = document.createElement('button');
+        captureBtn.innerHTML = '📸 Capture';
+        captureBtn.style.position = 'fixed';
+        captureBtn.style.bottom = '100px';
+        captureBtn.style.left = '50%';
+        captureBtn.style.transform = 'translateX(-50%)';
+        captureBtn.style.zIndex = '10000';
+        captureBtn.style.padding = '16px 40px';
+        captureBtn.style.borderRadius = '50px';
+        captureBtn.style.background = 'linear-gradient(135deg, #4F46E5, #7C3AED)';
+        captureBtn.style.border = 'none';
+        captureBtn.style.color = 'white';
+        captureBtn.style.fontSize = '18px';
+        captureBtn.style.fontWeight = '600';
+        captureBtn.style.cursor = 'pointer';
+        captureBtn.style.boxShadow = '0 4px 20px rgba(79,70,229,0.4)';
+        captureBtn.style.transition = 'all 0.3s ease';
+        document.body.appendChild(captureBtn);
+        
+        // Create close button
+        const closeBtn = document.createElement('button');
+        closeBtn.innerHTML = '✕ Close';
+        closeBtn.style.position = 'fixed';
+        closeBtn.style.top = '20px';
+        closeBtn.style.right = '20px';
+        closeBtn.style.zIndex = '10000';
+        closeBtn.style.padding = '12px 24px';
+        closeBtn.style.borderRadius = '50px';
+        closeBtn.style.background = 'rgba(0,0,0,0.7)';
+        closeBtn.style.border = '1px solid rgba(255,255,255,0.2)';
+        closeBtn.style.color = 'white';
+        closeBtn.style.fontSize = '16px';
+        closeBtn.style.cursor = 'pointer';
+        closeBtn.style.transition = 'all 0.3s ease';
+        document.body.appendChild(closeBtn);
+        
+        // Hover effects
+        captureBtn.onmouseover = () => captureBtn.style.transform = 'translateX(-50%) scale(1.05)';
+        captureBtn.onmouseout = () => captureBtn.style.transform = 'translateX(-50%) scale(1)';
+        closeBtn.onmouseover = () => closeBtn.style.background = 'rgba(239,68,68,0.8)';
+        closeBtn.onmouseout = () => closeBtn.style.background = 'rgba(0,0,0,0.7)';
+        
+        // Capture photo on click
+        return new Promise((resolve) => {
+            captureBtn.addEventListener('click', () => {
+                const canvas = document.createElement('canvas');
+                canvas.width = video.videoWidth || 1280;
+                canvas.height = video.videoHeight || 720;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                
+                // Stop stream and remove UI
+                stream.getTracks().forEach(track => track.stop());
+                video.remove();
+                captureBtn.remove();
+                closeBtn.remove();
+                
+                // Convert to file
+                canvas.toBlob((blob) => {
+                    if (blob) {
+                        const file = new File([blob], 'camera-capture.jpg', { type: 'image/jpeg' });
+                        resolve(file);
+                    } else {
+                        resolve(null);
+                    }
+                }, 'image/jpeg', 0.9);
+            });
+            
+            // Close camera on close button click
+            closeBtn.addEventListener('click', () => {
+                stream.getTracks().forEach(track => track.stop());
+                video.remove();
+                captureBtn.remove();
+                closeBtn.remove();
+                resolve(null);
+            });
+        });
+        
+    } catch (error) {
+        console.warn('Camera error:', error);
+        return null;
+    }
+}
+
 if (takePhotoBtn) {
-    takePhotoBtn.addEventListener('click', () => {
+    takePhotoBtn.addEventListener('click', async () => {
         // Check if camera is supported
         if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
             showToast('Camera not supported on this device. Please upload a file instead.', 'warning');
@@ -128,21 +238,41 @@ if (takePhotoBtn) {
             return;
         }
         
-        // Use native camera input
-        if (cameraInput) {
-            cameraInput.value = '';
-            cameraInput.click();
+        // Check if device is mobile
+        const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+        
+        if (isMobile) {
+            // On mobile, use native camera input with capture attribute
+            if (cameraInput) {
+                cameraInput.setAttribute('capture', 'environment');
+                cameraInput.value = '';
+                cameraInput.click();
+                showToast('📸 Opening camera...', 'info');
+            }
+        } else {
+            // On desktop, use getUserMedia API
+            showToast('📸 Opening camera...', 'info');
+            const file = await captureWithGetUserMedia();
+            
+            if (file) {
+                console.log('📸 Camera captured:', file.name, file.type, (file.size / 1024).toFixed(1) + 'KB');
+                handleImageFile(file);
+                showToast('✅ Photo captured successfully!', 'success');
+            } else {
+                showToast('📸 Camera closed or failed to capture', 'info');
+            }
         }
     });
 }
 
-// Handle camera capture
+// Handle mobile camera capture
 if (cameraInput) {
     cameraInput.addEventListener('change', (e) => {
         if (e.target.files && e.target.files.length > 0) {
             const file = e.target.files[0];
-            console.log('📸 Camera captured:', file.name, file.type, (file.size / 1024).toFixed(1) + 'KB');
+            console.log('📸 Camera captured (mobile):', file.name, file.type, (file.size / 1024).toFixed(1) + 'KB');
             handleImageFile(file);
+            showToast('✅ Photo captured successfully!', 'success');
         } else {
             showToast('No photo captured. Please try again.', 'error');
         }
@@ -187,6 +317,63 @@ if (removeImageBtn) {
         if (cameraInput) cameraInput.value = '';
         showToast('Image removed', 'info');
     });
+}
+
+// ============================================
+// SAVE TO HISTORY FUNCTION
+// ============================================
+async function saveToHistory(detectionData) {
+    try {
+        // Format data for history
+        const historyRecord = {
+            id: detectionData.id || Date.now(),
+            disease: detectionData.disease,
+            confidence: detectionData.confidence,
+            severity: detectionData.severity,
+            chemical_treatment: detectionData.chemical_treatment || 'N/A',
+            organic_treatment: detectionData.organic_treatment || 'N/A',
+            cultural_practices: detectionData.cultural_practices || 'N/A',
+            prevention_tips: detectionData.prevention_tips || 'N/A',
+            timestamp: new Date().toISOString(),
+            date: detectionData.date || new Date().toLocaleString(),
+            response_time: detectionData.response_time || 'N/A',
+            model_used: detectionData.model_used || 'Trained Model'
+        };
+        
+        // Save to localStorage
+        let history = JSON.parse(localStorage.getItem('scanHistory') || '[]');
+        history.unshift(historyRecord);
+        // Keep only last 100 items
+        if (history.length > 100) history = history.slice(0, 100);
+        localStorage.setItem('scanHistory', JSON.stringify(history));
+        
+        // Try to save to backend API
+        try {
+            const response = await fetch('http://127.0.0.1:5000/api/history', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(historyRecord)
+            });
+            
+            if (response.ok) {
+                console.log('✅ History saved to backend');
+            } else {
+                console.warn('⚠️ History saved only locally (backend error)');
+            }
+        } catch (apiError) {
+            console.warn('⚠️ History saved only locally (backend not reachable)');
+        }
+        
+        console.log('✅ History saved successfully');
+        return true;
+    } catch (error) {
+        console.error('❌ Error saving history:', error);
+        return false;
+    }
+    // In saveToHistory function, add this at the end:
+console.log('✅ History saved. Total records:', history.length);
 }
 
 // ============================================
@@ -241,7 +428,7 @@ if (detectBtn) {
                 throw new Error(data.error || 'Detection failed');
             }
             
-            // Process backend response - Adjust based on your model's output format
+            // Process backend response
             const prediction = data.prediction || data.result || data;
             
             // Extract disease name and confidence
@@ -250,7 +437,6 @@ if (detectBtn) {
             
             // Handle different response formats
             if (prediction.predictions && Array.isArray(prediction.predictions)) {
-                // If multiple predictions, take the top one
                 const topPrediction = prediction.predictions[0];
                 diseaseName = topPrediction.class || topPrediction.label || topPrediction.disease || diseaseName;
                 confidence = topPrediction.confidence || topPrediction.score || topPrediction.probability || confidence;
@@ -278,6 +464,11 @@ if (detectBtn) {
                 backend_response: data,
                 model_used: prediction.model || 'Trained Model'
             };
+            
+            // ============================================
+            // AUTO-SAVE TO HISTORY
+            // ============================================
+            await saveToHistory(currentDetection);
             
             displayResults(currentDetection, responseTime);
             loadingSpinner.style.display = 'none';
@@ -679,6 +870,9 @@ document.querySelectorAll('.sample-item').forEach(item => {
                     is_sample: true
                 };
                 
+                // Auto-save sample detection to history
+                saveToHistory(currentDetection);
+                
                 displayResults(currentDetection, responseTime);
                 loadingSpinner.style.display = 'none';
                 resultsContent.style.display = 'block';
@@ -689,23 +883,62 @@ document.querySelectorAll('.sample-item').forEach(item => {
 });
 
 // ============================================
-// SAVE TO HISTORY
+// SAVE TO HISTORY (Button)
 // ============================================
-document.getElementById('saveToHistoryBtn')?.addEventListener('click', () => {
+document.getElementById('saveToHistoryBtn')?.addEventListener('click', async () => {
     if (!currentDetection) {
         showToast('No detection results to save', 'error');
         return;
     }
     
-    let history = JSON.parse(localStorage.getItem('scanHistory') || '[]');
-    history.unshift({
-        ...currentDetection,
-        savedAt: new Date().toISOString()
-    });
-    // Keep only last 100 items
-    if (history.length > 100) history = history.slice(0, 100);
-    localStorage.setItem('scanHistory', JSON.stringify(history));
-    showToast('✅ Saved to history successfully!', 'success');
+    // Check if already saved
+    if (currentDetection.savedAt) {
+        showToast('Already saved to history!', 'info');
+        return;
+    }
+    
+    try {
+        const historyRecord = {
+            id: currentDetection.id || Date.now(),
+            disease: currentDetection.disease,
+            confidence: currentDetection.confidence,
+            severity: currentDetection.severity,
+            chemical_treatment: currentDetection.chemical_treatment || 'N/A',
+            organic_treatment: currentDetection.organic_treatment || 'N/A',
+            cultural_practices: currentDetection.cultural_practices || 'N/A',
+            prevention_tips: currentDetection.prevention_tips || 'N/A',
+            timestamp: new Date().toISOString(),
+            date: currentDetection.date || new Date().toLocaleString(),
+            response_time: currentDetection.response_time || 'N/A',
+            model_used: currentDetection.model_used || 'Trained Model'
+        };
+        
+        // Save to localStorage
+        let history = JSON.parse(localStorage.getItem('scanHistory') || '[]');
+        history.unshift(historyRecord);
+        if (history.length > 100) history = history.slice(0, 100);
+        localStorage.setItem('scanHistory', JSON.stringify(history));
+        
+        // Try to save to backend
+        try {
+            await fetch('http://127.0.0.1:5000/api/history', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(historyRecord)
+            });
+        } catch (apiError) {
+            // Backend not available, but we already saved locally
+            console.log('History saved locally only');
+        }
+        
+        // Mark as saved
+        currentDetection.savedAt = new Date().toISOString();
+        
+        showToast('✅ Saved to history successfully!', 'success');
+    } catch (error) {
+        console.error('Error saving to history:', error);
+        showToast('❌ Failed to save to history', 'error');
+    }
 });
 
 // ============================================

@@ -1,13 +1,13 @@
 /**
  * FarmIntel AI - Scan History JavaScript
- * Complete Backend Integration
+ * Complete Backend Integration with localStorage fallback
  */
 
 // Initialize AOS
 AOS.init({ duration: 800, once: true, offset: 50 });
 
 // API Base URL
-const API_BASE_URL = 'http://localhost:5000/api';
+const API_BASE_URL = 'http://127.0.0.1:5000/api';
 
 // DOM Elements
 const searchInput = document.getElementById('searchInput');
@@ -54,58 +54,105 @@ function showToast(message, type = 'info') {
     if (!container) return;
     const toast = document.createElement('div');
     toast.className = `toast ${type}`;
-    toast.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle'}"></i><span>${message}</span>`;
+    const icons = {
+        success: 'fa-check-circle',
+        error: 'fa-exclamation-circle',
+        warning: 'fa-exclamation-triangle',
+        info: 'fa-info-circle'
+    };
+    toast.innerHTML = `<i class="fas ${icons[type] || icons.info}"></i><span>${message}</span>`;
     container.appendChild(toast);
-    setTimeout(() => toast.remove(), 3000);
+    setTimeout(() => {
+        toast.style.animation = 'slideOut 0.3s ease forwards';
+        setTimeout(() => toast.remove(), 300);
+    }, 4000);
 }
 
-// Fetch history from backend API
-async function fetchHistory() {
-    try {
-        const response = await fetch(`${API_BASE_URL}/history`);
-        if (response.ok) {
-            const data = await response.json();
-            if (data.success && data.history) {
-                // Convert backend format to frontend format
-                scanHistory = data.history.map(record => ({
-                    id: record.id,
-                    disease: record.disease || 'Unknown Disease',
-                    date: record.timestamp || record.date || new Date().toISOString(),
-                    confidence: record.confidence || 0,
-                    severity: record.severity || 'Low',
-                    chemical_treatment: record.chemical_treatment || 'Copper hydroxide - 2g/L water. Apply every 7-10 days.',
-                    organic_treatment: record.organic_treatment || 'Neem oil 5ml/L + garlic extract. Spray twice weekly.',
-                    cultural_practices: record.cultural_practices || 'Remove infected leaves, avoid overhead watering.',
-                    prevention_tips: record.prevention_tips || 'Use resistant varieties, crop rotation, proper spacing.'
-                }));
-                localStorage.setItem('scanHistory', JSON.stringify(scanHistory));
-                applyFilters();
-                return;
-            }
-        }
-        // If API fails, try localStorage
-        loadFromLocalStorage();
-    } catch (error) {
-        console.error('Error fetching history:', error);
-        loadFromLocalStorage();
-    }
-}
-
-// Load from localStorage fallback
+// Load from localStorage (primary source)
 function loadFromLocalStorage() {
     const stored = localStorage.getItem('scanHistory');
-    if (stored && JSON.parse(stored).length > 0) {
-        scanHistory = JSON.parse(stored);
-    } else {
-        scanHistory = getSampleHistory();
-        localStorage.setItem('scanHistory', JSON.stringify(scanHistory));
+    console.log('📂 Reading from localStorage:', stored ? 'found' : 'not found');
+    
+    if (stored) {
+        try {
+            const parsed = JSON.parse(stored);
+            if (Array.isArray(parsed) && parsed.length > 0) {
+                scanHistory = parsed;
+                console.log('✅ Loaded from localStorage:', scanHistory.length, 'records');
+                console.log('📊 Sample record:', scanHistory[0]);
+                applyFilters();
+                return true;
+            } else {
+                console.log('📭 localStorage is empty, creating sample data');
+            }
+        } catch (e) {
+            console.warn('Error parsing localStorage data:', e);
+        }
     }
-    applyFilters();
+    return false;
 }
 
-// Load history
-function loadHistory() {
-    fetchHistory();
+// Load history - prioritize localStorage then backend
+async function loadHistory() {
+    // First try localStorage (fastest)
+    const hasLocalData = loadFromLocalStorage();
+    
+    if (!hasLocalData) {
+        // If no local data, try backend
+        try {
+            const response = await fetch(`${API_BASE_URL}/history`);
+            if (response.ok) {
+                const data = await response.json();
+                if (data.success && data.history && data.history.length > 0) {
+                    scanHistory = data.history.map(record => ({
+                        id: record.id || Date.now() + Math.random(),
+                        disease: record.disease || 'Unknown Disease',
+                        date: record.timestamp || record.date || new Date().toISOString(),
+                        confidence: record.confidence || 0,
+                        severity: record.severity || 'Low',
+                        chemical_treatment: record.chemical_treatment || 'Copper hydroxide - 2g/L water. Apply every 7-10 days.',
+                        organic_treatment: record.organic_treatment || 'Neem oil 5ml/L + garlic extract. Spray twice weekly.',
+                        cultural_practices: record.cultural_practices || 'Remove infected leaves, avoid overhead watering.',
+                        prevention_tips: record.prevention_tips || 'Use resistant varieties, crop rotation, proper spacing.'
+                    }));
+                    localStorage.setItem('scanHistory', JSON.stringify(scanHistory));
+                    console.log('✅ Loaded from backend:', scanHistory.length, 'records');
+                    applyFilters();
+                    return;
+                }
+            }
+        } catch (error) {
+            console.warn('Backend not reachable');
+        }
+        
+        // If no data anywhere, create sample data
+        scanHistory = getSampleHistory();
+        localStorage.setItem('scanHistory', JSON.stringify(scanHistory));
+        console.log('📊 Created sample data:', scanHistory.length, 'records');
+        applyFilters();
+    }
+    
+    console.log('📊 Total records loaded:', scanHistory.length);
+}
+
+// Force reload history (for after detection)
+function reloadHistory() {
+    console.log('🔄 Reloading history...');
+    const stored = localStorage.getItem('scanHistory');
+    if (stored) {
+        try {
+            const parsed = JSON.parse(stored);
+            if (Array.isArray(parsed) && parsed.length > 0) {
+                scanHistory = parsed;
+                console.log('✅ Reloaded:', scanHistory.length, 'records');
+                applyFilters();
+                return true;
+            }
+        } catch (e) {
+            console.warn('Error reloading:', e);
+        }
+    }
+    return false;
 }
 
 // Sample history data (fallback)
@@ -122,9 +169,9 @@ function getSampleHistory() {
         const date = new Date();
         date.setDate(date.getDate() - Math.floor(Math.random() * 60));
         history.push({
-            id: i,
+            id: Date.now() + i,
             disease: diseases[Math.floor(Math.random() * diseases.length)],
-            date: date.toLocaleString(),
+            date: date.toISOString(),
             confidence: Math.floor(Math.random() * (98 - 65 + 1) + 65),
             severity: severities[Math.floor(Math.random() * severities.length)],
             chemical_treatment: "Copper hydroxide - 2g/L water. Apply every 7-10 days.",
@@ -138,9 +185,9 @@ function getSampleHistory() {
 
 // Apply filters
 function applyFilters() {
-    const searchTerm = searchInput.value.toLowerCase();
-    const severityValue = severityFilter.value;
-    const dateValue = dateFilter.value;
+    const searchTerm = searchInput ? searchInput.value.toLowerCase() : '';
+    const severityValue = severityFilter ? severityFilter.value : 'all';
+    const dateValue = dateFilter ? dateFilter.value : 'all';
     
     filteredHistory = scanHistory.filter(record => {
         if (searchTerm && !record.disease.toLowerCase().includes(searchTerm)) return false;
@@ -165,16 +212,18 @@ function applyFilters() {
 
 // Update statistics
 function updateStats() {
-    totalScansSpan.innerText = filteredHistory.length;
+    if (totalScansSpan) totalScansSpan.innerText = filteredHistory.length;
     const diseasedCount = filteredHistory.filter(r => !r.disease.includes('Healthy')).length;
-    diseasesDetectedSpan.innerText = diseasedCount;
+    if (diseasesDetectedSpan) diseasesDetectedSpan.innerText = diseasedCount;
     const avgConf = filteredHistory.length > 0 ? Math.round(filteredHistory.reduce((sum, r) => sum + r.confidence, 0) / filteredHistory.length) : 0;
-    avgConfidenceSpan.innerText = avgConf;
-    if (filteredHistory.length > 0) {
-        const lastDate = new Date(filteredHistory[0].date);
-        lastScanSpan.innerText = lastDate.toLocaleDateString();
-    } else {
-        lastScanSpan.innerText = '-';
+    if (avgConfidenceSpan) avgConfidenceSpan.innerText = avgConf;
+    if (lastScanSpan) {
+        if (filteredHistory.length > 0) {
+            const lastDate = new Date(filteredHistory[0].date);
+            lastScanSpan.innerText = lastDate.toLocaleDateString();
+        } else {
+            lastScanSpan.innerText = '-';
+        }
     }
 }
 
@@ -191,6 +240,8 @@ function renderTable() {
     const pageRecords = filteredHistory.slice(start, end);
     const paginationContainer = document.getElementById('paginationContainer');
     
+    if (!historyTableBody) return;
+    
     if (pageRecords.length === 0) {
         historyTableBody.innerHTML = `<tr class="empty-row"><td colspan="7"><div class="empty-state"><i class="fas fa-history"></i><h4>No matching records found</h4><p>Try adjusting your search or filters</p></div></td></tr>`;
         if (paginationContainer) paginationContainer.style.display = 'none';
@@ -206,7 +257,7 @@ function renderTable() {
             <td>${formatDate(record.date)}</td>
             <td><div class="confidence-badge ${getConfidenceClass(record.confidence)}">${record.confidence}%</div></td>
             <td><span class="severity-badge ${record.severity.toLowerCase()}">${record.severity}</span></td>
-            <td class="treatment-preview" title="${record.chemical_treatment}">${record.chemical_treatment.substring(0, 40)}...</td>
+            <td class="treatment-preview" title="${record.chemical_treatment}">${record.chemical_treatment.substring(0, 40)}${record.chemical_treatment.length > 40 ? '...' : ''}</td>
             <td><div class="action-buttons"><button class="view-btn" onclick="viewDetails(${record.id})"><i class="fas fa-eye"></i></button><button class="delete-btn" onclick="confirmDelete(${record.id})"><i class="fas fa-trash"></i></button></div></td>
         </tr>
     `).join('');
@@ -234,10 +285,15 @@ function updatePagination() {
     const prevBtn = document.getElementById('prevPageBtn');
     const nextBtn = document.getElementById('nextPageBtn');
     
-    if (prevBtn) prevBtn.disabled = currentPage === 1;
-    if (nextBtn) nextBtn.disabled = currentPage === totalPages;
+    if (prevBtn) prevBtn.disabled = currentPage === 1 || totalPages === 0;
+    if (nextBtn) nextBtn.disabled = currentPage === totalPages || totalPages === 0;
     
     if (!pageNumbers) return;
+    
+    if (totalPages === 0) {
+        pageNumbers.innerHTML = '';
+        return;
+    }
     
     let pagesHtml = '';
     const maxVisible = 5;
@@ -281,30 +337,13 @@ function updateSelectAllState() {
     }
 }
 
-// View details from backend
-window.viewDetails = async function(id) {
-    try {
-        const response = await fetch(`${API_BASE_URL}/history/${id}`);
-        if (response.ok) {
-            const data = await response.json();
-            if (data.success && data.record) {
-                showDetailModal(data.record);
-                return;
-            }
-        }
-        // Fallback: find in local history
-        const record = scanHistory.find(r => r.id === id);
-        if (record) {
-            showDetailModal(record);
-        } else {
-            showToast('Record not found', 'error');
-        }
-    } catch (error) {
-        console.error('Error fetching detail:', error);
-        const record = scanHistory.find(r => r.id === id);
-        if (record) {
-            showDetailModal(record);
-        }
+// View details
+window.viewDetails = function(id) {
+    const record = scanHistory.find(r => r.id === id);
+    if (record) {
+        showDetailModal(record);
+    } else {
+        showToast('Record not found', 'error');
     }
 };
 
@@ -315,7 +354,7 @@ function showDetailModal(record) {
     
     modalBody.innerHTML = `
         <div class="detail-section">
-            <h3>${record.disease}</h3>
+            <h3><i class="fas fa-leaf" style="color:#4F46E5;"></i> ${record.disease}</h3>
             <div class="detail-row"><span class="detail-label">Scan Date:</span><span class="detail-value">${formatDate(record.date)}</span></div>
             <div class="detail-row"><span class="detail-label">Confidence:</span><span class="detail-value">${record.confidence}%</span></div>
             <div class="detail-row"><span class="detail-label">Severity:</span><span class="detail-value severity-badge ${record.severity.toLowerCase()}">${record.severity}</span></div>
@@ -332,7 +371,6 @@ function showDetailModal(record) {
     
     const modal = document.getElementById('detailModal');
     if (modal) modal.style.display = 'flex';
-    currentDeleteId = record.id;
 }
 
 // Confirm delete
@@ -342,35 +380,14 @@ window.confirmDelete = function(id) {
     if (modal) modal.style.display = 'flex';
 };
 
-// Delete record from backend
-async function deleteRecord() {
+// Delete record
+function deleteRecord() {
     if (!currentDeleteId) return;
     
-    try {
-        const response = await fetch(`${API_BASE_URL}/history/${currentDeleteId}`, {
-            method: 'DELETE'
-        });
-        
-        if (response.ok) {
-            // Remove from local history
-            scanHistory = scanHistory.filter(r => r.id !== currentDeleteId);
-            localStorage.setItem('scanHistory', JSON.stringify(scanHistory));
-            applyFilters();
-            showToast('Record deleted successfully', 'success');
-        } else {
-            // Fallback: remove from local only
-            scanHistory = scanHistory.filter(r => r.id !== currentDeleteId);
-            localStorage.setItem('scanHistory', JSON.stringify(scanHistory));
-            applyFilters();
-            showToast('Record deleted (offline mode)', 'success');
-        }
-    } catch (error) {
-        // Fallback: remove from local only
-        scanHistory = scanHistory.filter(r => r.id !== currentDeleteId);
-        localStorage.setItem('scanHistory', JSON.stringify(scanHistory));
-        applyFilters();
-        showToast('Record deleted', 'success');
-    }
+    scanHistory = scanHistory.filter(r => r.id !== currentDeleteId);
+    localStorage.setItem('scanHistory', JSON.stringify(scanHistory));
+    applyFilters();
+    showToast('Record deleted successfully', 'success');
     
     const modal = document.getElementById('deleteModal');
     if (modal) modal.style.display = 'none';
@@ -378,7 +395,7 @@ async function deleteRecord() {
 }
 
 // Delete selected records
-async function deleteSelected() {
+function deleteSelected() {
     const selectedIds = Array.from(document.querySelectorAll('.record-checkbox:checked')).map(cb => parseInt(cb.dataset.id));
     if (selectedIds.length === 0) {
         showToast('No records selected', 'warning');
@@ -387,174 +404,129 @@ async function deleteSelected() {
     
     if (!confirm(`Delete ${selectedIds.length} record(s)? This cannot be undone.`)) return;
     
-    try {
-        // Try batch delete API
-        const response = await fetch(`${API_BASE_URL}/history/batch/delete`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ record_ids: selectedIds })
-        });
-        
-        if (response.ok) {
-            scanHistory = scanHistory.filter(r => !selectedIds.includes(r.id));
-            localStorage.setItem('scanHistory', JSON.stringify(scanHistory));
-            applyFilters();
-            showToast(`${selectedIds.length} record(s) deleted`, 'success');
-        } else {
-            throw new Error('Batch delete failed');
-        }
-    } catch (error) {
-        // Fallback: delete one by one
-        selectedIds.forEach(id => {
-            scanHistory = scanHistory.filter(r => r.id !== id);
-        });
-        localStorage.setItem('scanHistory', JSON.stringify(scanHistory));
-        applyFilters();
-        showToast(`${selectedIds.length} record(s) deleted`, 'success');
-    }
+    scanHistory = scanHistory.filter(r => !selectedIds.includes(r.id));
+    localStorage.setItem('scanHistory', JSON.stringify(scanHistory));
+    applyFilters();
+    showToast(`${selectedIds.length} record(s) deleted`, 'success');
 }
 
-// Export CSV from backend
-async function exportToCSV() {
+// Export CSV
+function exportToCSV() {
     if (filteredHistory.length === 0) {
         showToast('No data to export', 'warning');
         return;
     }
     
-    try {
-        const response = await fetch(`${API_BASE_URL}/report/csv`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 
-                report_type: 'history',
-                history: filteredHistory 
-            })
-        });
-        
-        if (response.ok) {
-            const blob = await response.blob();
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `farmintel_history_${new Date().toISOString().split('T')[0]}.csv`;
-            a.click();
-            URL.revokeObjectURL(url);
-            showToast('CSV exported successfully', 'success');
-            return;
-        }
-        throw new Error('CSV export failed');
-    } catch (error) {
-        // Fallback: local CSV generation
-        const headers = ['Disease', 'Scan Date', 'Confidence (%)', 'Severity', 'Chemical Treatment', 'Organic Treatment', 'Cultural Practices', 'Prevention Tips'];
-        const rows = filteredHistory.map(r => [r.disease, r.date, r.confidence, r.severity, r.chemical_treatment, r.organic_treatment, r.cultural_practices, r.prevention_tips]);
-        const csvContent = [headers, ...rows].map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(',')).join('\n');
-        const blob = new Blob([csvContent], { type: 'text/csv' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `farmintel_history_${new Date().toISOString().split('T')[0]}.csv`;
-        a.click();
-        URL.revokeObjectURL(url);
-        showToast('CSV exported (offline mode)', 'success');
-    }
+    const headers = ['Disease', 'Scan Date', 'Confidence (%)', 'Severity', 'Chemical Treatment', 'Organic Treatment', 'Cultural Practices', 'Prevention Tips'];
+    const rows = filteredHistory.map(r => [r.disease, r.date, r.confidence, r.severity, r.chemical_treatment, r.organic_treatment, r.cultural_practices, r.prevention_tips]);
+    const csvContent = [headers, ...rows].map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(',')).join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `farmintel_history_${new Date().toISOString().split('T')[0]}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast('CSV exported successfully', 'success');
 }
 
 // Export PDF
-async function exportToPDF() {
+function exportToPDF() {
     if (filteredHistory.length === 0) {
         showToast('No data to export', 'warning');
         return;
     }
     
-    try {
-        const response = await fetch(`${API_BASE_URL}/report/pdf`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 
-                report_type: 'history',
-                history: filteredHistory 
-            })
-        });
-        
-        if (response.ok) {
-            const blob = await response.blob();
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `farmintel_report_${new Date().toISOString().split('T')[0]}.pdf`;
-            a.click();
-            URL.revokeObjectURL(url);
-            showToast('PDF exported successfully', 'success');
-            return;
-        }
-        throw new Error('PDF export failed');
-    } catch (error) {
-        // Fallback: print window
-        const printWindow = window.open('', '_blank');
-        if (!printWindow) {
-            showToast('Please allow popups to export PDF', 'error');
-            return;
-        }
-        
-        printWindow.document.write(`
-            <!DOCTYPE html>
-            <html>
-            <head>
-                <title>FarmIntel AI - Scan History</title>
-                <style>
-                    body { font-family: Arial, sans-serif; padding: 40px; }
-                    h1 { color: #4F46E5; }
-                    .header { text-align: center; margin-bottom: 30px; }
-                    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-                    th, td { padding: 10px; text-align: left; border-bottom: 1px solid #ddd; }
-                    th { background: #f0f0f0; font-weight: bold; }
-                    .footer { text-align: center; margin-top: 30px; font-size: 12px; color: #666; }
-                </style>
-            </head>
-            <body>
-                <div class="header">
-                    <h1>FarmIntel AI - Scan History Report</h1>
-                    <p>Generated: ${new Date().toLocaleString()}</p>
-                    <p>Total Records: ${filteredHistory.length}</p>
-                </div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Disease</th>
-                            <th>Scan Date</th>
-                            <th>Confidence</th>
-                            <th>Severity</th>
-                            <th>Treatment</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        ${filteredHistory.map(r => `
-                            <tr>
-                                <td>${r.disease}</td>
-                                <td>${formatDate(r.date)}</td>
-                                <td>${r.confidence}%</td>
-                                <td>${r.severity}</td>
-                                <td>${r.chemical_treatment.substring(0, 60)}...</td>
-                            </tr>
-                        `).join('')}
-                    </tbody>
-                </table>
-                <div class="footer">
-                    <p>FarmIntel AI - Empowering Farmers with AI Technology</p>
-                </div>
-            </body>
-            </html>
-        `);
-        printWindow.document.close();
-        printWindow.print();
-        showToast('PDF preview opened. Use print to save as PDF.', 'info');
+    const printWindow = window.open('', '_blank');
+    if (!printWindow) {
+        showToast('Please allow popups to export PDF', 'error');
+        return;
     }
+    
+    const totalConfidence = filteredHistory.reduce((sum, r) => sum + r.confidence, 0);
+    const avgConf = filteredHistory.length > 0 ? Math.round(totalConfidence / filteredHistory.length) : 0;
+    
+    printWindow.document.write(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>FarmIntel AI - Scan History</title>
+            <style>
+                * { margin: 0; padding: 0; box-sizing: border-box; }
+                body { font-family: Arial, sans-serif; padding: 40px; }
+                .header { text-align: center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 2px solid #4F46E5; }
+                h1 { color: #4F46E5; font-size: 28px; }
+                .subtitle { color: #666; margin-top: 5px; }
+                .summary { display: flex; justify-content: center; gap: 40px; margin: 20px 0; }
+                .summary-item { text-align: center; }
+                .summary-item .label { color: #666; font-size: 12px; }
+                .summary-item .value { font-size: 24px; font-weight: bold; color: #1a1a2e; }
+                table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+                th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid #e5e7eb; }
+                th { background: #4F46E5; color: white; font-weight: 600; }
+                .footer { text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb; font-size: 12px; color: #666; }
+            </style>
+        </head>
+        <body>
+            <div class="header">
+                <h1>🌾 FarmIntel AI - Scan History Report</h1>
+                <div class="subtitle">Generated: ${new Date().toLocaleString()}</div>
+            </div>
+            <div class="summary">
+                <div class="summary-item">
+                    <div class="label">Total Records</div>
+                    <div class="value">${filteredHistory.length}</div>
+                </div>
+                <div class="summary-item">
+                    <div class="label">Avg Confidence</div>
+                    <div class="value">${avgConf}%</div>
+                </div>
+                <div class="summary-item">
+                    <div class="label">Diseases Detected</div>
+                    <div class="value">${filteredHistory.filter(r => !r.disease.includes('Healthy')).length}</div>
+                </div>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Disease</th>
+                        <th>Date</th>
+                        <th>Confidence</th>
+                        <th>Severity</th>
+                        <th>Treatment</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${filteredHistory.slice(0, 50).map((r, i) => `
+                        <tr>
+                            <td>${i + 1}</td>
+                            <td>${r.disease}</td>
+                            <td>${formatDate(r.date)}</td>
+                            <td>${r.confidence}%</td>
+                            <td>${r.severity}</td>
+                            <td>${r.chemical_treatment.substring(0, 50)}${r.chemical_treatment.length > 50 ? '...' : ''}</td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>
+            ${filteredHistory.length > 50 ? `<p style="margin-top: 10px; color: #666; font-size: 12px;">Showing first 50 of ${filteredHistory.length} records</p>` : ''}
+            <div class="footer">
+                <p>FarmIntel AI - Empowering Farmers with AI Technology</p>
+            </div>
+        </body>
+        </html>
+    `);
+    printWindow.document.close();
+    printWindow.print();
+    showToast('PDF preview opened. Use print to save as PDF.', 'info');
 }
 
 // Event Listeners
 if (searchInput) searchInput.addEventListener('input', applyFilters);
 if (severityFilter) severityFilter.addEventListener('change', applyFilters);
 if (dateFilter) dateFilter.addEventListener('change', applyFilters);
+
 if (clearFiltersBtn) {
     clearFiltersBtn.addEventListener('click', () => {
         if (searchInput) searchInput.value = '';
@@ -564,11 +536,13 @@ if (clearFiltersBtn) {
         showToast('Filters cleared', 'info');
     });
 }
+
 if (selectAllCheckbox) {
     selectAllCheckbox.addEventListener('change', (e) => {
         document.querySelectorAll('.record-checkbox').forEach(cb => cb.checked = e.target.checked);
     });
 }
+
 if (deleteAllBtn) deleteAllBtn.addEventListener('click', deleteSelected);
 if (exportCsvBtn) exportCsvBtn.addEventListener('click', exportToCSV);
 if (exportPdfBtn) exportPdfBtn.addEventListener('click', exportToPDF);
@@ -584,17 +558,40 @@ if (cancelDeleteBtn) cancelDeleteBtn.addEventListener('click', () => {
     const modal = document.getElementById('deleteModal');
     if (modal) modal.style.display = 'none';
 });
-if (closeDetailModal) closeDetailModal.addEventListener('click', () => {
-    const modal = document.getElementById('detailModal');
-    if (modal) modal.style.display = 'none';
-});
 
-// Modal close on outside click
+if (closeDetailModal) {
+    closeDetailModal.addEventListener('click', () => {
+        const modal = document.getElementById('detailModal');
+        if (modal) modal.style.display = 'none';
+    });
+}
+
+// Close modal on outside click
 window.onclick = (e) => {
     if (e.target.classList.contains('modal')) {
         e.target.style.display = 'none';
     }
 };
+
+// Pagination buttons
+if (prevPageBtn) {
+    prevPageBtn.addEventListener('click', () => {
+        if (currentPage > 1) {
+            currentPage--;
+            renderTable();
+        }
+    });
+}
+
+if (nextPageBtn) {
+    nextPageBtn.addEventListener('click', () => {
+        const totalPages = Math.ceil(filteredHistory.length / itemsPerPage);
+        if (currentPage < totalPages) {
+            currentPage++;
+            renderTable();
+        }
+    });
+}
 
 // Mobile sidebar
 const mobileToggle = document.getElementById('mobileMenuToggle');
@@ -607,6 +604,7 @@ if (mobileToggle) {
         if (overlay) overlay.classList.toggle('active');
     };
 }
+
 if (overlay) {
     overlay.onclick = () => {
         if (sidebar) sidebar.classList.remove('mobile-open');
@@ -618,7 +616,10 @@ if (overlay) {
 const logoutBtn = document.getElementById('logoutBtn');
 if (logoutBtn) {
     logoutBtn.onclick = () => {
-        localStorage.clear();
+        localStorage.removeItem('farmintel_user');
+        localStorage.removeItem('farmintel_token');
+        localStorage.removeItem('farmintel_logged_in');
+        localStorage.removeItem('userName');
         window.location.href = '../index.html';
     };
 }
@@ -630,12 +631,12 @@ if (userNameElement) {
     if (userStr) {
         try {
             const user = JSON.parse(userStr);
-            userNameElement.innerHTML = user.name || 'Farmer';
+            userNameElement.textContent = user.name || 'Farmer';
         } catch (e) {
-            userNameElement.innerHTML = localStorage.getItem('userName') || 'John';
+            userNameElement.textContent = localStorage.getItem('userName') || 'John';
         }
     } else {
-        userNameElement.innerHTML = localStorage.getItem('userName') || 'John';
+        userNameElement.textContent = localStorage.getItem('userName') || 'John Farmer';
     }
 }
 
@@ -647,6 +648,7 @@ if (themeToggle) {
         isDark = !isDark;
         document.body.classList.toggle('dark-mode', isDark);
         themeToggle.innerHTML = isDark ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>';
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
         showToast(`${isDark ? 'Dark' : 'Light'} mode activated`, 'success');
     };
 }
@@ -659,28 +661,12 @@ if (savedTheme === 'dark') {
     if (themeToggle) themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
 }
 
-// Check backend health
-async function checkBackendHealth() {
-    try {
-        const response = await fetch(`${API_BASE_URL}/health`);
-        if (response.ok) {
-            console.log('✅ Backend is healthy');
-            return true;
-        }
-        return false;
-    } catch (error) {
-        console.warn('⚠️ Backend not reachable');
-        return false;
-    }
-}
-
 // Initialize
 createParticles();
 loadHistory();
 
-// Auto-refresh every 30 seconds
-setInterval(() => {
-    if (document.visibilityState === 'visible') {
-        fetchHistory();
-    }
-}, 30000);
+// Expose reload function for debugging
+window.reloadHistory = reloadHistory;
+
+console.log('📊 Scan History module loaded');
+console.log('💡 To reload history, run: reloadHistory()');

@@ -16,12 +16,12 @@ weather_bp = Blueprint('weather', __name__)
 def get_weather():
     """
     Get current weather data for a location
-    GET /api/weather?city=Mumbai
-    GET /api/weather?lat=19.0760&lon=72.8777
-    GET /api/weather?pincode=400001
+    GET /api/weather?city=Chandigarh
+    GET /api/weather?lat=30.7333&lon=76.7794
+    GET /api/weather?pincode=160001
     
     Query Parameters:
-        city: City name (e.g., Mumbai, Delhi, Bangalore)
+        city: City name (e.g., Chandigarh, Mumbai, Delhi, Bangalore)
         lat: Latitude
         lon: Longitude
         pincode: Indian postal code
@@ -117,8 +117,8 @@ def get_weather():
 def get_weather_forecast():
     """
     Get 7-day weather forecast
-    GET /api/weather/forecast?city=Mumbai
-    GET /api/weather/forecast?lat=19.0760&lon=72.8777
+    GET /api/weather/forecast?city=Chandigarh
+    GET /api/weather/forecast?lat=30.7333&lon=76.7794
     
     Query Parameters:
         city: City name
@@ -154,7 +154,7 @@ def get_weather_forecast():
         
         return jsonify({
             'success': True,
-            'location': city or 'Current Location',
+            'location': city or WeatherController._get_city_from_config(),
             'days': len(forecast),
             'forecast': forecast,
             'timestamp': datetime.now().isoformat()
@@ -173,7 +173,7 @@ def get_weather_forecast():
 def get_disease_risk():
     """
     Calculate disease risk based on weather conditions
-    GET /api/weather/risk?city=Mumbai
+    GET /api/weather/risk?city=Chandigarh
     GET /api/weather/risk?temp=28&humidity=85&wind=12&rain=2.4
     
     Query Parameters:
@@ -226,7 +226,7 @@ def get_disease_risk():
             })
         else:
             # Get risk from city weather
-            city = request.args.get('city', 'Mumbai')
+            city = request.args.get('city', WeatherConfig.DEFAULT_CITY)
             weather_data = WeatherController.get_weather(city=city)
             
             return jsonify({
@@ -263,7 +263,7 @@ def get_disease_risk():
 def get_weather_alerts():
     """
     Get weather alerts for a location
-    GET /api/weather/alerts?city=Mumbai
+    GET /api/weather/alerts?city=Chandigarh
     
     Query Parameters:
         city: City name
@@ -272,7 +272,8 @@ def get_weather_alerts():
         JSON with weather alerts
     """
     try:
-        city = request.args.get('city', 'Mumbai')
+        from app.config.weather_config import WeatherConfig
+        city = request.args.get('city', WeatherConfig.DEFAULT_CITY)
         weather_data = WeatherController.get_weather(city=city)
         
         return jsonify({
@@ -280,7 +281,7 @@ def get_weather_alerts():
             'location': city,
             'alerts': weather_data.get('alerts', []),
             'total_alerts': len(weather_data.get('alerts', [])),
-            'high_risk': weather_data.get('disease_risk') == 'High',
+            'high_risk': weather_data.get('disease_risk') == 'HIGH',
             'timestamp': datetime.now().isoformat()
         })
         
@@ -297,7 +298,7 @@ def get_weather_alerts():
 def get_spray_advisory():
     """
     Get spray advisory based on weather conditions
-    GET /api/weather/spray-advisory?city=Mumbai
+    GET /api/weather/spray-advisory?city=Chandigarh
     GET /api/weather/spray-advisory?temp=28&humidity=85&wind=12
     
     Query Parameters:
@@ -310,13 +311,13 @@ def get_spray_advisory():
         JSON with spray advisory
     """
     try:
+        from app.config.weather_config import WeatherConfig
+        
         temp = request.args.get('temp', type=float)
         humidity = request.args.get('humidity', type=float)
         wind = request.args.get('wind', type=float)
         
         if temp is not None and humidity is not None:
-            from app.config.weather_config import WeatherConfig
-            
             advisory = WeatherConfig.get_spray_advisory(temp, humidity, wind or 0, 0)
             
             return jsonify({
@@ -331,7 +332,7 @@ def get_spray_advisory():
                 'timestamp': datetime.now().isoformat()
             })
         else:
-            city = request.args.get('city', 'Mumbai')
+            city = request.args.get('city', WeatherConfig.DEFAULT_CITY)
             weather_data = WeatherController.get_weather(city=city)
             
             return jsonify({
@@ -395,3 +396,11 @@ def weather_health():
         'status': 'healthy',
         'timestamp': datetime.now().isoformat()
     })
+
+
+# Helper method to get city from config
+@staticmethod
+def _get_city_from_config():
+    """Get default city from configuration"""
+    from app.config.weather_config import WeatherConfig
+    return WeatherConfig.DEFAULT_CITY

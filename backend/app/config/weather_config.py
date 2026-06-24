@@ -17,12 +17,12 @@ class WeatherConfig:
     # ========================================
     
     # OpenWeatherMap API
-    API_KEY = os.getenv('WEATHER_API_KEY', '')
-    API_BASE_URL = 'https://api.openweathermap.org/data/2.5'
+    API_KEY = os.getenv('WEATHER_API_KEY', '855806ebd3b87344f662c768d28f2b1c')
+    API_BASE_URL = os.getenv('WEATHER_API_BASE_URL', 'https://api.openweathermap.org/data/2.5')
     API_VERSION = '2.5'
     
     # Request settings
-    REQUEST_TIMEOUT = 10  # seconds
+    REQUEST_TIMEOUT = int(os.getenv('WEATHER_API_TIMEOUT', 10))
     MAX_RETRIES = 3
     RETRY_DELAY = 1  # seconds
     
@@ -30,10 +30,10 @@ class WeatherConfig:
     # Location Settings
     # ========================================
     
-    DEFAULT_CITY = 'Mumbai'
-    DEFAULT_COUNTRY = 'IN'
-    DEFAULT_UNITS = 'metric'  # metric, imperial, standard
-    DEFAULT_LANGUAGE = 'en'
+    DEFAULT_CITY = os.getenv('DEFAULT_CITY', 'Chandigarh')
+    DEFAULT_COUNTRY = os.getenv('DEFAULT_COUNTRY', 'IN')
+    DEFAULT_UNITS = os.getenv('WEATHER_UNITS', 'metric')  # metric, imperial, standard
+    DEFAULT_LANGUAGE = os.getenv('WEATHER_LANGUAGE', 'en')
     
     # Supported cities in India
     SUPPORTED_CITIES = [

@@ -77,15 +77,15 @@
             </nav>
             
             <div class="sidebar-footer">
-                <a href="profile.html" class="user-info" id="profileLink">
+                <div class="user-info" id="profileLink">
                     <div class="user-avatar">
                         <i class="fas fa-user"></i>
                     </div>
                     <div class="user-details">
                         <h4 id="userName">John Farmer</h4>
-                        <p>Premium Plan</p>
+                        <p id="userRole">Farmer</p>
                     </div>
-                </a>
+                </div>
                 <button id="logoutBtn" class="logout-btn">
                     <i class="fas fa-sign-out-alt"></i>
                     <span>Logout</span>
@@ -161,22 +161,22 @@
                                 </div>
                                 <div class="avatar-info">
                                     <h3 id="profileName">John Farmer</h3>
-                                    <p>Joined June 2024 · Premium Plan</p>
+                                    <p id="profileJoined">Joined June 2024 · Premium Plan</p>
                                 </div>
                             </div>
                             
                             <form id="profileForm" class="settings-form">
                                 <div class="form-group">
                                     <label><i class="fas fa-user"></i> Full Name</label>
-                                    <input type="text" id="fullName" placeholder="John Farmer" value="John Farmer">
+                                    <input type="text" id="fullName" placeholder="John Farmer">
                                 </div>
                                 <div class="form-group">
                                     <label><i class="fas fa-envelope"></i> Email Address</label>
-                                    <input type="email" id="email" placeholder="farmer@farmintel.ai" value="farmer@farmintel.ai">
+                                    <input type="email" id="email" placeholder="farmer@farmintel.ai">
                                 </div>
                                 <div class="form-group">
                                     <label><i class="fas fa-phone"></i> Mobile Number</label>
-                                    <input type="tel" id="mobile" placeholder="+91 98765 43210" value="+91 98765 43210">
+                                    <input type="tel" id="mobile" placeholder="+91 98765 43210">
                                 </div>
                                 <div class="form-group">
                                     <label><i class="fas fa-tractor"></i> Farm Type</label>
@@ -190,7 +190,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label><i class="fas fa-map-pin"></i> Farm Size (acres)</label>
-                                    <input type="number" id="farmSize" placeholder="Farm size in acres" value="25">
+                                    <input type="number" id="farmSize" placeholder="Farm size in acres">
                                 </div>
                                 <div class="form-actions">
                                     <button type="submit" class="btn-primary">Save Changes</button>
@@ -328,12 +328,12 @@
                             <form id="locationForm" class="settings-form">
                                 <div class="form-group">
                                     <label><i class="fas fa-city"></i> City / District</label>
-                                    <input type="text" id="city" placeholder="Your city" value="Mumbai">
+                                    <input type="text" id="city" placeholder="Your city">
                                 </div>
                                 <div class="form-group">
                                     <label><i class="fas fa-map-pin"></i> State</label>
                                     <select id="state">
-                                        <option value="maharashtra" selected>Maharashtra</option>
+                                        <option value="maharashtra">Maharashtra</option>
                                         <option value="punjab">Punjab</option>
                                         <option value="haryana">Haryana</option>
                                         <option value="uttar-pradesh">Uttar Pradesh</option>
@@ -347,7 +347,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label><i class="fas fa-tachometer-alt"></i> Pin Code</label>
-                                    <input type="text" id="pincode" placeholder="Pin code" value="400001">
+                                    <input type="text" id="pincode" placeholder="Pin code">
                                 </div>
                                 <div class="form-group">
                                     <label class="checkbox-label">
@@ -413,7 +413,7 @@
                                         <i class="fas fa-laptop"></i>
                                         <div>
                                             <h4>Chrome on Windows</h4>
-                                            <p>Mumbai, India · Last active 2 minutes ago</p>
+                                            <p id="sessionLocation1">Mumbai, India · Last active 2 minutes ago</p>
                                         </div>
                                     </div>
                                     <button class="btn-outline-small">Logout</button>
@@ -423,7 +423,7 @@
                                         <i class="fas fa-mobile-alt"></i>
                                         <div>
                                             <h4>Safari on iPhone</h4>
-                                            <p>Mumbai, India · Last active 3 hours ago</p>
+                                            <p id="sessionLocation2">Mumbai, India · Last active 3 hours ago</p>
                                         </div>
                                     </div>
                                     <button class="btn-outline-small">Logout</button>

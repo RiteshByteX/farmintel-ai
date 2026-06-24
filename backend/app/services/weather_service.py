@@ -10,6 +10,7 @@ from flask import current_app
 from typing import Dict, Any, Optional, List
 import random
 import logging
+import os
 
 logger = logging.getLogger(__name__)
 
@@ -78,6 +79,10 @@ class WeatherService:
         self._cache = {}
         self._cache_duration = 1800  # 30 minutes
         
+        # Default city
+        self.default_city = os.environ.get('DEFAULT_CITY', 'Chandigarh')
+        self.default_country = os.environ.get('DEFAULT_COUNTRY', 'IN')
+        
         # Supported cities
         self.supported_cities = [
             'Mumbai', 'Delhi', 'Bangalore', 'Hyderabad', 'Ahmedabad',
@@ -100,7 +105,6 @@ class WeatherService:
             return self._api_key
         
         # Try environment variable
-        import os
         self._api_key = os.environ.get('WEATHER_API_KEY', '')
         
         if self._api_key:
@@ -125,7 +129,7 @@ class WeatherService:
         Get current weather data for a location
         
         Args:
-            city: City name
+            city: City name (defaults to Chandigarh)
             lat: Latitude
             lon: Longitude
             include_forecast: Whether to include forecast data
@@ -133,8 +137,12 @@ class WeatherService:
         Returns:
             Dictionary with weather data
         """
+        # Use default city if none provided
+        if not city and lat is None and lon is None:
+            city = self.default_city
+        
         # Check cache
-        cache_key = city or f"{lat},{lon}" or "default"
+        cache_key = city or f"{lat},{lon}" or self.default_city
         if cache_key in self._cache:
             cached_data, cache_time = self._cache[cache_key]
             if (datetime.now() - cache_time).seconds < self._cache_duration:
@@ -146,7 +154,7 @@ class WeatherService:
                 weather_data = self._fetch_from_api(city, lat, lon)
             else:
                 logger.warning("Weather API not configured, using mock data")
-                weather_data = self._get_mock_weather(city or 'Mumbai')
+                weather_data = self._get_mock_weather(city or self.default_city)
             
             # Add forecast if requested
             if include_forecast:
@@ -159,7 +167,7 @@ class WeatherService:
             
         except Exception as e:
             logger.error(f"Weather API error: {str(e)}")
-            return self._get_mock_weather(city or 'Mumbai')
+            return self._get_mock_weather(city or self.default_city)
     
     def _fetch_from_api(self, city: str = None, lat: float = None, lon: float = None) -> Dict:
         """
@@ -173,11 +181,15 @@ class WeatherService:
         Returns:
             Parsed weather data
         """
+        # Use default city if none provided
+        if not city and lat is None and lon is None:
+            city = self.default_city
+        
         # Build URL and params
         if city:
             url = f"{self.base_url}/weather"
             params = {
-                'q': f"{city},IN",
+                'q': f"{city},{self.default_country}",
                 'appid': self.api_key,
                 'units': self.units,
                 'lang': self.lang
@@ -192,10 +204,10 @@ class WeatherService:
                 'lang': self.lang
             }
         else:
-            # Default to Mumbai
+            # Default to configured city
             url = f"{self.base_url}/weather"
             params = {
-                'q': "Mumbai,IN",
+                'q': f"{self.default_city},{self.default_country}",
                 'appid': self.api_key,
                 'units': self.units,
                 'lang': self.lang
@@ -225,8 +237,8 @@ class WeatherService:
         
         weather_data = {
             'success': True,
-            'city': data.get('name', city or 'Unknown'),
-            'country': sys_data.get('country', 'IN'),
+            'city': data.get('name', city or self.default_city),
+            'country': sys_data.get('country', self.default_country),
             'temperature': round(main_data.get('temp', 25), 1),
             'feels_like': round(main_data.get('feels_like', 25), 1),
             'temp_min': round(main_data.get('temp_min', 20), 1),
@@ -267,7 +279,7 @@ class WeatherService:
         Get weather forecast for a location
         
         Args:
-            city: City name
+            city: City name (defaults to Chandigarh)
             lat: Latitude
             lon: Longitude
             days: Number of days (max 7)
@@ -275,16 +287,20 @@ class WeatherService:
         Returns:
             List of forecast data
         """
+        # Use default city if none provided
+        if not city and lat is None and lon is None:
+            city = self.default_city
+            
         days = min(days, 7)  # Limit to 7 days
         
         try:
             if self.is_configured():
                 return self._fetch_forecast_from_api(city, lat, lon, days)
             else:
-                return self._get_mock_forecast(city or 'Mumbai', days)
+                return self._get_mock_forecast(city or self.default_city, days)
         except Exception as e:
             logger.error(f"Forecast error: {str(e)}")
-            return self._get_mock_forecast(city or 'Mumbai', days)
+            return self._get_mock_forecast(city or self.default_city, days)
     
     def _fetch_forecast_from_api(self, city: str = None, lat: float = None, lon: float = None, days: int = 7) -> List[Dict]:
         """
@@ -299,11 +315,15 @@ class WeatherService:
         Returns:
             List of forecast data
         """
+        # Use default city if none provided
+        if not city and lat is None and lon is None:
+            city = self.default_city
+        
         # Build URL
         if city:
             url = f"{self.base_url}/forecast"
             params = {
-                'q': f"{city},IN",
+                'q': f"{city},{self.default_country}",
                 'appid': self.api_key,
                 'units': self.units,
                 'lang': self.lang,
@@ -322,7 +342,7 @@ class WeatherService:
         else:
             url = f"{self.base_url}/forecast"
             params = {
-                'q': "Mumbai,IN",
+                'q': f"{self.default_city},{self.default_country}",
                 'appid': self.api_key,
                 'units': self.units,
                 'lang': self.lang,
@@ -833,13 +853,16 @@ class WeatherService:
         """
         # City-based temperature ranges
         city_temps = {
+            'Chandigarh': (15, 35, 40, 75),  # Added Chandigarh
             'Mumbai': (25, 32, 65, 85),
             'Delhi': (15, 35, 40, 75),
             'Bangalore': (18, 28, 60, 85),
             'Chennai': (24, 33, 65, 85),
             'Kolkata': (22, 32, 65, 85),
             'Pune': (18, 30, 55, 80),
-            'Hyderabad': (20, 32, 55, 80)
+            'Hyderabad': (20, 32, 55, 80),
+            'Jaipur': (20, 38, 30, 60),
+            'Lucknow': (18, 35, 45, 75)
         }
         
         defaults = city_temps.get(city, (20, 30, 55, 80))
@@ -847,17 +870,17 @@ class WeatherService:
         
         temperature = round(random.uniform(temp_min, temp_max), 1)
         humidity = random.randint(hum_min, hum_max)
-        wind_speed = round(random.uniform(5, 20), 1)
-        rainfall = round(random.uniform(0, 8), 1)
+        wind_speed = round(random.uniform(5, 15), 1)  # Lower wind speed for Chandigarh
+        rainfall = round(random.uniform(0, 5), 1)  # Lower rainfall for Chandigarh
         
-        conditions = ['Sunny', 'Partly Cloudy', 'Cloudy', 'Light Rain']
+        conditions = ['Sunny', 'Partly Cloudy', 'Cloudy', 'Clear']
         condition = random.choice(conditions)
-        icons = {'Sunny': '01d', 'Partly Cloudy': '02d', 'Cloudy': '03d', 'Light Rain': '10d'}
+        icons = {'Sunny': '01d', 'Partly Cloudy': '02d', 'Cloudy': '03d', 'Clear': '01d'}
         
         weather_data = {
             'success': True,
             'city': city,
-            'country': 'IN',
+            'country': self.default_country,
             'temperature': temperature,
             'feels_like': round(temperature + random.uniform(-2, 2), 1),
             'temp_min': round(temperature - random.uniform(2, 5), 1),
@@ -868,7 +891,7 @@ class WeatherService:
             'wind_direction': random.randint(0, 360),
             'wind_gust': round(wind_speed + random.uniform(0, 5), 1),
             'rainfall': rainfall,
-            'clouds': random.randint(10, 90),
+            'clouds': random.randint(10, 70),
             'condition': condition,
             'condition_main': condition.split()[0],
             'weather_icon': icons.get(condition, '01d'),
@@ -900,13 +923,21 @@ class WeatherService:
             List of forecast data
         """
         forecast = []
-        conditions = ['☀️ Sunny', '⛅ Partly Cloudy', '☁️ Cloudy', '🌧️ Light Rain']
-        icons = {'☀️ Sunny': '01d', '⛅ Partly Cloudy': '02d', '☁️ Cloudy': '03d', '🌧️ Light Rain': '10d'}
+        conditions = ['☀️ Sunny', '⛅ Partly Cloudy', '☁️ Cloudy', '🌤️ Mostly Clear']
+        icons = {'☀️ Sunny': '01d', '⛅ Partly Cloudy': '02d', '☁️ Cloudy': '03d', '🌤️ Mostly Clear': '01d'}
         
         # Base temperature by city
         city_base_temp = {
-            'Mumbai': 28, 'Delhi': 25, 'Bangalore': 24, 'Chennai': 29,
-            'Kolkata': 28, 'Pune': 26, 'Hyderabad': 27
+            'Chandigarh': 28,  # Added Chandigarh
+            'Mumbai': 28,
+            'Delhi': 25,
+            'Bangalore': 24,
+            'Chennai': 29,
+            'Kolkata': 28,
+            'Pune': 26,
+            'Hyderabad': 27,
+            'Jaipur': 30,
+            'Lucknow': 27
         }
         base_temp = city_base_temp.get(city, 26)
         
@@ -925,11 +956,11 @@ class WeatherService:
                 'temperature': round(base_temp + temp_variation, 1),
                 'temp_min': round(base_temp + temp_variation - random.uniform(2, 5), 1),
                 'temp_max': round(base_temp + temp_variation + random.uniform(2, 5), 1),
-                'humidity': random.randint(55, 85),
+                'humidity': random.randint(40, 75),  # Lower humidity for Chandigarh
                 'condition': condition,
                 'weather_icon': icons.get(condition, '01d'),
-                'rainfall': round(random.uniform(0, 10), 1),
-                'wind_speed': round(random.uniform(5, 20), 1),
+                'rainfall': round(random.uniform(0, 5), 1),  # Lower rainfall for Chandigarh
+                'wind_speed': round(random.uniform(5, 15), 1),
                 'disease_risk': risk,
                 'risk_color': '#EF4444' if risk == 'High' else '#F59E0B' if risk == 'Medium' else '#10B981',
                 'risk_score': 80 if risk == 'High' else 50 if risk == 'Medium' else 20

@@ -26,7 +26,7 @@ class WeatherController:
         Get current weather data for a location
         
         Args:
-            city: City name (e.g., 'Mumbai', 'Delhi')
+            city: City name (e.g., 'Chandigarh', 'Mumbai', 'Delhi')
             lat: Latitude (if city not provided)
             lon: Longitude (if city not provided)
             
@@ -338,6 +338,16 @@ class WeatherController:
         """
         # Map pincode to city (simplified mapping)
         pincode_city_map = {
+            '160001': 'Chandigarh',  # Added Chandigarh pincode
+            '160002': 'Chandigarh',
+            '160003': 'Chandigarh',
+            '160004': 'Chandigarh',
+            '160005': 'Chandigarh',
+            '160006': 'Chandigarh',
+            '160007': 'Chandigarh',
+            '160008': 'Chandigarh',
+            '160009': 'Chandigarh',
+            '160010': 'Chandigarh',
             '400001': 'Mumbai',
             '110001': 'Delhi',
             '560001': 'Bangalore',
@@ -368,22 +378,25 @@ class WeatherController:
         
         # Generate realistic mock data based on city
         city_temps = {
+            'Chandigarh': (15, 35),  # Added Chandigarh temperature range
             'Mumbai': (25, 32),
             'Delhi': (15, 35),
             'Bangalore': (18, 28),
             'Chennai': (24, 33),
             'Kolkata': (22, 32),
             'Pune': (18, 30),
-            'Hyderabad': (20, 32)
+            'Hyderabad': (20, 32),
+            'Jaipur': (20, 38),
+            'Lucknow': (18, 35)
         }
         
         temp_range = city_temps.get(city, (20, 30))
         temperature = round(random.uniform(temp_range[0], temp_range[1]), 1)
-        humidity = random.randint(55, 90)
-        wind_speed = round(random.uniform(5, 20), 1)
-        rainfall = round(random.uniform(0, 8), 1)
+        humidity = random.randint(40, 80)  # Chandigarh has lower humidity
+        wind_speed = round(random.uniform(5, 15), 1)
+        rainfall = round(random.uniform(0, 5), 1)
         
-        conditions = ['Sunny', 'Partly Cloudy', 'Cloudy', 'Light Rain']
+        conditions = ['Sunny', 'Partly Cloudy', 'Cloudy', 'Clear']
         condition = random.choice(conditions)
         
         # Calculate disease risk
@@ -414,7 +427,7 @@ class WeatherController:
             'wind_speed': wind_speed,
             'wind_direction': random.randint(0, 360),
             'rainfall': rainfall,
-            'clouds': random.randint(10, 90),
+            'clouds': random.randint(10, 70),
             'condition': condition,
             'condition_main': condition.split()[0],
             'weather_icon': '04d' if 'Cloud' in condition else '01d',
@@ -446,8 +459,22 @@ class WeatherController:
         import random
         
         forecast = []
-        conditions = ['☀️ Sunny', '⛅ Partly Cloudy', '☁️ Cloudy', '🌧️ Light Rain']
+        conditions = ['☀️ Sunny', '⛅ Partly Cloudy', '☁️ Cloudy', '🌤️ Mostly Clear']
         risk_levels = ['Low', 'Medium', 'High']
+        
+        # City-specific temperature adjustments
+        city_temp_adjustments = {
+            'Chandigarh': 28,
+            'Mumbai': 30,
+            'Delhi': 28,
+            'Bangalore': 25,
+            'Chennai': 31,
+            'Kolkata': 29,
+            'Pune': 27,
+            'Hyderabad': 29
+        }
+        
+        base_temp = city_temp_adjustments.get(city, 28)
         
         for i in range(7):
             date = datetime.now() + timedelta(days=i)
@@ -455,10 +482,10 @@ class WeatherController:
                 'date': date.strftime('%Y-%m-%d'),
                 'day': date.strftime('%a'),
                 'full_day': date.strftime('%A'),
-                'temperature': round(28 + random.uniform(-5, 5), 1),
-                'humidity': random.randint(55, 85),
+                'temperature': round(base_temp + random.uniform(-5, 5), 1),
+                'humidity': random.randint(40, 75),
                 'condition': random.choice(conditions),
-                'rainfall': round(random.uniform(0, 10), 1),
+                'rainfall': round(random.uniform(0, 5), 1),
                 'disease_risk': random.choice(risk_levels),
                 'risk_color': '#EF4444' if random.choice(risk_levels) == 'High' else '#F59E0B' if random.choice(risk_levels) == 'Medium' else '#10B981'
             })

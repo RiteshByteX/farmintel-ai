@@ -126,13 +126,33 @@ class WeatherAlertGenerator:
         }
     }
     
+    # Regional crop information for Chandigarh and surrounding areas
+    REGIONAL_CROPS = {
+        'Chandigarh': {
+            'kharif': ['Rice', 'Maize', 'Cotton', 'Sugarcane'],
+            'rabi': ['Wheat', 'Barley', 'Mustard', 'Gram'],
+            'summer': ['Vegetables', 'Fruits', 'Sunflower']
+        },
+        'Punjab': {
+            'kharif': ['Rice', 'Maize', 'Cotton'],
+            'rabi': ['Wheat', 'Barley', 'Mustard'],
+            'summer': ['Potato', 'Tomato', 'Cauliflower']
+        },
+        'Haryana': {
+            'kharif': ['Rice', 'Maize', 'Sugarcane'],
+            'rabi': ['Wheat', 'Barley', 'Mustard'],
+            'summer': ['Vegetables', 'Fruits']
+        }
+    }
+    
     @classmethod
-    def generate_alerts(cls, weather_data: Dict) -> List[Dict]:
+    def generate_alerts(cls, weather_data: Dict, location: str = 'Chandigarh') -> List[Dict]:
         """
         Generate weather alerts based on current conditions
         
         Args:
             weather_data: Dictionary with current weather data
+            location: Location name (default: Chandigarh)
             
         Returns:
             List of alert dictionaries
@@ -149,21 +169,24 @@ class WeatherAlertGenerator:
         alerts.extend(cls._get_temperature_alerts(temp))
         
         # Humidity alerts
-        alerts.extend(cls._get_humidity_alerts(humidity))
+        alerts.extend(cls._get_humidity_alerts(humidity, location))
         
         # Wind alerts
         alerts.extend(cls._get_wind_alerts(wind))
         
         # Rain alerts
-        alerts.extend(cls._get_rain_alerts(rain))
+        alerts.extend(cls._get_rain_alerts(rain, location))
         
         # Disease risk alerts
-        alerts.extend(cls._get_disease_risk_alerts(temp, humidity, rain))
+        alerts.extend(cls._get_disease_risk_alerts(temp, humidity, rain, location))
         
         # Spray advisory
         spray_alert = cls._get_spray_advisory(temp, humidity, wind, rain)
         if spray_alert:
             alerts.append(spray_alert)
+        
+        # Location-specific alerts
+        alerts.extend(cls._get_location_specific_alerts(location, temp, humidity, rain))
         
         return alerts
     
@@ -172,34 +195,44 @@ class WeatherAlertGenerator:
         """Generate temperature-based alerts"""
         alerts = []
         
-        if temp >= 38:
+        # Chandigarh-specific temperature thresholds
+        if temp >= 40:  # Higher threshold for Chandigarh's hot summers
             alerts.append({
                 'type': 'temperature',
                 'severity': 'critical',
-                'title': '🚨 Extreme Heat Warning',
-                'message': f'Temperature has reached {temp}°C. Extreme heat stress on crops.',
-                'recommendation': 'Provide shade, increase irrigation, avoid midday spraying.',
-                'affected_crops': ['Tomato', 'Potato', 'Bell Pepper', 'All Vegetables']
+                'title': '🚨 Extreme Heat Warning - Chandigarh Region',
+                'message': f'Temperature has reached {temp}°C. Extreme heat stress on crops in Chandigarh region.',
+                'recommendation': 'Provide shade, increase irrigation, avoid midday spraying. Protect young plants.',
+                'affected_crops': ['Tomato', 'Potato', 'Bell Pepper', 'Vegetables']
             })
-        elif temp >= 35:
+        elif temp >= 37:
             alerts.append({
                 'type': 'temperature',
                 'severity': 'high',
                 'title': '🌡️ High Temperature Alert',
-                'message': f'Temperature at {temp}°C. Heat stress may affect crop growth.',
+                'message': f'Temperature at {temp}°C. Heat stress may affect crop growth in the region.',
                 'recommendation': 'Water early morning or evening. Provide temporary shade if possible.',
-                'affected_crops': ['Tomato', 'Bell Pepper', 'Strawberry']
+                'affected_crops': ['Tomato', 'Bell Pepper', 'Strawberry', 'Vegetables']
             })
-        elif temp <= 5:
+        elif temp >= 35:
+            alerts.append({
+                'type': 'temperature',
+                'severity': 'warning',
+                'title': '🌡️ Warm Temperature Advisory',
+                'message': f'Temperature at {temp}°C. Monitor crops for heat stress.',
+                'recommendation': 'Increase irrigation frequency. Mulch to conserve soil moisture.',
+                'affected_crops': ['All crops']
+            })
+        elif temp <= 2:  # Chandigarh winter temperatures can drop low
             alerts.append({
                 'type': 'temperature',
                 'severity': 'critical',
-                'title': '❄️ Frost Warning',
+                'title': '❄️ Frost Warning - Chandigarh Region',
                 'message': f'Temperature dropped to {temp}°C. Frost risk for sensitive crops.',
-                'recommendation': 'Cover plants, move potted plants indoors, irrigate before frost.',
+                'recommendation': 'Cover plants, use row covers, irrigate before frost. Protect young plants.',
                 'affected_crops': ['Potato', 'Tomato', 'Bell Pepper', 'Strawberry']
             })
-        elif temp <= 10:
+        elif temp <= 5:
             alerts.append({
                 'type': 'temperature',
                 'severity': 'warning',
@@ -212,29 +245,30 @@ class WeatherAlertGenerator:
         return alerts
     
     @classmethod
-    def _get_humidity_alerts(cls, humidity: int) -> List[Dict]:
+    def _get_humidity_alerts(cls, humidity: int, location: str = 'Chandigarh') -> List[Dict]:
         """Generate humidity-based alerts"""
         alerts = []
         
-        if humidity >= 90:
+        # Chandigarh typically has lower humidity than coastal areas
+        if humidity >= 85:
             alerts.append({
                 'type': 'humidity',
                 'severity': 'critical',
-                'title': '💧 Critical High Humidity',
-                'message': f'Humidity at {humidity}%. Perfect conditions for fungal disease outbreak!',
+                'title': '💧 Critical High Humidity - Unusual for Chandigarh',
+                'message': f'Humidity at {humidity}%. Unusually high for this region. Perfect conditions for fungal disease outbreak!',
                 'recommendation': 'Apply preventive fungicide IMMEDIATELY. Improve air circulation.',
                 'high_risk_diseases': ['Late Blight', 'Downy Mildew', 'Leaf Spot']
             })
-        elif humidity >= 80:
+        elif humidity >= 75:
             alerts.append({
                 'type': 'humidity',
                 'severity': 'high',
                 'title': '⚠️ High Humidity Alert',
-                'message': f'Humidity at {humidity}%. High risk for fungal diseases.',
+                'message': f'Humidity at {humidity}%. Elevated risk for fungal diseases.',
                 'recommendation': 'Apply preventive fungicide. Avoid overhead irrigation.',
                 'high_risk_diseases': ['Late Blight', 'Early Blight', 'Powdery Mildew']
             })
-        elif humidity >= 70:
+        elif humidity >= 65:
             alerts.append({
                 'type': 'humidity',
                 'severity': 'warning',
@@ -243,13 +277,13 @@ class WeatherAlertGenerator:
                 'recommendation': 'Increase monitoring frequency. Ensure good air circulation.',
                 'high_risk_diseases': ['Early Blight', 'Leaf Spot']
             })
-        elif humidity <= 30:
+        elif humidity <= 25:
             alerts.append({
                 'type': 'humidity',
                 'severity': 'warning',
-                'title': '🌵 Low Humidity Alert',
-                'message': f'Humidity at {humidity}%. Dry conditions may stress plants.',
-                'recommendation': 'Increase irrigation frequency. Mulch to retain moisture.',
+                'title': '🌵 Low Humidity Alert - Chandigarh Region',
+                'message': f'Humidity at {humidity}%. Very dry conditions may stress plants.',
+                'recommendation': 'Increase irrigation frequency. Mulch to retain moisture. Use drip irrigation.',
                 'affected_crops': ['All crops']
             })
         
@@ -260,7 +294,7 @@ class WeatherAlertGenerator:
         """Generate wind-based alerts"""
         alerts = []
         
-        if wind >= 30:
+        if wind >= 35:  # Higher threshold for Chandigarh's occasional strong winds
             alerts.append({
                 'type': 'wind',
                 'severity': 'critical',
@@ -269,7 +303,7 @@ class WeatherAlertGenerator:
                 'recommendation': 'Do NOT spray today. Provide wind breaks. Support tall plants.',
                 'affected_crops': ['Corn', 'Tomato', 'All tall crops']
             })
-        elif wind >= 20:
+        elif wind >= 25:
             alerts.append({
                 'type': 'wind',
                 'severity': 'high',
@@ -278,7 +312,7 @@ class WeatherAlertGenerator:
                 'recommendation': 'Avoid spraying. Monitor for spore spread.',
                 'affected_crops': ['All crops']
             })
-        elif wind >= 15:
+        elif wind >= 18:
             alerts.append({
                 'type': 'wind',
                 'severity': 'warning',
@@ -291,20 +325,21 @@ class WeatherAlertGenerator:
         return alerts
     
     @classmethod
-    def _get_rain_alerts(cls, rain: float) -> List[Dict]:
+    def _get_rain_alerts(cls, rain: float, location: str = 'Chandigarh') -> List[Dict]:
         """Generate rain-based alerts"""
         alerts = []
         
-        if rain >= 20:
+        # Chandigarh receives moderate rainfall compared to coastal areas
+        if rain >= 30:
             alerts.append({
                 'type': 'rain',
                 'severity': 'critical',
-                'title': '🌧️ Heavy Rain Warning',
-                'message': f'{rain}mm rainfall expected. High risk of disease spread.',
+                'title': '🌧️ Heavy Rain Warning - Chandigarh Region',
+                'message': f'{rain}mm rainfall expected. High risk of waterlogging and disease spread.',
                 'recommendation': 'Apply fungicide BEFORE rain. Ensure drainage. Check for standing water.',
                 'high_risk_diseases': ['Late Blight', 'Downy Mildew', 'Bacterial Spot']
             })
-        elif rain >= 10:
+        elif rain >= 15:
             alerts.append({
                 'type': 'rain',
                 'severity': 'high',
@@ -318,7 +353,7 @@ class WeatherAlertGenerator:
                 'type': 'rain',
                 'severity': 'warning',
                 'title': '🌦️ Light Rain Expected',
-                'message': 'Rain expected in next 24 hours.',
+                'message': f'{rain}mm rain expected. Prepare for disease prevention.',
                 'recommendation': 'Consider applying preventive fungicide before rain.',
                 'high_risk_diseases': ['Fungal diseases']
             })
@@ -326,7 +361,7 @@ class WeatherAlertGenerator:
         return alerts
     
     @classmethod
-    def _get_disease_risk_alerts(cls, temp: float, humidity: int, rain: float) -> List[Dict]:
+    def _get_disease_risk_alerts(cls, temp: float, humidity: int, rain: float, location: str = 'Chandigarh') -> List[Dict]:
         """Generate disease-specific risk alerts"""
         alerts = []
         
@@ -337,12 +372,13 @@ class WeatherAlertGenerator:
                 alerts.append({
                     'type': 'disease_risk',
                     'severity': risk_level,
-                    'title': f'🚨 {disease} Risk Alert',
-                    'message': cls._get_disease_risk_message(disease, risk_level, temp, humidity),
-                    'recommendation': cls._get_disease_recommendation(disease, risk_level),
+                    'title': f'🚨 {disease} Risk Alert - {location} Region',
+                    'message': cls._get_disease_risk_message(disease, risk_level, temp, humidity, location),
+                    'recommendation': cls._get_disease_recommendation(disease, risk_level, location),
                     'disease': disease,
                     'risk_level': risk_level,
-                    'incubation_days': thresholds.get('incubation_days', 5)
+                    'incubation_days': thresholds.get('incubation_days', 5),
+                    'location': location
                 })
         
         return alerts
@@ -377,17 +413,17 @@ class WeatherAlertGenerator:
             return 'low'
     
     @classmethod
-    def _get_disease_risk_message(cls, disease: str, risk_level: str, temp: float, humidity: int) -> str:
+    def _get_disease_risk_message(cls, disease: str, risk_level: str, temp: float, humidity: int, location: str = 'Chandigarh') -> str:
         """Get risk message for disease"""
         if risk_level == 'critical':
-            return f"⚠️ CRITICAL: Perfect conditions for {disease} outbreak! (Temp: {temp}°C, Humidity: {humidity}%)"
+            return f"⚠️ CRITICAL: Perfect conditions for {disease} outbreak in {location}! (Temp: {temp}°C, Humidity: {humidity}%)"
         elif risk_level == 'high':
-            return f"⚠️ HIGH RISK: Conditions favorable for {disease} development. Take preventive action."
+            return f"⚠️ HIGH RISK: Conditions favorable for {disease} development in {location}. Take preventive action."
         else:
             return f"Conditions are not ideal for {disease} currently. Continue monitoring."
     
     @classmethod
-    def _get_disease_recommendation(cls, disease: str, risk_level: str) -> str:
+    def _get_disease_recommendation(cls, disease: str, risk_level: str, location: str = 'Chandigarh') -> str:
         """Get recommendation for disease prevention"""
         recommendations = {
             'Late Blight': 'Apply copper-based fungicide immediately. Remove infected leaves. Ensure good air circulation.',
@@ -400,20 +436,20 @@ class WeatherAlertGenerator:
         }
         
         if risk_level == 'critical':
-            return f"🚨 IMMEDIATE ACTION: {recommendations.get(disease, 'Apply appropriate fungicide. Monitor closely.')}"
+            return f"🚨 IMMEDIATE ACTION: {recommendations.get(disease, 'Apply appropriate fungicide. Monitor closely.')} Consider consulting local agriculture office in {location}."
         else:
             return f"⚠️ PREVENTIVE: {recommendations.get(disease, 'Apply preventive fungicide. Increase monitoring.')}"
     
     @classmethod
     def _get_spray_advisory(cls, temp: float, humidity: int, wind: float, rain: float) -> Optional[Dict]:
         """Get spray advisory based on conditions"""
-        if wind > 20:
+        if wind > 25:
             return {
                 'type': 'spray',
                 'severity': 'high',
                 'title': '🚫 Do Not Spray Today',
-                'message': f'Wind speed {wind} km/h is too high for spraying.',
-                'recommendation': 'Wait for wind speed to drop below 15 km/h.',
+                'message': f'Wind speed {wind} km/h is too high for effective spraying.',
+                'recommendation': 'Wait for wind speed to drop below 18 km/h.',
                 'best_time': 'Check forecast for calmer conditions'
             }
         elif rain > 0:
@@ -425,16 +461,16 @@ class WeatherAlertGenerator:
                 'recommendation': 'Apply today if rain is forecast. Allow 2-4 hours to dry before rain.',
                 'best_time': 'Apply immediately in the morning'
             }
-        elif temp > 32:
+        elif temp > 35:
             return {
                 'type': 'spray',
                 'severity': 'warning',
                 'title': '🌡️ Spray During Cooler Hours',
-                'message': f'Temperature {temp}°C is high for spraying.',
+                'message': f'Temperature {temp}°C is high for effective spraying.',
                 'recommendation': 'Spray early morning (6-9 AM) or late evening (5-7 PM).',
                 'best_time': 'Early morning or late evening'
             }
-        elif humidity < 40 or humidity > 85:
+        elif humidity < 35 or humidity > 85:
             return {
                 'type': 'spray',
                 'severity': 'info',
@@ -454,12 +490,74 @@ class WeatherAlertGenerator:
             }
     
     @classmethod
-    def get_forecast_alerts(cls, forecast: List[Dict]) -> List[Dict]:
+    def _get_location_specific_alerts(cls, location: str, temp: float, humidity: int, rain: float) -> List[Dict]:
+        """Get location-specific alerts for Chandigarh and surrounding regions"""
+        alerts = []
+        
+        if location in cls.REGIONAL_CROPS:
+            crops = cls.REGIONAL_CROPS[location]
+            
+            # Determine current season
+            month = datetime.now().month
+            if 6 <= month <= 10:
+                season = 'kharif'
+                season_name = 'Kharif (Monsoon)'
+            elif 11 <= month <= 3:
+                season = 'rabi'
+                season_name = 'Rabi (Winter)'
+            else:
+                season = 'summer'
+                season_name = 'Summer'
+            
+            if season in crops:
+                active_crops = crops[season]
+                
+                # Temperature alert for specific crops
+                if temp >= 38 and 'Wheat' in active_crops:
+                    alerts.append({
+                        'type': 'location_specific',
+                        'severity': 'critical',
+                        'title': f'🌾 Wheat Heat Stress Alert - {location}',
+                        'message': f'High temperature ({temp}°C) during wheat grain filling stage. Significant yield loss possible.',
+                        'recommendation': 'Increase irrigation. Apply stress-reducing practices. Protect grain development.',
+                        'crops': active_crops,
+                        'season': season_name
+                    })
+                
+                # Humidity alert for specific crops
+                if humidity >= 80 and ('Rice' in active_crops or 'Maize' in active_crops):
+                    alerts.append({
+                        'type': 'location_specific',
+                        'severity': 'high',
+                        'title': f'🌾 Crop Disease Alert - {location}',
+                        'message': f'High humidity ({humidity}%) in {location} favors disease development in {", ".join(active_crops[:3])}.',
+                        'recommendation': 'Apply preventive fungicide. Monitor crops daily. Improve field drainage.',
+                        'crops': active_crops,
+                        'season': season_name
+                    })
+                
+                # Rain alert for specific crops
+                if rain >= 15 and ('Cotton' in active_crops or 'Sugarcane' in active_crops):
+                    alerts.append({
+                        'type': 'location_specific',
+                        'severity': 'critical',
+                        'title': f'🌧️ Waterlogging Risk - {location}',
+                        'message': f'Heavy rain ({rain}mm) may cause waterlogging in {location} fields.',
+                        'recommendation': 'Ensure proper drainage. Monitor for root rot diseases. Avoid mechanical operations.',
+                        'crops': active_crops,
+                        'season': season_name
+                    })
+        
+        return alerts
+    
+    @classmethod
+    def get_forecast_alerts(cls, forecast: List[Dict], location: str = 'Chandigarh') -> List[Dict]:
         """
         Generate alerts from forecast data
         
         Args:
             forecast: List of daily forecast dictionaries
+            location: Location name (default: Chandigarh)
             
         Returns:
             List of forecast-based alerts
@@ -473,54 +571,79 @@ class WeatherAlertGenerator:
             date = day.get('date', 'Unknown')
             
             # Rain in forecast
-            if rain >= 10:
+            if rain >= 20:
+                alerts.append({
+                    'type': 'forecast',
+                    'severity': 'critical',
+                    'title': f'☔ Heavy Rain Forecast - {date} - {location}',
+                    'message': f'{rain}mm rainfall expected in {location}. High disease and waterlogging risk.',
+                    'recommendation': 'Apply preventive fungicide BEFORE rain. Ensure field drainage. Protect young plants.',
+                    'date': date,
+                    'location': location
+                })
+            elif rain >= 10:
                 alerts.append({
                     'type': 'forecast',
                     'severity': 'high',
-                    'title': f'☔ Heavy Rain Forecast - {date}',
-                    'message': f'{rain}mm rainfall expected. High disease risk.',
-                    'recommendation': 'Apply preventive fungicide BEFORE rain.',
-                    'date': date
+                    'title': f'☔ Moderate Rain Forecast - {date} - {location}',
+                    'message': f'Rain expected in {location}. Prepare for disease prevention.',
+                    'recommendation': 'Apply preventive treatment before rain. Monitor after rain.',
+                    'date': date,
+                    'location': location
                 })
             elif rain > 0:
                 alerts.append({
                     'type': 'forecast',
                     'severity': 'warning',
-                    'title': f'🌧️ Rain Forecast - {date}',
-                    'message': f'Rain expected. Prepare for disease prevention.',
-                    'recommendation': 'Apply preventive treatment before rain.',
-                    'date': date
+                    'title': f'🌧️ Light Rain Forecast - {date}',
+                    'message': f'Light rain expected in {location} area.',
+                    'recommendation': 'Consider applying preventive fungicide before rain.',
+                    'date': date,
+                    'location': location
                 })
             
-            # Temperature extremes
-            if temp >= 38:
+            # Temperature extremes for Chandigarh region
+            if temp >= 40:
                 alerts.append({
                     'type': 'forecast',
                     'severity': 'critical',
-                    'title': f'🔥 Extreme Heat - {date}',
-                    'message': f'Temperature forecast: {temp}°C.',
-                    'recommendation': 'Prepare shade structures. Increase irrigation.',
-                    'date': date
+                    'title': f'🔥 Extreme Heat Forecast - {date} - Chandigarh Region',
+                    'message': f'Temperature forecast: {temp}°C. Extreme heat expected.',
+                    'recommendation': 'Prepare shade structures. Increase irrigation. Protect crops from heat stress.',
+                    'date': date,
+                    'location': location
                 })
-            elif temp <= 5:
+            elif temp >= 37:
+                alerts.append({
+                    'type': 'forecast',
+                    'severity': 'high',
+                    'title': f'🌡️ High Temperature Forecast - {date}',
+                    'message': f'Temperature forecast: {temp}°C. Heat stress risk.',
+                    'recommendation': 'Ensure adequate irrigation. Protect sensitive crops.',
+                    'date': date,
+                    'location': location
+                })
+            elif temp <= 2:
                 alerts.append({
                     'type': 'forecast',
                     'severity': 'critical',
-                    'title': f'❄️ Frost Risk - {date}',
-                    'message': f'Temperature forecast: {temp}°C.',
-                    'recommendation': 'Prepare frost protection (covers, water).',
-                    'date': date
+                    'title': f'❄️ Frost Risk - {date} - Chandigarh Region',
+                    'message': f'Temperature forecast: {temp}°C. Frost risk for sensitive crops.',
+                    'recommendation': 'Prepare frost protection (covers, water). Protect crops.',
+                    'date': date,
+                    'location': location
                 })
         
         return alerts
     
     @classmethod
-    def get_seasonal_alerts(cls, crop: str, month: int = None) -> List[Dict]:
+    def get_seasonal_alerts(cls, crop: str, location: str = 'Chandigarh', month: int = None) -> List[Dict]:
         """
-        Generate seasonal alerts for specific crops
+        Generate seasonal alerts for specific crops in Chandigarh region
         
         Args:
             crop: Crop name
+            location: Location name (default: Chandigarh)
             month: Month number (1-12, default current month)
             
         Returns:
@@ -542,15 +665,25 @@ class WeatherAlertGenerator:
                 'dry': ['Aphids', 'Leafhoppers'],
                 'winter': ['Late Blight', 'Scab']
             },
-            'Grape': {
-                'rainy': ['Downy Mildew', 'Black Rot'],
-                'dry': ['Powdery Mildew'],
-                'monsoon': ['Anthracnose']
+            'Wheat': {
+                'winter': ['Rust', 'Leaf Blight', 'Powdery Mildew'],
+                'summer': ['Termites', 'Aphids']
             },
-            'Apple': {
-                'spring': ['Apple Scab', 'Cedar Rust'],
-                'summer': ['Apple Scab', 'Codling Moth'],
-                'monsoon': ['Apple Scab']
+            'Rice': {
+                'rainy': ['Blast', 'Leaf Spot', 'Stem Borer'],
+                'winter': ['Bacterial Leaf Blight']
+            },
+            'Maize': {
+                'rainy': ['Leaf Blight', 'Rust', 'Stem Borer'],
+                'winter': ['Smut', 'Aphids']
+            },
+            'Cotton': {
+                'rainy': ['Bacterial Blight', 'Aphids', 'Bollworm'],
+                'winter': ['Mites', 'Whitefly']
+            },
+            'Sugarcane': {
+                'rainy': ['Red Rot', 'Smut', 'Top Borer'],
+                'winter': ['Sett Rot']
             }
         }
         
@@ -560,38 +693,43 @@ class WeatherAlertGenerator:
             # Determine season based on month
             if 6 <= month <= 9:  # Monsoon/Rainy
                 season = 'rainy'
+                season_name = 'Monsoon'
             elif 10 <= month <= 2:  # Winter
                 season = 'winter'
+                season_name = 'Winter'
             else:  # Summer/Dry
                 season = 'dry'
+                season_name = 'Summer'
             
             if season in crop_risks:
                 diseases = crop_risks[season]
                 alerts.append({
                     'type': 'seasonal',
                     'severity': 'warning',
-                    'title': f'🌿 Seasonal Alert - {crop}',
-                    'message': f'High risk period for: {", ".join(diseases)}',
-                    'recommendation': f'Increase monitoring frequency. Apply preventive treatments.',
+                    'title': f'🌿 Seasonal Alert - {crop} in {location}',
+                    'message': f'High risk period for {crop} in {location}: {", ".join(diseases)}',
+                    'recommendation': f'Increase monitoring frequency. Apply preventive treatments. Consult local agricultural office in {location} if symptoms appear.',
                     'crop': crop,
-                    'season': season,
-                    'high_risk_diseases': diseases
+                    'season': season_name,
+                    'high_risk_diseases': diseases,
+                    'location': location
                 })
         
         return alerts
     
     @classmethod
-    def get_alert_summary(cls, weather_data: Dict) -> Dict:
+    def get_alert_summary(cls, weather_data: Dict, location: str = 'Chandigarh') -> Dict:
         """
-        Get summary of all alerts
+        Get summary of all alerts for a location
         
         Args:
             weather_data: Current weather data
+            location: Location name (default: Chandigarh)
             
         Returns:
             Summary dictionary with counts and highest priority alert
         """
-        alerts = cls.generate_alerts(weather_data)
+        alerts = cls.generate_alerts(weather_data, location)
         
         if not alerts:
             return {
@@ -602,7 +740,8 @@ class WeatherAlertGenerator:
                 'warning_count': 0,
                 'info_count': 0,
                 'highest_priority': None,
-                'alerts': []
+                'alerts': [],
+                'location': location
             }
         
         # Count by severity
@@ -631,5 +770,18 @@ class WeatherAlertGenerator:
             'warning_count': warning_count,
             'info_count': info_count,
             'highest_priority': highest_priority,
-            'alerts': alerts
+            'alerts': alerts,
+            'location': location,
+            'crop_season': cls._get_current_season()
         }
+    
+    @classmethod
+    def _get_current_season(cls) -> str:
+        """Get current agricultural season"""
+        month = datetime.now().month
+        if 6 <= month <= 10:
+            return 'Kharif (Monsoon)'
+        elif 11 <= month <= 3:
+            return 'Rabi (Winter)'
+        else:
+            return 'Summer'

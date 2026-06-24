@@ -1,6 +1,6 @@
 /**
- * FarmIntel AI - Weather Analysis JavaScript
- * Complete weather functionality with location detection
+ * FarmIntel AI - Real-Time Weather Analysis
+ * Fetches weather data from backend API
  */
 
 // Initialize AOS
@@ -10,10 +10,18 @@ AOS.init({
     offset: 50
 });
 
+// Configuration
+const API_CONFIG = {
+    BASE_URL: 'http://localhost:5000/api', // Your Flask backend URL
+    UPDATE_INTERVAL: 300000 // 5 minutes
+};
+
 // DOM Elements
 const locationInput = document.getElementById('locationInput');
 const searchLocationBtn = document.getElementById('searchLocationBtn');
 const detectLocationBtn = document.getElementById('detectLocationBtn');
+const refreshWeatherBtn = document.getElementById('refreshWeatherBtn');
+const loadingSpinner = document.getElementById('loadingSpinner');
 const weatherLocationSpan = document.getElementById('weatherLocation').querySelector('span');
 const currentTemp = document.getElementById('currentTemp');
 const weatherCondition = document.getElementById('weatherCondition');
@@ -22,15 +30,19 @@ const windSpeed = document.getElementById('windSpeed');
 const rainfall = document.getElementById('rainfall');
 const minTemp = document.getElementById('minTemp');
 const maxTemp = document.getElementById('maxTemp');
+const pressure = document.getElementById('pressure');
 const riskValue = document.getElementById('riskValue');
 const riskFill = document.getElementById('riskFill');
 const riskMessage = document.getElementById('riskMessage');
+const riskBadge = document.getElementById('riskBadge');
 const alertsContainer = document.getElementById('alertsContainer');
 const sprayAdvisory = document.getElementById('sprayAdvisory');
 const trendAnalysis = document.getElementById('trendAnalysis');
+const updateTimeSpan = document.querySelector('#updateTime span');
 
 let weatherChart = null;
-let currentLocation = 'Mumbai';
+let currentLocation = 'Chandigarh';
+let updateTimer = null;
 
 // Create particles
 function createParticles() {
@@ -58,195 +70,192 @@ function showToast(message, type = 'info') {
     
     const toast = document.createElement('div');
     toast.className = `toast ${type}`;
-    toast.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle'}"></i><span>${message}</span>`;
+    const icons = {
+        success: 'fa-check-circle',
+        error: 'fa-exclamation-circle',
+        info: 'fa-info-circle',
+        warning: 'fa-exclamation-triangle'
+    };
+    toast.innerHTML = `<i class="fas ${icons[type] || icons.info}"></i><span>${message}</span>`;
     container.appendChild(toast);
     
-    setTimeout(() => toast.remove(), 3000);
+    setTimeout(() => {
+        if (toast.parentNode) toast.remove();
+    }, 4000);
 }
 
-// Get weather data (mock data - replace with actual API call)
-async function getWeatherData(location) {
-    // Simulate API call delay
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    // Generate realistic mock data based on location name
-    const locationHash = location.toLowerCase().split('').reduce((a, b) => a + b.charCodeAt(0), 0);
-    
-    const temperatures = [22, 24, 26, 28, 30, 32, 34];
-    const humidities = [55, 65, 75, 85, 90];
-    const conditions = ['Sunny', 'Partly Cloudy', 'Cloudy', 'Light Rain', 'Heavy Rain', 'Thunderstorm'];
-    
-    const tempIndex = locationHash % temperatures.length;
-    const humidityIndex = (locationHash + 7) % humidities.length;
-    const conditionIndex = (locationHash + 3) % conditions.length;
-    
-    const temp = temperatures[tempIndex];
-    const hum = humidities[humidityIndex];
-    
-    return {
-        temperature: temp,
-        humidity: hum,
-        wind_speed: Math.floor(Math.random() * 25) + 5,
-        rainfall: Math.random() * 10,
-        condition: conditions[conditionIndex],
-        min_temp: temp - 4,
-        max_temp: temp + 4,
-        location_name: location,
-        timestamp: new Date().toLocaleString()
+// Show/hide loading spinner
+function setLoading(show) {
+    if (loadingSpinner) {
+        loadingSpinner.style.display = show ? 'block' : 'none';
+    }
+}
+
+// Get weather icon class
+function getWeatherIconClass(iconCode) {
+    const iconMap = {
+        '01d': 'fa-sun',
+        '01n': 'fa-moon',
+        '02d': 'fa-cloud-sun',
+        '02n': 'fa-cloud-moon',
+        '03d': 'fa-cloud',
+        '03n': 'fa-cloud',
+        '04d': 'fa-cloud',
+        '04n': 'fa-cloud',
+        '09d': 'fa-cloud-rain',
+        '09n': 'fa-cloud-rain',
+        '10d': 'fa-cloud-sun-rain',
+        '10n': 'fa-cloud-moon-rain',
+        '11d': 'fa-bolt',
+        '11n': 'fa-bolt',
+        '13d': 'fa-snowflake',
+        '13n': 'fa-snowflake',
+        '50d': 'fa-smog',
+        '50n': 'fa-smog'
     };
+    return iconMap[iconCode] || 'fa-cloud-sun-rain';
 }
 
-// Generate forecast data
-function generateForecastData() {
-    const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-    const forecast = [];
-    
-    for (let i = 0; i < 7; i++) {
-        const tempBase = 25 + Math.sin(i) * 3;
-        const humidityBase = 70 + Math.cos(i * 1.5) * 15;
+// Fetch weather data from backend API
+async function fetchWeatherData(location) {
+    try {
+        setLoading(true);
         
-        let risk = 'Medium';
-        if (humidityBase > 80) risk = 'High';
-        else if (humidityBase < 65) risk = 'Low';
+        // Build query parameters
+        const params = new URLSearchParams();
+        if (location) {
+            params.append('city', location);
+        }
         
-        forecast.push({
-            day: days[i],
-            temperature: Math.round(tempBase),
-            humidity: Math.round(humidityBase),
-            risk: risk,
-            icon: getWeatherIcon(humidityBase, tempBase)
-        });
-    }
-    return forecast;
-}
-
-function getWeatherIcon(humidity, temp) {
-    if (humidity > 80) return 'cloud-rain';
-    if (humidity > 65) return 'cloud-sun-rain';
-    if (temp > 30) return 'sun';
-    return 'cloud-sun';
-}
-
-// Calculate disease risk
-function calculateDiseaseRisk(temp, humidity, wind, rain) {
-    let riskScore = 0;
-    let risk = 'Low';
-    let message = '';
-    
-    // Temperature factor
-    if (temp > 32 || temp < 15) {
-        riskScore += 2;
-    } else if (temp > 28 || temp < 18) {
-        riskScore += 1;
-    }
-    
-    // Humidity factor (most important for fungal diseases)
-    if (humidity > 85) {
-        riskScore += 3;
-    } else if (humidity > 75) {
-        riskScore += 2;
-    } else if (humidity > 65) {
-        riskScore += 1;
-    }
-    
-    // Wind factor
-    if (wind > 20) {
-        riskScore += 1;
-    }
-    
-    // Rain factor
-    if (rain > 5) {
-        riskScore += 2;
-    } else if (rain > 0) {
-        riskScore += 1;
-    }
-    
-    if (riskScore >= 5) {
-        risk = 'High';
-        message = '⚠️ CRITICAL: Perfect conditions for disease outbreak! Apply preventive fungicide immediately.';
-    } else if (riskScore >= 3) {
-        risk = 'Medium';
-        message = '⚠️ Moderate risk. Monitor crops regularly.';
-    } else {
-        risk = 'Low';
-        message = '✅ Low risk. Conditions are favorable. Continue regular monitoring.';
-    }
-    
-    return { risk, message, score: riskScore };
-}
-
-// Get spray advisory
-function getSprayAdvisory(temp, humidity, wind) {
-    if (wind > 15) {
-        return '⚠️ Not recommended today. Wind speed too high. Wait for calmer conditions (<15 km/h).';
-    } else if (humidity > 80) {
-        return '⚠️ Apply preventive fungicide today! High humidity creates disease risk.';
-    } else if (temp > 30) {
-        return '🌡️ Spray early morning or late evening to avoid heat stress on plants.';
-    } else if (humidity < 60 && temp < 30) {
-        return '✅ Perfect conditions for spraying today. Apply as scheduled.';
-    } else {
-        return '📋 Moderate conditions. Spraying possible but monitor weather changes.';
+        const url = `${API_CONFIG.BASE_URL}/weather?${params.toString()}`;
+        
+        const response = await fetch(url);
+        
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.message || `API Error: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        
+        if (!data.success) {
+            throw new Error(data.message || 'Failed to fetch weather data');
+        }
+        
+        return data;
+        
+    } catch (error) {
+        console.error('Weather API Error:', error);
+        showToast(`Failed to fetch weather: ${error.message}`, 'error');
+        return null;
+    } finally {
+        setLoading(false);
     }
 }
 
-// Get trend analysis
-function getTrendAnalysis(forecast) {
-    const avgHumidity = forecast.reduce((sum, d) => sum + d.humidity, 0) / 7;
-    const highRiskDays = forecast.filter(d => d.risk === 'High').length;
-    
-    if (avgHumidity > 75) {
-        return `Humidity expected to remain high for next ${highRiskDays} days. Monitor crops closely for early signs of disease.`;
-    } else if (avgHumidity > 65) {
-        return `Moderate humidity levels expected. Regular monitoring recommended.`;
-    } else {
-        return `Good weather conditions ahead. Continue standard crop management practices.`;
+// Fetch forecast from backend API
+async function fetchForecast(location) {
+    try {
+        const params = new URLSearchParams();
+        if (location) {
+            params.append('city', location);
+        }
+        params.append('days', '7');
+        
+        const url = `${API_CONFIG.BASE_URL}/weather/forecast?${params.toString()}`;
+        
+        const response = await fetch(url);
+        
+        if (!response.ok) {
+            return null;
+        }
+        
+        const data = await response.json();
+        return data.success ? data.forecast : null;
+        
+    } catch (error) {
+        console.warn('Forecast API Error:', error);
+        return null;
     }
 }
 
 // Update UI with weather data
 async function updateWeatherData(location) {
-    showToast(`Fetching weather data for ${location}...`, 'info');
+    showToast(`Fetching real-time weather for ${location}...`, 'info');
     
     try {
-        const data = await getWeatherData(location);
-        const forecast = generateForecastData();
-        const risk = calculateDiseaseRisk(data.temperature, data.humidity, data.wind_speed, data.rainfall);
+        const data = await fetchWeatherData(location);
+        
+        if (!data) {
+            return;
+        }
+        
+        // Extract data from API response
+        const weather = data.current || {};
+        const locationInfo = data.location || {};
+        const diseaseRisk = data.disease_risk || {};
+        const alerts = data.alerts || [];
+        const sprayAdvisoryData = data.spray_advisory || {};
+        const forecastData = data.forecast || [];
+        
+        // Update location input
+        const cityName = locationInfo.city || location || 'Unknown';
+        locationInput.value = cityName;
+        currentLocation = cityName;
         
         // Update current weather
-        currentTemp.innerText = data.temperature;
-        weatherCondition.innerText = data.condition;
-        weatherLocationSpan.innerText = `${data.location_name.toUpperCase()}`;
-        humidity.innerText = data.humidity;
-        windSpeed.innerText = data.wind_speed;
-        rainfall.innerText = data.rainfall.toFixed(1);
-        minTemp.innerText = data.min_temp;
-        maxTemp.innerText = data.max_temp;
+        currentTemp.textContent = weather.temperature || '--';
+        weatherCondition.textContent = weather.condition || 'Unknown';
+        weatherLocationSpan.textContent = `${cityName.toUpperCase()}${locationInfo.country ? `, ${locationInfo.country}` : ''}`;
+        humidity.textContent = weather.humidity || '--';
+        windSpeed.textContent = weather.wind_speed || '--';
+        rainfall.textContent = weather.rainfall || '0.0';
+        minTemp.textContent = weather.min_temp || weather.temperature || '--';
+        maxTemp.textContent = weather.max_temp || weather.temperature || '--';
+        if (pressure) pressure.textContent = weather.pressure || '--';
+        
+        // Update update time
+        if (updateTimeSpan) {
+            updateTimeSpan.textContent = `Last updated: ${new Date().toLocaleString()}`;
+        }
         
         // Update weather icon
         const weatherIcon = document.getElementById('weatherIcon');
-        if (data.condition === 'Sunny') weatherIcon.innerHTML = '<i class="fas fa-sun"></i>';
-        else if (data.condition === 'Partly Cloudy') weatherIcon.innerHTML = '<i class="fas fa-cloud-sun"></i>';
-        else if (data.condition === 'Cloudy') weatherIcon.innerHTML = '<i class="fas fa-cloud"></i>';
-        else if (data.condition === 'Light Rain') weatherIcon.innerHTML = '<i class="fas fa-cloud-rain"></i>';
-        else if (data.condition === 'Heavy Rain') weatherIcon.innerHTML = '<i class="fas fa-cloud-showers-heavy"></i>';
-        else if (data.condition === 'Thunderstorm') weatherIcon.innerHTML = '<i class="fas fa-bolt"></i>';
-        else weatherIcon.innerHTML = '<i class="fas fa-cloud-sun-rain"></i>';
+        const iconClass = getWeatherIconClass(weather.weather_icon || '01d');
+        weatherIcon.innerHTML = `<i class="fas ${iconClass}"></i>`;
         
         // Update risk index
-        riskValue.innerText = risk.risk;
-        riskValue.style.color = risk.risk === 'High' ? '#F87171' : risk.risk === 'Medium' ? '#FBBF24' : '#34D399';
+        const riskLevel = diseaseRisk.risk_level || 'Low';
+        const riskScore = diseaseRisk.risk_score || 0;
+        const riskColor = diseaseRisk.risk_color || '#10B981';
+        const riskMsg = diseaseRisk.risk_message || 'Loading weather data...';
         
-        const riskPercent = risk.risk === 'High' ? 85 : risk.risk === 'Medium' ? 60 : 30;
+        riskValue.textContent = riskLevel;
+        riskValue.style.color = riskColor;
+        
+        const riskPercent = riskLevel === 'Critical' ? 95 : 
+                           riskLevel === 'High' ? 80 : 
+                           riskLevel === 'Medium' ? 55 : 25;
         riskFill.style.width = `${riskPercent}%`;
-        riskFill.style.background = risk.risk === 'High' ? '#EF4444' : risk.risk === 'Medium' ? '#F59E0B' : '#10B981';
-        riskMessage.innerText = risk.message;
+        riskFill.style.background = riskColor;
+        riskMessage.textContent = riskMsg;
+        
+        // Update risk badge
+        if (riskBadge) {
+            riskBadge.className = `risk-badge ${riskLevel.toLowerCase()}`;
+            riskBadge.textContent = riskLevel;
+        }
         
         // Update risk factors
-        const tempPercent = Math.min(100, Math.abs(data.temperature - 25) * 10);
-        const humidityPercent = Math.min(100, data.humidity);
-        const windPercent = Math.min(100, data.wind_speed * 2);
-        const rainPercent = Math.min(100, data.rainfall * 10);
+        const temp = weather.temperature || 25;
+        const hum = weather.humidity || 65;
+        const wind = weather.wind_speed || 10;
+        const rain = weather.rainfall || 0;
+        
+        const tempPercent = Math.min(100, Math.max(0, Math.abs(temp - 25) * 6));
+        const humidityPercent = Math.min(100, hum);
+        const windPercent = Math.min(100, wind * 2);
+        const rainPercent = Math.min(100, rain * 8);
         
         document.getElementById('tempFactor').style.width = `${tempPercent}%`;
         document.getElementById('humidityFactor').style.width = `${humidityPercent}%`;
@@ -254,95 +263,96 @@ async function updateWeatherData(location) {
         document.getElementById('rainFactor').style.width = `${rainPercent}%`;
         
         // Color factor bars
-        document.getElementById('tempFactor').className = `factor-fill ${data.temperature > 32 || data.temperature < 15 ? 'high' : data.temperature > 28 || data.temperature < 18 ? 'medium' : 'low'}`;
-        document.getElementById('humidityFactor').className = `factor-fill ${data.humidity > 80 ? 'high' : data.humidity > 65 ? 'medium' : 'low'}`;
-        document.getElementById('windFactor').className = `factor-fill ${data.wind_speed > 20 ? 'high' : data.wind_speed > 12 ? 'medium' : 'low'}`;
-        document.getElementById('rainFactor').className = `factor-fill ${data.rainfall > 5 ? 'high' : data.rainfall > 0 ? 'medium' : 'low'}`;
+        document.getElementById('tempFactor').className = `factor-fill ${temp > 35 || temp < 0 ? 'high' : temp > 30 || temp < 10 ? 'medium' : 'low'}`;
+        document.getElementById('humidityFactor').className = `factor-fill ${hum > 80 ? 'high' : hum > 65 ? 'medium' : 'low'}`;
+        document.getElementById('windFactor').className = `factor-fill ${wind > 25 ? 'high' : wind > 15 ? 'medium' : 'low'}`;
+        document.getElementById('rainFactor').className = `factor-fill ${rain > 15 ? 'high' : rain > 5 ? 'medium' : 'low'}`;
         
         // Update factor statuses
-        document.getElementById('tempStatus').innerText = data.temperature > 32 ? 'High' : data.temperature < 18 ? 'Low' : 'Normal';
-        document.getElementById('tempStatus').className = `factor-status ${data.temperature > 32 || data.temperature < 15 ? 'danger' : 'success'}`;
-        document.getElementById('humidityStatus').innerText = data.humidity > 80 ? 'Critical' : data.humidity > 65 ? 'High' : 'Normal';
-        document.getElementById('humidityStatus').className = `factor-status ${data.humidity > 80 ? 'danger' : data.humidity > 65 ? 'warning' : 'success'}`;
-        document.getElementById('windStatus').innerText = data.wind_speed > 20 ? 'High' : data.wind_speed > 12 ? 'Moderate' : 'Low';
-        document.getElementById('rainStatus').innerText = data.rainfall > 5 ? 'Heavy' : data.rainfall > 0 ? 'Light' : 'None';
+        const tempStatus = document.getElementById('tempStatus');
+        const humidityStatus = document.getElementById('humidityStatus');
+        const windStatus = document.getElementById('windStatus');
+        const rainStatus = document.getElementById('rainStatus');
+        
+        if (tempStatus) {
+            tempStatus.textContent = temp > 35 ? 'Extreme' : temp > 30 ? 'High' : temp < 0 ? 'Freezing' : temp < 5 ? 'Cold' : 'Normal';
+            tempStatus.className = `factor-status ${temp > 35 || temp < 0 ? 'danger' : temp > 30 || temp < 5 ? 'warning' : 'success'}`;
+        }
+        if (humidityStatus) {
+            humidityStatus.textContent = hum > 80 ? 'Critical' : hum > 65 ? 'High' : 'Normal';
+            humidityStatus.className = `factor-status ${hum > 80 ? 'danger' : hum > 65 ? 'warning' : 'success'}`;
+        }
+        if (windStatus) {
+            windStatus.textContent = wind > 25 ? 'High' : wind > 15 ? 'Moderate' : 'Low';
+            windStatus.className = `factor-status ${wind > 25 ? 'danger' : wind > 15 ? 'warning' : 'success'}`;
+        }
+        if (rainStatus) {
+            rainStatus.textContent = rain > 15 ? 'Heavy' : rain > 5 ? 'Moderate' : rain > 0 ? 'Light' : 'None';
+        }
         
         // Update alerts
-        updateAlerts(data, risk);
+        updateAlerts(alerts);
         
         // Update spray advisory
-        sprayAdvisory.innerText = getSprayAdvisory(data.temperature, data.humidity, data.wind_speed);
+        if (sprayAdvisoryData && sprayAdvisoryData.message) {
+            sprayAdvisory.textContent = sprayAdvisoryData.message;
+        } else {
+            sprayAdvisory.textContent = 'No spray advisory available.';
+        }
         
         // Update trend analysis
-        trendAnalysis.innerText = getTrendAnalysis(forecast);
+        if (forecastData && forecastData.length > 0) {
+            const avgHumidity = forecastData.reduce((sum, d) => sum + (d.humidity || 0), 0) / forecastData.length;
+            const highRiskDays = forecastData.filter(d => d.disease_risk === 'High' || d.disease_risk === 'Critical').length;
+            const rainyDays = forecastData.filter(d => (d.rainfall || 0) > 5).length;
+            
+            let analysis = '';
+            if (avgHumidity > 75) {
+                analysis += `High humidity expected (${Math.round(avgHumidity)}%) over next 7 days. `;
+            } else if (avgHumidity > 60) {
+                analysis += `Moderate humidity levels expected (${Math.round(avgHumidity)}%). `;
+            } else {
+                analysis += `Low humidity conditions expected (${Math.round(avgHumidity)}%). `;
+            }
+            
+            if (highRiskDays > 0) {
+                analysis += `${highRiskDays} day(s) of high/critical disease risk. `;
+            }
+            
+            if (rainyDays > 0) {
+                analysis += `${rainyDays} day(s) with rainfall expected. Apply fungicide before rain.`;
+            } else {
+                analysis += 'No significant rainfall expected. Continue regular monitoring.';
+            }
+            
+            trendAnalysis.textContent = analysis;
+        } else {
+            trendAnalysis.textContent = 'No forecast data available for trend analysis.';
+        }
         
         // Update forecast grid
-        updateForecastGrid(forecast);
+        if (forecastData && forecastData.length > 0) {
+            updateForecastGrid(forecastData);
+        }
         
         // Update chart
-        updateWeatherChart(forecast);
+        if (forecastData && forecastData.length > 0) {
+            updateWeatherChart(forecastData);
+        }
         
-        showToast(`Weather data updated for ${location}!`, 'success');
+        showToast(`Weather updated for ${cityName}!`, 'success');
         
     } catch (error) {
-        console.error('Error fetching weather:', error);
-        showToast('Error fetching weather data', 'error');
+        console.error('Error updating weather:', error);
+        showToast(`Error: ${error.message}`, 'error');
     }
 }
 
-// Update alerts
-function updateAlerts(data, risk) {
+// Update alerts in UI
+function updateAlerts(alerts) {
     alertsContainer.innerHTML = '';
     
-    if (data.humidity > 80) {
-        alertsContainer.innerHTML += `
-            <div class="alert-card high">
-                <i class="fas fa-exclamation-triangle"></i>
-                <div class="alert-content">
-                    <h4>⚠️ High Humidity Alert</h4>
-                    <p>Humidity levels above 80% create perfect conditions for fungal diseases. Apply preventive fungicide immediately.</p>
-                </div>
-            </div>
-        `;
-    }
-    
-    if (data.rainfall > 0) {
-        alertsContainer.innerHTML += `
-            <div class="alert-card warning">
-                <i class="fas fa-cloud-rain"></i>
-                <div class="alert-content">
-                    <h4>☔ Rain Expected</h4>
-                    <p>Rain forecast in next 24 hours. Apply fungicide BEFORE rain for best protection.</p>
-                </div>
-            </div>
-        `;
-    }
-    
-    if (data.wind_speed > 20) {
-        alertsContainer.innerHTML += `
-            <div class="alert-card warning">
-                <i class="fas fa-wind"></i>
-                <div class="alert-content">
-                    <h4>💨 High Wind Alert</h4>
-                    <p>High wind speeds may spread fungal spores. Consider wind barriers if possible.</p>
-                </div>
-            </div>
-        `;
-    }
-    
-    if (risk.risk === 'High') {
-        alertsContainer.innerHTML += `
-            <div class="alert-card high">
-                <i class="fas fa-skull-crosswalk"></i>
-                <div class="alert-content">
-                    <h4>🚨 Critical Disease Risk</h4>
-                    <p>Perfect conditions for disease outbreak! Immediate preventive action recommended.</p>
-                </div>
-            </div>
-        `;
-    }
-    
-    if (alertsContainer.innerHTML === '') {
+    if (!alerts || alerts.length === 0) {
         alertsContainer.innerHTML = `
             <div class="alert-card success">
                 <i class="fas fa-check-circle"></i>
@@ -352,21 +362,53 @@ function updateAlerts(data, risk) {
                 </div>
             </div>
         `;
+        return;
     }
+    
+    alerts.forEach(alert => {
+        const severity = alert.severity || 'info';
+        const typeClass = severity === 'critical' ? 'high' : 
+                         severity === 'high' ? 'high' : 
+                         severity === 'warning' ? 'warning' : 
+                         severity === 'success' ? 'success' : 'info';
+        
+        alertsContainer.innerHTML += `
+            <div class="alert-card ${typeClass}">
+                <i class="fas ${alert.icon || 'fa-info-circle'}"></i>
+                <div class="alert-content">
+                    <h4>${alert.title || 'Alert'}</h4>
+                    <p>${alert.message || 'Weather alert'}</p>
+                </div>
+            </div>
+        `;
+    });
 }
 
 // Update forecast grid
 function updateForecastGrid(forecast) {
     const grid = document.getElementById('forecastGrid');
-    grid.innerHTML = forecast.map(day => `
-        <div class="forecast-card ${day.risk.toLowerCase()}">
-            <div class="forecast-day">${day.day}</div>
-            <i class="fas fa-${day.icon}"></i>
-            <div class="forecast-temp">${day.temperature}°C</div>
-            <div class="forecast-humidity">${day.humidity}%</div>
-            <div class="forecast-risk ${day.risk.toLowerCase()}">${day.risk}</div>
-        </div>
-    `).join('');
+    if (!forecast || forecast.length === 0) {
+        grid.innerHTML = '<p style="color: #94A3B8; grid-column: 1/-1; text-align: center;">No forecast data available</p>';
+        return;
+    }
+    
+    grid.innerHTML = forecast.map(day => {
+        const riskClass = (day.disease_risk || 'Low').toLowerCase();
+        const iconClass = getWeatherIconClass(day.weather_icon || '01d');
+        const temp = day.temperature || '--';
+        const hum = day.humidity || '--';
+        const risk = day.disease_risk || 'Low';
+        
+        return `
+            <div class="forecast-card ${riskClass}">
+                <div class="forecast-day">${day.day || day.date || '--'}</div>
+                <i class="fas ${iconClass}"></i>
+                <div class="forecast-temp">${temp}°C</div>
+                <div class="forecast-humidity">${hum}%</div>
+                <div class="forecast-risk ${riskClass}">${risk}</div>
+            </div>
+        `;
+    }).join('');
 }
 
 // Update weather chart
@@ -375,14 +417,18 @@ function updateWeatherChart(forecast) {
     
     if (weatherChart) weatherChart.destroy();
     
+    const labels = forecast.map(d => d.day || d.date || '');
+    const temps = forecast.map(d => d.temperature || 0);
+    const hums = forecast.map(d => d.humidity || 0);
+    
     weatherChart = new Chart(ctx, {
         type: 'line',
         data: {
-            labels: forecast.map(d => d.day),
+            labels: labels,
             datasets: [
                 {
                     label: 'Temperature (°C)',
-                    data: forecast.map(d => d.temperature),
+                    data: temps,
                     borderColor: '#FBBF24',
                     backgroundColor: 'rgba(251, 191, 36, 0.1)',
                     borderWidth: 2,
@@ -395,7 +441,7 @@ function updateWeatherChart(forecast) {
                 },
                 {
                     label: 'Humidity (%)',
-                    data: forecast.map(d => d.humidity),
+                    data: hums,
                     borderColor: '#4F46E5',
                     backgroundColor: 'rgba(79, 70, 229, 0.1)',
                     borderWidth: 2,
@@ -419,62 +465,104 @@ function updateWeatherChart(forecast) {
                 tooltip: { mode: 'index', intersect: false }
             },
             scales: {
-                y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94A3B8' } },
-                x: { grid: { display: false }, ticks: { color: '#94A3B8' } }
+                y: { 
+                    beginAtZero: true, 
+                    grid: { color: 'rgba(255,255,255,0.05)' }, 
+                    ticks: { color: '#94A3B8' } 
+                },
+                x: { 
+                    grid: { display: false }, 
+                    ticks: { color: '#94A3B8' } 
+                }
             }
         }
     });
 }
 
 // Detect user's location
-function detectUserLocation() {
+async function detectUserLocation() {
     showToast('Detecting your location...', 'info');
     
-    if (!navigator.geolocation) {
-        showToast('Geolocation is not supported by your browser', 'error');
-        return;
+    try {
+        // Try IP-based geolocation first
+        const ipResponse = await fetch('https://ipapi.co/json/');
+        if (ipResponse.ok) {
+            const ipData = await ipResponse.json();
+            const city = ipData.city || ipData.region || ipData.country_name;
+            
+            if (city && city !== 'Unknown') {
+                showToast(`Location detected: ${city}!`, 'success');
+                locationInput.value = city;
+                currentLocation = city;
+                await updateWeatherData(city);
+                return;
+            }
+        }
+    } catch (error) {
+        console.warn('IP geolocation failed:', error);
     }
     
-    navigator.geolocation.getCurrentPosition(
-        async (position) => {
-            const { latitude, longitude } = position.coords;
-            showToast(`Location detected! Fetching weather...`, 'success');
-            
-            // In a real app, you would reverse geocode lat/lng to city name
-            // For demo, we'll use a mock city based on coordinates
-            const mockCities = ['Mumbai', 'Delhi', 'Bangalore', 'Chennai', 'Kolkata'];
-            const cityIndex = Math.floor((latitude + longitude) % mockCities.length);
-            const city = mockCities[cityIndex];
-            
-            locationInput.value = city;
-            currentLocation = city;
-            await updateWeatherData(city);
-        },
-        (error) => {
-            let errorMessage = 'Unable to detect location. ';
-            switch(error.code) {
-                case error.PERMISSION_DENIED:
-                    errorMessage += 'Please allow location access.';
-                    break;
-                case error.POSITION_UNAVAILABLE:
-                    errorMessage += 'Location information unavailable.';
-                    break;
-                case error.TIMEOUT:
-                    errorMessage += 'Location request timed out.';
-                    break;
-                default:
-                    errorMessage += 'Please enter city manually.';
+    // Try browser geolocation
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            async (position) => {
+                const { latitude, longitude } = position.coords;
+                showToast(`Location detected! Fetching weather...`, 'success');
+                
+                try {
+                    // Use the API to get weather by coordinates
+                    const params = new URLSearchParams();
+                    params.append('lat', latitude);
+                    params.append('lon', longitude);
+                    
+                    const url = `${API_CONFIG.BASE_URL}/weather?${params.toString()}`;
+                    const response = await fetch(url);
+                    
+                    if (response.ok) {
+                        const data = await response.json();
+                        const city = data.location?.city || 'Unknown';
+                        locationInput.value = city;
+                        currentLocation = city;
+                        await updateWeatherData(city);
+                    } else {
+                        // Use coordinates as fallback
+                        const coords = `${latitude.toFixed(4)},${longitude.toFixed(4)}`;
+                        locationInput.value = coords;
+                        currentLocation = coords;
+                        await updateWeatherData(coords);
+                    }
+                } catch (error) {
+                    showToast('Error with location service. Please enter city manually.', 'error');
+                }
+            },
+            (error) => {
+                let errorMessage = 'Unable to detect location. ';
+                switch(error.code) {
+                    case error.PERMISSION_DENIED:
+                        errorMessage += 'Please allow location access or enter city manually.';
+                        break;
+                    case error.POSITION_UNAVAILABLE:
+                        errorMessage += 'Location information unavailable.';
+                        break;
+                    case error.TIMEOUT:
+                        errorMessage += 'Location request timed out.';
+                        break;
+                    default:
+                        errorMessage += 'Please enter city manually.';
+                }
+                showToast(errorMessage, 'warning');
             }
-            showToast(errorMessage, 'error');
-        }
-    );
+        );
+    } else {
+        showToast('Geolocation not supported. Please enter city manually.', 'warning');
+    }
 }
 
-// Search location by city/pincode
+// Search location by city
 async function searchLocation() {
     const location = locationInput.value.trim();
     if (!location) {
-        showToast('Please enter a city name or pincode', 'error');
+        showToast('Please enter a city name', 'error');
         return;
     }
     
@@ -482,9 +570,23 @@ async function searchLocation() {
     await updateWeatherData(location);
 }
 
+// Refresh weather data
+async function refreshWeather() {
+    if (refreshWeatherBtn) {
+        refreshWeatherBtn.classList.add('spinning');
+    }
+    await updateWeatherData(currentLocation);
+    if (refreshWeatherBtn) {
+        setTimeout(() => {
+            refreshWeatherBtn.classList.remove('spinning');
+        }, 1000);
+    }
+}
+
 // Event Listeners
 if (searchLocationBtn) searchLocationBtn.addEventListener('click', searchLocation);
 if (detectLocationBtn) detectLocationBtn.addEventListener('click', detectUserLocation);
+if (refreshWeatherBtn) refreshWeatherBtn.addEventListener('click', refreshWeather);
 if (locationInput) locationInput.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') searchLocation();
 });
@@ -544,9 +646,14 @@ if (savedTheme === 'dark') {
 
 // Initialize
 createParticles();
-updateWeatherData('Mumbai');
+
+// Start with default location
+updateWeatherData('Chandigarh');
 
 // Auto-refresh every 5 minutes
-setInterval(() => {
-    updateWeatherData(currentLocation);
-}, 300000);
+if (updateTimer) clearInterval(updateTimer);
+updateTimer = setInterval(() => {
+    if (currentLocation) {
+        updateWeatherData(currentLocation);
+    }
+}, API_CONFIG.UPDATE_INTERVAL);

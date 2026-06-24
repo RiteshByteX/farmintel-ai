@@ -1,20 +1,89 @@
 /**
  * FarmIntel AI - Settings JavaScript
- * Complete Backend Integration with Fixed Navigation
+ * Complete Authentication Integration
  */
 
 // Initialize AOS
 AOS.init({ duration: 800, once: true, offset: 50 });
 
-// API Base URL
-const API_BASE_URL = 'http://localhost:5000/api';
+// ========================================
+// AUTHENTICATION HELPERS
+// ========================================
 
-// Global variables
-let currentTheme = 'light';
-let currentFontSize = 16;
-let userSettings = {};
+function getCurrentUser() {
+    const userData = localStorage.getItem('farmintel_current_user');
+    if (userData) {
+        try {
+            return JSON.parse(userData);
+        } catch (e) {
+            return null;
+        }
+    }
+    return null;
+}
 
-// Create particles
+function getUsers() {
+    const usersData = localStorage.getItem('farmintel_users');
+    if (usersData) {
+        try {
+            return JSON.parse(usersData);
+        } catch (e) {
+            return [];
+        }
+    }
+    return [];
+}
+
+function saveUsers(users) {
+    localStorage.setItem('farmintel_users', JSON.stringify(users));
+}
+
+function updateUserInStorage(updatedUser) {
+    const users = getUsers();
+    const index = users.findIndex(u => u.id === updatedUser.id);
+    if (index !== -1) {
+        users[index] = { ...users[index], ...updatedUser };
+        saveUsers(users);
+        // Update current user session
+        const currentUser = getCurrentUser();
+        if (currentUser && currentUser.id === updatedUser.id) {
+            localStorage.setItem('farmintel_current_user', JSON.stringify(users[index]));
+        }
+        return true;
+    }
+    return false;
+}
+
+function isAuthenticated() {
+    return getCurrentUser() !== null;
+}
+
+// ========================================
+// TOAST NOTIFICATION
+// ========================================
+
+function showToast(message, type = 'info') {
+    const container = document.getElementById('toastContainer');
+    if (!container) return;
+    
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    const icon = type === 'success' ? 'fa-check-circle' : 
+                 type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle';
+    toast.innerHTML = `<i class="fas ${icon}"></i><span>${message}</span>`;
+    container.appendChild(toast);
+    
+    setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateX(50px)';
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+}
+
+// ========================================
+// PARTICLES
+// ========================================
+
 function createParticles() {
     const container = document.getElementById('particles');
     if (!container) return;
@@ -32,224 +101,205 @@ function createParticles() {
     }
 }
 
-// Show toast
-function showToast(message, type = 'info') {
-    const container = document.getElementById('toastContainer');
-    if (!container) return;
-    const toast = document.createElement('div');
-    toast.className = `toast ${type}`;
-    toast.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle'}"></i><span>${message}</span>`;
-    container.appendChild(toast);
-    setTimeout(() => toast.remove(), 3000);
+// ========================================
+// LOAD USER DATA
+// ========================================
+
+function loadUserData() {
+    const user = getCurrentUser();
+    if (!user) {
+        // Redirect to login if not authenticated
+        showToast('Please login first', 'error');
+        setTimeout(() => {
+            window.location.href = '../index.html';
+        }, 1500);
+        return;
+    }
+    
+    // Update UI with user data
+    const userName = document.getElementById('userName');
+    const userRole = document.getElementById('userRole');
+    const profileName = document.getElementById('profileName');
+    const fullName = document.getElementById('fullName');
+    const email = document.getElementById('email');
+    
+    if (userName) userName.textContent = user.name || 'John';
+    if (userRole) userRole.textContent = user.role || 'Farmer';
+    if (profileName) profileName.textContent = user.name || 'John Farmer';
+    if (fullName) fullName.value = user.name || 'John Farmer';
+    if (email) email.value = user.email || 'farmer@farmintel.ai';
+    
+    // Load saved settings
+    loadSettings();
 }
 
-// Load user settings from localStorage
+// ========================================
+// SETTINGS MANAGEMENT
+// ========================================
+
 function loadSettings() {
     const savedSettings = localStorage.getItem('farmintel_settings');
     if (savedSettings) {
-        userSettings = JSON.parse(savedSettings);
-    } else {
-        userSettings = {
-            theme: 'light',
-            fontSize: 16,
-            language: 'en',
-            twoFactorAuth: false,
-            notifications: {
-                comments: true,
-                mentions: true,
-                followers: true,
-                disease: true,
-                weather: true,
-                updates: true,
-                digest: false,
-                security: true
-            },
-            location: {
-                city: 'Mumbai',
-                state: 'maharashtra',
-                pincode: '400001',
-                autoDetect: false
-            }
-        };
-        localStorage.setItem('farmintel_settings', JSON.stringify(userSettings));
-    }
-    return userSettings;
-}
-
-// Save settings to localStorage and backend
-async function saveSettings(updatedSettings) {
-    userSettings = { ...userSettings, ...updatedSettings };
-    localStorage.setItem('farmintel_settings', JSON.stringify(userSettings));
-    
-    try {
-        const response = await fetch(`${API_BASE_URL}/settings`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('farmintel_token') || ''}`
-            },
-            body: JSON.stringify(userSettings)
-        });
-        if (response.ok) {
-            showToast('Settings saved successfully!', 'success');
+        try {
+            const settings = JSON.parse(savedSettings);
+            applySettings(settings);
+            return settings;
+        } catch (e) {
+            console.error('Error loading settings:', e);
         }
-    } catch (error) {
-        console.error('Error saving settings to server:', error);
-        showToast('Settings saved locally', 'info');
     }
+    // Default settings
+    const defaultSettings = {
+        theme: 'light',
+        fontSize: 16,
+        language: 'en',
+        twoFactorAuth: false,
+        location: {
+            city: 'Mumbai',
+            state: 'maharashtra',
+            pincode: '400001',
+            autoDetect: false
+        },
+        notifications: {
+            comments: true,
+            mentions: true,
+            followers: true,
+            disease: true,
+            weather: true,
+            updates: true,
+            digest: false,
+            security: true
+        }
+    };
+    localStorage.setItem('farmintel_settings', JSON.stringify(defaultSettings));
+    applySettings(defaultSettings);
+    return defaultSettings;
 }
 
-// Apply settings to UI
-function applySettings() {
-    const settings = userSettings;
-    
+function saveSettings(updatedSettings) {
+    const currentSettings = JSON.parse(localStorage.getItem('farmintel_settings') || '{}');
+    const newSettings = { ...currentSettings, ...updatedSettings };
+    localStorage.setItem('farmintel_settings', JSON.stringify(newSettings));
+    return newSettings;
+}
+
+function applySettings(settings) {
+    // Theme
     if (settings.theme === 'dark') {
         document.body.classList.add('dark-mode');
-        document.querySelector('.theme-toggle-btn').innerHTML = '<i class="fas fa-moon"></i>';
+        const themeBtn = document.querySelector('.theme-toggle-btn');
+        if (themeBtn) themeBtn.innerHTML = '<i class="fas fa-moon"></i>';
     } else {
         document.body.classList.remove('dark-mode');
-        document.querySelector('.theme-toggle-btn').innerHTML = '<i class="fas fa-sun"></i>';
+        const themeBtn = document.querySelector('.theme-toggle-btn');
+        if (themeBtn) themeBtn.innerHTML = '<i class="fas fa-sun"></i>';
     }
     
-    currentFontSize = settings.fontSize || 16;
-    document.body.style.fontSize = currentFontSize + 'px';
-    updateFontSizeLabel(currentFontSize);
+    // Font Size
+    const fontSize = settings.fontSize || 16;
+    document.body.style.fontSize = fontSize + 'px';
+    updateFontSizeLabel(fontSize);
     
+    // Language
     const langSelect = document.getElementById('languageSelect');
     if (langSelect && settings.language) {
         langSelect.value = settings.language;
     }
     
+    // Two Factor Auth
     const twoFactor = document.getElementById('twoFactorAuth');
     if (twoFactor) {
         twoFactor.checked = settings.twoFactorAuth || false;
     }
     
-    const notifMap = {
-        'notifyComments': 'comments',
-        'notifyMentions': 'mentions',
-        'notifyFollowers': 'followers',
-        'notifyDisease': 'disease',
-        'notifyWeather': 'weather',
-        'notifyUpdates': 'updates',
-        'notifyDigest': 'digest',
-        'notifySecurity': 'security'
-    };
-    
-    for (const [elId, key] of Object.entries(notifMap)) {
-        const el = document.getElementById(elId);
-        if (el && settings.notifications) {
-            el.checked = settings.notifications[key] || false;
+    // Notifications
+    if (settings.notifications) {
+        const notifMap = {
+            'notifyComments': 'comments',
+            'notifyMentions': 'mentions',
+            'notifyFollowers': 'followers',
+            'notifyDisease': 'disease',
+            'notifyWeather': 'weather',
+            'notifyUpdates': 'updates',
+            'notifyDigest': 'digest',
+            'notifySecurity': 'security'
+        };
+        for (const [elId, key] of Object.entries(notifMap)) {
+            const el = document.getElementById(elId);
+            if (el) {
+                el.checked = settings.notifications[key] || false;
+            }
         }
     }
     
+    // Location
     if (settings.location) {
-        const cityInput = document.getElementById('city');
-        if (cityInput) cityInput.value = settings.location.city || '';
-        const stateSelect = document.getElementById('state');
-        if (stateSelect) stateSelect.value = settings.location.state || 'maharashtra';
-        const pincodeInput = document.getElementById('pincode');
-        if (pincodeInput) pincodeInput.value = settings.location.pincode || '';
+        const city = document.getElementById('city');
+        if (city) city.value = settings.location.city || '';
+        const state = document.getElementById('state');
+        if (state) state.value = settings.location.state || 'maharashtra';
+        const pincode = document.getElementById('pincode');
+        if (pincode) pincode.value = settings.location.pincode || '';
         const autoDetect = document.getElementById('autoDetectLocation');
         if (autoDetect) autoDetect.checked = settings.location.autoDetect || false;
     }
     
+    // Theme cards
     document.querySelectorAll('.theme-card').forEach(card => {
         card.classList.toggle('active', card.dataset.theme === settings.theme);
     });
 }
 
+function updateFontSizeLabel(size) {
+    const label = document.getElementById('fontSizeLabel');
+    if (!label) return;
+    if (size <= 14) label.textContent = 'Small';
+    else if (size <= 16) label.textContent = 'Medium';
+    else if (size <= 18) label.textContent = 'Large';
+    else label.textContent = 'Extra Large';
+}
+
 // ========================================
-// SECTION NAVIGATION - FULLY WORKING
+// SETTINGS NAVIGATION
 // ========================================
 
 function initSettingsNav() {
     const navItems = document.querySelectorAll('.settings-nav-item');
     const sections = document.querySelectorAll('.settings-section');
     
-    console.log('🔧 Initializing settings navigation...');
-    console.log(`📋 Found ${navItems.length} nav items and ${sections.length} sections`);
-    
-    // Function to show section
     function showSection(sectionId) {
-        // Hide all sections
-        sections.forEach(section => {
-            section.classList.remove('active');
-        });
-        
-        // Find and show target section
+        sections.forEach(section => section.classList.remove('active'));
         const target = document.getElementById(sectionId);
         if (target) {
             target.classList.add('active');
-            console.log(`✅ Showing section: ${sectionId}`);
             return true;
         }
-        console.error(`❌ Section not found: ${sectionId}`);
         return false;
     }
     
-    // Function to set active nav
     function setActiveNav(targetId) {
-        navItems.forEach(nav => {
-            nav.classList.remove('active');
-        });
+        navItems.forEach(nav => nav.classList.remove('active'));
         const activeNav = document.querySelector(`.settings-nav-item[data-target="${targetId}"]`);
-        if (activeNav) {
-            activeNav.classList.add('active');
-        }
+        if (activeNav) activeNav.classList.add('active');
     }
     
-    // Add click handlers
     navItems.forEach(item => {
         item.addEventListener('click', function(e) {
             e.preventDefault();
             const target = this.dataset.target;
             const sectionId = `section-${target}`;
             
-            console.log(`🔄 Clicked: ${target} -> ${sectionId}`);
-            
-            // Update active nav
             setActiveNav(target);
+            showSection(sectionId);
             
-            // Show the section
-            const success = showSection(sectionId);
-            
-            if (success) {
-                // Smooth scroll to section
-                const targetElement = document.getElementById(sectionId);
-                if (targetElement) {
-                    setTimeout(() => {
-                        targetElement.scrollIntoView({ 
-                            behavior: 'smooth', 
-                            block: 'start' 
-                        });
-                    }, 100);
-                }
+            const targetElement = document.getElementById(sectionId);
+            if (targetElement) {
+                setTimeout(() => {
+                    targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 100);
             }
         });
     });
-    
-    // Show first section by default
-    const firstNav = navItems[0];
-    if (firstNav) {
-        const firstTarget = firstNav.dataset.target;
-        const firstSectionId = `section-${firstTarget}`;
-        setActiveNav(firstTarget);
-        
-        // Hide all sections first
-        sections.forEach(section => {
-            section.classList.remove('active');
-        });
-        
-        // Show first section
-        const firstSection = document.getElementById(firstSectionId);
-        if (firstSection) {
-            firstSection.classList.add('active');
-            console.log(`✅ Default section: ${firstSectionId}`);
-        }
-    }
-    
-    console.log('✅ Settings navigation initialized successfully!');
 }
 
 // ========================================
@@ -259,85 +309,80 @@ function initSettingsNav() {
 function initProfileForm() {
     const profileForm = document.getElementById('profileForm');
     if (profileForm) {
-        profileForm.addEventListener('submit', async (e) => {
+        profileForm.addEventListener('submit', function(e) {
             e.preventDefault();
-            const fullName = document.getElementById('fullName').value.trim();
+            
+            const name = document.getElementById('fullName').value.trim();
             const email = document.getElementById('email').value.trim();
             const mobile = document.getElementById('mobile').value.trim();
+            const farmType = document.getElementById('farmType').value;
+            const farmSize = document.getElementById('farmSize').value;
             
-            if (!fullName) {
+            if (!name) {
                 showToast('Name is required', 'error');
                 return;
             }
             
-            const user = JSON.parse(localStorage.getItem('farmintel_user') || '{}');
-            user.name = fullName;
-            user.email = email;
-            user.mobile = mobile;
-            localStorage.setItem('farmintel_user', JSON.stringify(user));
-            localStorage.setItem('userName', fullName.split(' ')[0]);
-            
-            document.getElementById('profileName').innerHTML = fullName;
-            document.getElementById('userName').innerHTML = fullName.split(' ')[0];
-            
-            try {
-                await fetch(`${API_BASE_URL}/profile`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${localStorage.getItem('farmintel_token') || ''}`
-                    },
-                    body: JSON.stringify(user)
-                });
-            } catch (error) {
-                console.error('Error updating profile:', error);
+            const currentUser = getCurrentUser();
+            if (currentUser) {
+                const updatedUser = {
+                    ...currentUser,
+                    name: name,
+                    email: email,
+                    mobile: mobile,
+                    farmType: farmType,
+                    farmSize: farmSize
+                };
+                
+                if (updateUserInStorage(updatedUser)) {
+                    // Update UI
+                    document.getElementById('userName').textContent = name.split(' ')[0];
+                    document.getElementById('profileName').textContent = name;
+                    showToast('Profile updated successfully!', 'success');
+                } else {
+                    showToast('Failed to update profile', 'error');
+                }
             }
-            
-            showToast('Profile updated successfully!', 'success');
         });
     }
     
+    // Avatar upload
     const changePhotoBtn = document.getElementById('changePhotoBtn');
     const avatarUpload = document.getElementById('avatarUpload');
     const profileAvatar = document.getElementById('profileAvatar');
     
-    if (changePhotoBtn) {
-        changePhotoBtn.addEventListener('click', () => {
-            if (avatarUpload) avatarUpload.click();
-        });
-    }
-    
-    if (avatarUpload) {
-        avatarUpload.addEventListener('change', (e) => {
-            if (e.target.files && e.target.files[0]) {
+    if (changePhotoBtn && avatarUpload) {
+        changePhotoBtn.addEventListener('click', () => avatarUpload.click());
+        avatarUpload.addEventListener('change', function(e) {
+            if (this.files && this.files[0]) {
                 const reader = new FileReader();
-                reader.onload = (event) => {
+                reader.onload = function(event) {
                     if (profileAvatar) {
                         profileAvatar.style.backgroundImage = `url(${event.target.result})`;
                         profileAvatar.style.backgroundSize = 'cover';
                         profileAvatar.style.backgroundPosition = 'center';
                         profileAvatar.innerHTML = '';
-                        const user = JSON.parse(localStorage.getItem('farmintel_user') || '{}');
-                        user.avatar = event.target.result;
-                        localStorage.setItem('farmintel_user', JSON.stringify(user));
                         showToast('Profile photo updated!', 'success');
                     }
                 };
-                reader.readAsDataURL(e.target.files[0]);
+                reader.readAsDataURL(this.files[0]);
             }
         });
     }
     
-    const cancelProfileBtn = document.getElementById('cancelProfileBtn');
-    if (cancelProfileBtn) {
-        cancelProfileBtn.addEventListener('click', () => {
-            const user = JSON.parse(localStorage.getItem('farmintel_user') || '{}');
-            document.getElementById('fullName').value = user.name || 'John Farmer';
-            document.getElementById('email').value = user.email || 'farmer@farmintel.ai';
-            document.getElementById('mobile').value = user.mobile || '+91 98765 43210';
-            document.getElementById('farmType').value = user.farmType || 'mixed';
-            document.getElementById('farmSize').value = user.farmSize || '25';
-            showToast('Changes cancelled', 'info');
+    // Cancel button
+    const cancelBtn = document.getElementById('cancelProfileBtn');
+    if (cancelBtn) {
+        cancelBtn.addEventListener('click', function() {
+            const user = getCurrentUser();
+            if (user) {
+                document.getElementById('fullName').value = user.name || 'John Farmer';
+                document.getElementById('email').value = user.email || 'farmer@farmintel.ai';
+                document.getElementById('mobile').value = user.mobile || '+91 98765 43210';
+                document.getElementById('farmType').value = user.farmType || 'mixed';
+                document.getElementById('farmSize').value = user.farmSize || '25';
+                showToast('Changes cancelled', 'info');
+            }
         });
     }
 }
@@ -349,7 +394,7 @@ function initProfileForm() {
 function initNotifications() {
     const saveBtn = document.getElementById('saveNotificationsBtn');
     if (saveBtn) {
-        saveBtn.addEventListener('click', () => {
+        saveBtn.addEventListener('click', function() {
             const preferences = {
                 comments: document.getElementById('notifyComments')?.checked || false,
                 mentions: document.getElementById('notifyMentions')?.checked || false,
@@ -374,7 +419,7 @@ function initNotifications() {
 function initLocation() {
     const locationForm = document.getElementById('locationForm');
     if (locationForm) {
-        locationForm.addEventListener('submit', (e) => {
+        locationForm.addEventListener('submit', function(e) {
             e.preventDefault();
             const locationData = {
                 city: document.getElementById('city').value.trim(),
@@ -390,7 +435,7 @@ function initLocation() {
     
     const detectBtn = document.getElementById('detectLocationBtn');
     if (detectBtn) {
-        detectBtn.addEventListener('click', () => {
+        detectBtn.addEventListener('click', function() {
             showToast('Detecting your location...', 'info');
             
             if (navigator.geolocation) {
@@ -419,7 +464,7 @@ function initLocation() {
                         document.getElementById('pincode').value = '400001';
                         showToast('Location set to default (Mumbai)', 'success');
                     },
-                    () => {
+                    function() {
                         document.getElementById('city').value = 'Mumbai';
                         document.getElementById('state').value = 'maharashtra';
                         document.getElementById('pincode').value = '400001';
@@ -443,7 +488,7 @@ function initLocation() {
 function initSecurity() {
     const passwordForm = document.getElementById('passwordForm');
     if (passwordForm) {
-        passwordForm.addEventListener('submit', async (e) => {
+        passwordForm.addEventListener('submit', function(e) {
             e.preventDefault();
             const currentPass = document.getElementById('currentPassword')?.value;
             const newPass = document.getElementById('newPassword')?.value;
@@ -458,60 +503,45 @@ function initSecurity() {
                 showToast('Passwords do not match!', 'error');
                 return;
             }
+            
             if (newPass.length < 6) {
                 showToast('Password must be at least 6 characters', 'error');
                 return;
             }
             
-            try {
-                const response = await fetch(`${API_BASE_URL}/auth/change-password`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${localStorage.getItem('farmintel_token') || ''}`
-                    },
-                    body: JSON.stringify({
-                        current_password: currentPass,
-                        new_password: newPass
-                    })
-                });
+            const user = getCurrentUser();
+            if (user) {
+                // Verify current password
+                const users = getUsers();
+                const userRecord = users.find(u => u.id === user.id);
                 
-                if (response.ok) {
+                if (userRecord && userRecord.password === currentPass) {
+                    // Update password
+                    userRecord.password = newPass;
+                    saveUsers(users);
                     showToast('Password updated successfully!', 'success');
                     passwordForm.reset();
                 } else {
-                    const data = await response.json();
-                    showToast(data.message || 'Password update failed', 'error');
+                    showToast('Current password is incorrect', 'error');
                 }
-            } catch (error) {
-                showToast('Password updated locally', 'success');
-                passwordForm.reset();
             }
         });
     }
     
+    // Logout all devices
     const logoutAllBtn = document.getElementById('logoutAllDevices');
     if (logoutAllBtn) {
-        logoutAllBtn.addEventListener('click', async () => {
-            try {
-                await fetch(`${API_BASE_URL}/auth/logout-all`, {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${localStorage.getItem('farmintel_token') || ''}`
-                    }
-                });
-            } catch (error) {
-                console.error('Logout all error:', error);
-            }
+        logoutAllBtn.addEventListener('click', function() {
             showToast('Logged out from all devices', 'success');
         });
     }
     
+    // Two Factor Auth
     const twoFactorAuth = document.getElementById('twoFactorAuth');
     if (twoFactorAuth) {
-        twoFactorAuth.addEventListener('change', () => {
-            saveSettings({ twoFactorAuth: twoFactorAuth.checked });
-            showToast(twoFactorAuth.checked ? '2FA enabled' : '2FA disabled', 'success');
+        twoFactorAuth.addEventListener('change', function() {
+            saveSettings({ twoFactorAuth: this.checked });
+            showToast(this.checked ? '2FA enabled' : '2FA disabled', 'success');
         });
     }
 }
@@ -521,21 +551,22 @@ function initSecurity() {
 // ========================================
 
 function initAppearance() {
+    // Theme cards
     const themeCards = document.querySelectorAll('.theme-card');
     themeCards.forEach(card => {
-        card.addEventListener('click', () => {
+        card.addEventListener('click', function() {
             themeCards.forEach(c => c.classList.remove('active'));
-            card.classList.add('active');
-            currentTheme = card.dataset.theme;
+            this.classList.add('active');
+            const theme = this.dataset.theme;
             
-            saveSettings({ theme: currentTheme });
+            saveSettings({ theme: theme });
             
-            if (currentTheme === 'light') {
-                document.body.classList.remove('dark-mode');
-                document.querySelector('.theme-toggle-btn').innerHTML = '<i class="fas fa-sun"></i>';
-            } else if (currentTheme === 'dark') {
+            if (theme === 'dark') {
                 document.body.classList.add('dark-mode');
                 document.querySelector('.theme-toggle-btn').innerHTML = '<i class="fas fa-moon"></i>';
+            } else if (theme === 'light') {
+                document.body.classList.remove('dark-mode');
+                document.querySelector('.theme-toggle-btn').innerHTML = '<i class="fas fa-sun"></i>';
             } else {
                 const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
                 if (prefersDark) {
@@ -544,23 +575,18 @@ function initAppearance() {
                     document.body.classList.remove('dark-mode');
                 }
             }
+            showToast('Theme updated!', 'success');
         });
     });
     
+    // Font Size
     const fontSizeLabel = document.getElementById('fontSizeLabel');
     const increaseBtn = document.getElementById('increaseFontBtn');
     const decreaseBtn = document.getElementById('decreaseFontBtn');
-    
-    window.updateFontSizeLabel = function(size) {
-        if (!fontSizeLabel) return;
-        if (size <= 14) fontSizeLabel.innerText = 'Small';
-        else if (size <= 16) fontSizeLabel.innerText = 'Medium';
-        else if (size <= 18) fontSizeLabel.innerText = 'Large';
-        else fontSizeLabel.innerText = 'Extra Large';
-    };
+    let currentFontSize = parseInt(document.body.style.fontSize) || 16;
     
     if (increaseBtn) {
-        increaseBtn.addEventListener('click', () => {
+        increaseBtn.addEventListener('click', function() {
             if (currentFontSize < 20) {
                 currentFontSize += 2;
                 document.body.style.fontSize = currentFontSize + 'px';
@@ -571,7 +597,7 @@ function initAppearance() {
     }
     
     if (decreaseBtn) {
-        decreaseBtn.addEventListener('click', () => {
+        decreaseBtn.addEventListener('click', function() {
             if (currentFontSize > 12) {
                 currentFontSize -= 2;
                 document.body.style.fontSize = currentFontSize + 'px';
@@ -581,17 +607,19 @@ function initAppearance() {
         });
     }
     
+    // Language
     const languageSelect = document.getElementById('languageSelect');
     if (languageSelect) {
-        languageSelect.addEventListener('change', () => {
-            saveSettings({ language: languageSelect.value });
-            showToast(`Language changed to ${languageSelect.options[languageSelect.selectedIndex].text}`, 'success');
+        languageSelect.addEventListener('change', function() {
+            saveSettings({ language: this.value });
+            showToast(`Language changed to ${this.options[this.selectedIndex].text}`, 'success');
         });
     }
     
+    // Save Appearance
     const saveAppearanceBtn = document.getElementById('saveAppearanceBtn');
     if (saveAppearanceBtn) {
-        saveAppearanceBtn.addEventListener('click', () => {
+        saveAppearanceBtn.addEventListener('click', function() {
             showToast('Appearance settings saved!', 'success');
         });
     }
@@ -602,46 +630,38 @@ function initAppearance() {
 // ========================================
 
 function initDataManagement() {
+    // Clear History
     const clearHistoryBtn = document.getElementById('clearHistoryBtn');
     const clearHistoryModal = document.getElementById('clearHistoryModal');
     const confirmClearBtn = document.getElementById('confirmClearHistoryBtn');
     const cancelClearBtn = document.getElementById('cancelClearBtn');
     
-    if (clearHistoryBtn) {
+    if (clearHistoryBtn && clearHistoryModal) {
         clearHistoryBtn.addEventListener('click', () => {
-            if (clearHistoryModal) clearHistoryModal.style.display = 'flex';
+            clearHistoryModal.style.display = 'flex';
         });
     }
     
-    if (confirmClearBtn) {
-        confirmClearBtn.addEventListener('click', async () => {
+    if (confirmClearBtn && clearHistoryModal) {
+        confirmClearBtn.addEventListener('click', () => {
             localStorage.removeItem('scanHistory');
-            try {
-                await fetch(`${API_BASE_URL}/history/clear`, {
-                    method: 'DELETE',
-                    headers: {
-                        'Authorization': `Bearer ${localStorage.getItem('farmintel_token') || ''}`
-                    }
-                });
-            } catch (error) {
-                console.error('Error clearing history on server:', error);
-            }
             showToast('Scan history cleared successfully!', 'success');
-            if (clearHistoryModal) clearHistoryModal.style.display = 'none';
+            clearHistoryModal.style.display = 'none';
         });
     }
     
-    if (cancelClearBtn) {
+    if (cancelClearBtn && clearHistoryModal) {
         cancelClearBtn.addEventListener('click', () => {
-            if (clearHistoryModal) clearHistoryModal.style.display = 'none';
+            clearHistoryModal.style.display = 'none';
         });
     }
     
+    // Export Data
     const exportDataBtn = document.getElementById('exportDataBtn');
     if (exportDataBtn) {
-        exportDataBtn.addEventListener('click', () => {
+        exportDataBtn.addEventListener('click', function() {
             const data = {
-                profile: JSON.parse(localStorage.getItem('farmintel_user') || '{}'),
+                user: getCurrentUser(),
                 settings: JSON.parse(localStorage.getItem('farmintel_settings') || '{}'),
                 history: JSON.parse(localStorage.getItem('scanHistory') || '[]')
             };
@@ -658,9 +678,10 @@ function initDataManagement() {
         });
     }
     
+    // Backup Data
     const backupDataBtn = document.getElementById('backupDataBtn');
     if (backupDataBtn) {
-        backupDataBtn.addEventListener('click', () => {
+        backupDataBtn.addEventListener('click', function() {
             showToast('Backup created successfully!', 'success');
         });
     }
@@ -677,47 +698,45 @@ function initAccount() {
     const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
     const deleteConfirmInput = document.getElementById('deleteConfirmInput');
     
-    if (deleteAccountBtn) {
+    if (deleteAccountBtn && deleteModal) {
         deleteAccountBtn.addEventListener('click', () => {
-            if (deleteModal) deleteModal.style.display = 'flex';
+            deleteModal.style.display = 'flex';
             if (deleteConfirmInput) deleteConfirmInput.value = '';
         });
     }
     
-    if (confirmDeleteBtn) {
-        confirmDeleteBtn.addEventListener('click', async () => {
+    if (confirmDeleteBtn && deleteModal) {
+        confirmDeleteBtn.addEventListener('click', function() {
             if (deleteConfirmInput && deleteConfirmInput.value === 'DELETE') {
-                try {
-                    await fetch(`${API_BASE_URL}/auth/delete-account`, {
-                        method: 'DELETE',
-                        headers: {
-                            'Authorization': `Bearer ${localStorage.getItem('farmintel_token') || ''}`
-                        }
-                    });
-                } catch (error) {
-                    console.error('Error deleting account:', error);
+                // Delete user from storage
+                const currentUser = getCurrentUser();
+                if (currentUser) {
+                    let users = getUsers();
+                    users = users.filter(u => u.id !== currentUser.id);
+                    saveUsers(users);
+                    localStorage.removeItem('farmintel_current_user');
+                    localStorage.removeItem('farmintel_settings');
+                    showToast('Account deleted successfully', 'success');
+                    setTimeout(() => {
+                        window.location.href = '../index.html';
+                    }, 1500);
                 }
-                localStorage.clear();
-                showToast('Account deleted successfully', 'success');
-                setTimeout(() => {
-                    window.location.href = '../index.html';
-                }, 1500);
             } else {
                 showToast('Please type "DELETE" to confirm', 'error');
             }
         });
     }
     
-    if (cancelDeleteBtn) {
+    if (cancelDeleteBtn && deleteModal) {
         cancelDeleteBtn.addEventListener('click', () => {
-            if (deleteModal) deleteModal.style.display = 'none';
+            deleteModal.style.display = 'none';
             if (deleteConfirmInput) deleteConfirmInput.value = '';
         });
     }
     
     const manageSubscription = document.getElementById('manageSubscription');
     if (manageSubscription) {
-        manageSubscription.addEventListener('click', () => {
+        manageSubscription.addEventListener('click', function() {
             showToast('Subscription management page coming soon!', 'info');
         });
     }
@@ -729,13 +748,13 @@ function initAccount() {
 
 function initModals() {
     document.querySelectorAll('.modal-close').forEach(btn => {
-        btn.addEventListener('click', () => {
-            const modal = btn.closest('.modal');
+        btn.addEventListener('click', function() {
+            const modal = this.closest('.modal');
             if (modal) modal.style.display = 'none';
         });
     });
     
-    window.addEventListener('click', (e) => {
+    window.addEventListener('click', function(e) {
         if (e.target.classList.contains('modal')) {
             e.target.style.display = 'none';
         }
@@ -743,15 +762,33 @@ function initModals() {
 }
 
 // ========================================
-// CHECK BACKEND HEALTH
+// THEME TOGGLE
 // ========================================
 
-async function checkBackendHealth() {
-    try {
-        const response = await fetch(`${API_BASE_URL}/health`);
-        return response.ok;
-    } catch {
-        return false;
+function initThemeToggle() {
+    const themeToggle = document.getElementById('themeToggle');
+    if (themeToggle) {
+        themeToggle.addEventListener('click', function() {
+            const isDark = document.body.classList.contains('dark-mode');
+            if (isDark) {
+                document.body.classList.remove('dark-mode');
+                this.innerHTML = '<i class="fas fa-sun"></i>';
+                saveSettings({ theme: 'light' });
+                // Update theme card
+                document.querySelectorAll('.theme-card').forEach(card => {
+                    card.classList.toggle('active', card.dataset.theme === 'light');
+                });
+                showToast('Light mode activated', 'success');
+            } else {
+                document.body.classList.add('dark-mode');
+                this.innerHTML = '<i class="fas fa-moon"></i>';
+                saveSettings({ theme: 'dark' });
+                document.querySelectorAll('.theme-card').forEach(card => {
+                    card.classList.toggle('active', card.dataset.theme === 'dark');
+                });
+                showToast('Dark mode activated', 'success');
+            }
+        });
     }
 }
 
@@ -764,16 +801,15 @@ function initMobileSidebar() {
     const sidebar = document.getElementById('sidebar');
     const overlay = document.getElementById('sidebarOverlay');
 
-    if (mobileToggle) {
-        mobileToggle.addEventListener('click', () => {
-            if (sidebar) sidebar.classList.toggle('mobile-open');
-            if (overlay) overlay.classList.toggle('active');
+    if (mobileToggle && sidebar && overlay) {
+        mobileToggle.addEventListener('click', function() {
+            sidebar.classList.toggle('mobile-open');
+            overlay.classList.toggle('active');
         });
-    }
-    if (overlay) {
-        overlay.addEventListener('click', () => {
-            if (sidebar) sidebar.classList.remove('mobile-open');
-            if (overlay) overlay.classList.remove('active');
+        
+        overlay.addEventListener('click', function() {
+            sidebar.classList.remove('mobile-open');
+            overlay.classList.remove('active');
         });
     }
 }
@@ -785,46 +821,13 @@ function initMobileSidebar() {
 function initLogout() {
     const logoutBtn = document.getElementById('logoutBtn');
     if (logoutBtn) {
-        logoutBtn.addEventListener('click', () => {
-            localStorage.clear();
-            window.location.href = '../index.html';
+        logoutBtn.addEventListener('click', function() {
+            localStorage.removeItem('farmintel_current_user');
+            showToast('Logged out successfully', 'success');
+            setTimeout(() => {
+                window.location.href = '../index.html';
+            }, 1000);
         });
-    }
-}
-
-// ========================================
-// THEME TOGGLE BUTTON
-// ========================================
-
-function initThemeToggleButton() {
-    const themeToggle = document.getElementById('themeToggle');
-    if (themeToggle) {
-        themeToggle.addEventListener('click', () => {
-            const isDark = document.body.classList.contains('dark-mode');
-            if (isDark) {
-                document.body.classList.remove('dark-mode');
-                saveSettings({ theme: 'light' });
-                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
-                showToast('Light mode activated', 'success');
-            } else {
-                document.body.classList.add('dark-mode');
-                saveSettings({ theme: 'dark' });
-                themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
-                showToast('Dark mode activated', 'success');
-            }
-        });
-    }
-}
-
-// ========================================
-// SET USER NAME
-// ========================================
-
-function setUserName() {
-    const userNameElement = document.getElementById('userName');
-    if (userNameElement) {
-        const user = JSON.parse(localStorage.getItem('farmintel_user') || '{}');
-        userNameElement.innerHTML = user.name?.split(' ')[0] || 'John';
     }
 }
 
@@ -835,14 +838,21 @@ function setUserName() {
 function init() {
     console.log('🚀 Initializing Settings page...');
     
+    // Check authentication
+    if (!isAuthenticated()) {
+        showToast('Please login first', 'error');
+        setTimeout(() => {
+            window.location.href = '../index.html';
+        }, 1500);
+        return;
+    }
+    
     createParticles();
-    loadSettings();
-    applySettings();
-    setUserName();
+    loadUserData();
     
     initMobileSidebar();
     initLogout();
-    initThemeToggleButton();
+    initThemeToggle();
     initSettingsNav();
     initProfileForm();
     initNotifications();
@@ -853,15 +863,8 @@ function init() {
     initAccount();
     initModals();
     
-    checkBackendHealth().then(isHealthy => {
-        if (!isHealthy) {
-            showToast('Backend offline. Using local data.', 'warning');
-        } else {
-            console.log('✅ Backend is healthy');
-        }
-    });
-    
     console.log('✅ Settings page initialized successfully!');
+    console.log('👤 Current user:', getCurrentUser());
 }
 
 // Start the app
